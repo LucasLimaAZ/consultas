@@ -168,7 +168,7 @@ const CadastrarPaciente = props => {
             </Col>
         </Row>
         <Row style={{marginTop: '32px', marginBottom: '32px'}}>
-            <Col md={4}>
+            <Col md={12}>
                 <div className="box">
                     <h1 className="subtitle">
                         Informações adicionais
@@ -191,7 +191,9 @@ const CadastrarPaciente = props => {
                     </Row>
                 </div>
             </Col>
-            <Col md={4}>
+        </Row>
+        <Row style={{marginTop: '32px', marginBottom: '32px'}}>
+            <Col md={12}>
                 <div className="box">
                     <h1 className="subtitle">
                         Valor da Sessão
@@ -218,7 +220,9 @@ const CadastrarPaciente = props => {
                     </Row>
                 </div>
             </Col>
-            <Col md={4}>
+        </Row>
+        <Row style={{marginTop: '32px', marginBottom: '32px'}}>
+            <Col md={12}>
                 <div className="box">
                     <h1 className="subtitle">
                         Dados de Acesso ao Sistema
