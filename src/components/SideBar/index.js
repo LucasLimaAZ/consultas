@@ -5,6 +5,7 @@ import SubMenu from './SubMenu';
 import { NavItem, NavLink, Nav } from 'reactstrap';
 import classNames from 'classnames';
 import {Link} from 'react-router-dom';
+import "./style.scss";
 
 const SideBar = props => (
     <div className={classNames('sidebar', {'is-open': props.isOpen})}>

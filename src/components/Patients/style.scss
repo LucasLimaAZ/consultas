@@ -1,59 +1,12 @@
-*::selection{
-    background-color: #17A2B8 !important;
-    color: white;
-}
+@import "../../vars";
 
 form{
     margin-top: 40px;
 }
 
-input::placeholder, .nascimento::-webkit-datetime-edit{
-    color: #d1d1d1 !important;
-}
-
-.title{
-    color:#666;
-    text-transform: uppercase;
-    text-align: center;
-    font-weight: 200;
-    font-size: 30px;
-    margin: 0;
-}
-
-.sidebar-title{
-    color:#666;
-    text-transform: uppercase;
-    font-weight: 200;
-    font-size: 26px;
-    margin: 0;
-}
-
-.subtitle{
-    color:#666;
-    text-transform: uppercase;
-    font-weight: 200;
-    border-bottom: 1px solid #e1e1e1;
-    padding-bottom: 10px;
-    font-size: 20px;
-}
-
-.box{
-    border-radius: 0.25rem;
-    padding: 2%;
-    background-color: white;
-    box-shadow: 0 .125rem .25rem rgba(0,0,0,.075);
-}
-
-.input{
-    border: 0;
-    border-radius: 0;
-    border-bottom: 1px solid #666;
-    padding: 5px;
-}
-
 /* RADIO BUTTONS */
 
-.sexo, .recibo, .cadastro_ativo{
+.genders, .receipt, .active{
     display:flex;
     justify-content: space-around;
     margin-top: 24px;
@@ -103,7 +56,7 @@ input::placeholder, .nascimento::-webkit-datetime-edit{
     background: #9faab7;
   }
   .option-input:checked {
-    background: #17A2B8;
+    background: $darkBlue;
   }
   .option-input:checked::before {
     height: 20px;
@@ -111,7 +64,7 @@ input::placeholder, .nascimento::-webkit-datetime-edit{
     position: absolute;
     content: '✔';
     display: inline-block;
-    font-size: 16.66667px;
+    font-size: 16 $mediumGrey 67px;
     text-align: center;
     line-height: 20px;
   }
@@ -119,7 +72,7 @@ input::placeholder, .nascimento::-webkit-datetime-edit{
     -webkit-animation: click-wave 0.65s;
     -moz-animation: click-wave 0.65s;
     animation: click-wave 0.65s;
-    background: #40e0d0;
+    background: $lightBlue;
     content: '';
     display: block;
     position: relative;

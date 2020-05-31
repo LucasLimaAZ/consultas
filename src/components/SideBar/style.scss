@@ -1,0 +1,85 @@
+@import "../../vars";
+
+.sidebar {
+    min-width: 250px;
+    max-width: 250px;
+    background: $lightBlue;
+    color: #fff;
+    margin-left: -250px;
+    transition: all 0.5s;
+    margin-bottom: -5000px;
+    padding-bottom: 5000px; 
+    overflow: hidden;
+}
+  
+.sidebar.is-open {
+    margin-left: 0;
+    transition: .5s;
+}
+  
+.sidebar-header {
+    background: $darkBlue;
+}
+  
+.sidebar-header h3{
+    color: #fff;
+    padding: 1em;
+}
+  
+.sidebar ul p {
+    color: #fff;
+    padding: 10px;
+}
+  
+.menu-open {
+  background: $lightBlue;
+}
+  
+.nav-item:hover {
+    color: $darkBlue;
+    background: #fff;
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+}
+  
+.items-menu {
+	color: #fff;
+    background: $darkBlue;
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+}
+  
+li a.dropdown-toggle::after {
+    display: inline-flex;
+    position: relative;
+    left: 60%;
+    top: 10%
+}
+  
+.sidebar-header > span {
+    position: relative;
+    float: right;
+    margin: .5em;
+    font-size: 2rem;
+    cursor: pointer;
+    display: none;
+}
+
+.side-menu {
+	height: calc(100vh - 130px);
+	overflow-y: scroll;
+}
+  
+.side-menu::-webkit-scrollbar {
+  	width: 10px;
+}
+  
+.side-menu::-webkit-scrollbar-thumb {
+	background: $darkBlue; 
+	border-radius: 3px;
+}
+  
+.side-menu::-webkit-scrollbar-thumb:hover {
+  	background: $darkBlue; 
+}
+    

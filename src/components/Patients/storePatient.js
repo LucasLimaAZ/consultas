@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './style.css';
+import './style.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { Container, Row, Col, Button } from 'reactstrap';
@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
 import { cpfMask, currencyMask } from '../Mask/index';
 
-const CadastrarPaciente = props => {
+const StorePatients = props => {
 
     const [cpf, setCpf] = useState("");
     const [currency, setCurrency] = useState("");
@@ -38,23 +38,19 @@ const CadastrarPaciente = props => {
                         Dados do paciente
                     </h1>
                     <Row>
-                        <Col md={4}>
-                            <label htmlFor="nome">Nome: </label>
-                            <input type="text" id="nome" className="form-control input" />
+                        <Col md={8}>
+                            <label htmlFor="name">Nome: </label>
+                            <input type="text" id="name" placeholder="Nome completo" className="form-control input" />
                         </Col>
                         <Col md={4}>
-                            <label htmlFor="idade">Idade: </label>
-                            <input type="number" id="idade" className="form-control input" />
-                        </Col>
-                        <Col md={4}>
-                            <label htmlFor="telefone-fixo">Telefone Fixo: </label>                                    
-                            <input type="text" id="telefone-fixo" className="form-control input" placeholder="DDD + número"/>
+                            <label htmlFor="landline">Telefone Fixo: </label>                                    
+                            <input type="text" id="landline" className="form-control input" placeholder="DDD + número"/>
                         </Col>
                     </Row>
                     <Row style={{marginTop: '32px'}}>
                         <Col md={4}>
-                            <label htmlFor="celular">Celular: </label>
-                            <input type="text" id="celular" className="form-control input" placeholder="DDD + número"/>
+                            <label htmlFor="phone">Celular: </label>
+                            <input type="text" id="phone" className="form-control input" placeholder="DDD + número"/>
                         </Col>
                         <Col md={4}>
                             <label htmlFor="cpf">CPF: </label>
@@ -75,10 +71,10 @@ const CadastrarPaciente = props => {
                     </Row>
                     <Row style={{marginTop: '32px', marginBottom: '32px'}}>
                         <Col md={6}>
-                            <label htmlFor="data-nascimento">Data de Nascimento: </label>
+                            <label htmlFor="birthday">Data de Nascimento: </label>
                             <input 
                                 type="date" 
-                                id="data-nascimento" 
+                                id="birthday" 
                                 className={dateColor}
                                 placeholder="Data de Nascimento" 
                                 onChange={handleDateChage}
@@ -86,14 +82,15 @@ const CadastrarPaciente = props => {
                             />
                         </Col>
                         <Col md={6}>
-                            <div className="sexo">
+                            Gênero
+                            <div className="genders">
                                 <label>
-                                    <input type="radio" className="option-input radio" name="sexo" defaultChecked />
+                                    <input type="radio" className="option-input radio" name="genders" defaultChecked />
                                     Masculino
                                 </label>
                                 <br />
                                 <label>
-                                    <input type="radio" className="option-input radio" name="sexo" />
+                                    <input type="radio" className="option-input radio" name="genders" />
                                     Feminino
                                 </label>
                             </div>
@@ -108,8 +105,8 @@ const CadastrarPaciente = props => {
                     </h1>
                     <Row>
                         <Col md={6}>
-                            <label htmlFor="logradouro">Logradouro: </label>
-                            <input type="text" id="logradouro" className="form-control input" placeholder="Rua, AV, etc..." />
+                            <label htmlFor="street">Logradouro: </label>
+                            <input type="text" id="street" className="form-control input" placeholder="Rua, AV, etc..." />
                         </Col>
                         <Col md={6}>
                             <label htmlFor="numero">Número: </label>
@@ -118,8 +115,8 @@ const CadastrarPaciente = props => {
                     </Row>
                     <Row style={{marginTop: '32px', marginBottom: '32px'}}>
                         <Col md={6}>
-                            <label htmlFor="bairro">Bairro: </label>                                    
-                            <input type="text" id="bairro" className="form-control input"/>
+                            <label htmlFor="neighborhood">Bairro: </label>                                    
+                            <input type="text" id="neighborhood" className="form-control input"/>
                         </Col>
                         <Col md={6}>
                             <label htmlFor="cep">CEP: </label>
@@ -128,12 +125,19 @@ const CadastrarPaciente = props => {
                     </Row>
                     <Row style={{marginBottom: '32px'}}>
                         <Col md={6}>
-                            <label htmlFor="municipio">Municipio: </label>
-                            <input type="text" id="municipio" className="form-control input" />
+                            <label htmlFor="city_id">Municipio: </label>
+                            <select className="form-control input">
+                                <option value="1">Novo Hamburgo</option>
+                                <option value="2">São Leopoldo</option>
+                                <option value="3">Sapucaia</option>
+                                <option value="4">Esteio</option>
+                                <option value="5">Canoas</option>
+                                <option value="6">Porto Alegre</option>
+                            </select>
                         </Col>
                         <Col md={6}>
-                            <label htmlFor="uf">UF: </label>                                    
-                            <select id="uf" className="form-control input">
+                            <label htmlFor="state">UF: </label>                                    
+                            <select id="state" className="form-control input">
                                 <option value="ACRE">ACRE</option>
                                 <option value="ALAGOAS">ALAGOAS</option>
                                 <option value="AMAPÁ">AMAPÁ</option>
@@ -175,18 +179,18 @@ const CadastrarPaciente = props => {
                     </h1>
                     <Row>
                         <Col md={6}>
-                            <label htmlFor="contato_emergencia">Contato de Emergência: </label>                                    
-                            <input type="text" id="contato_emergencia" className="form-control input" placeholder="DDD + número" />
+                            <label htmlFor="emergency_contact">Contato de Emergência: </label>                                    
+                            <input type="text" id="emergency_contact" className="form-control input" placeholder="DDD + número" />
                         </Col>
                         <Col md={6}>
-                            <label htmlFor="nome_emergencia">Nome: </label>
-                            <input type="text" id="nome_emergencia" className="form-control input" placeholder="Nome completo" />                               
+                            <label htmlFor="emergency_name">Nome: </label>
+                            <input type="text" id="emergency_name" className="form-control input" placeholder="Nome completo" />                               
                         </Col>
                     </Row>
                     <Row style={{marginTop: '32px', marginBottom: '32px'}}>
                         <Col md={12}>
-                            <label htmlFor="observacao">Observação: </label>                                    
-                            <textarea className="form-control input" id="observacao"></textarea>
+                            <label htmlFor="observation">Observação: </label>                                    
+                            <textarea className="form-control input" id="observation"></textarea>
                         </Col>
                     </Row>
                 </div>
@@ -200,19 +204,19 @@ const CadastrarPaciente = props => {
                     </h1>
                     <Row style={{marginBottom: '32px'}}>
                         <Col md={6}>
-                            <label htmlFor="valor_consulta">Valor: </label>                                    
-                            <input type="text" value={currency} onChange={handleCurrency} className="form-control input" id="valor_consulta" />
+                            <label htmlFor="value">Valor: </label>                                    
+                            <input type="text" value={currency} onChange={handleCurrency} className="form-control input" id="value" />
                         </Col>
                         <Col md={6}>
                             Deseja recibo?
-                            <div className="recibo">
+                            <div className="receipt">
                                 <label>
-                                    <input type="radio" className="option-input radio" name="recibo" defaultChecked />
+                                    <input type="radio" className="option-input radio" name="receipt" defaultChecked />
                                     Sim
                                 </label>
                                 <br />
                                 <label>
-                                    <input type="radio" className="option-input radio" name="recibo" />
+                                    <input type="radio" className="option-input radio" name="receipt" />
                                     Não
                                 </label>
                             </div>
@@ -229,12 +233,12 @@ const CadastrarPaciente = props => {
                     </h1>
                     <Row>
                         <Col md={6}>
-                            <label htmlFor="usuario">Usuário: </label>                                    
-                            <input type="text" className="form-control input" id="usuario" />
+                            <label htmlFor="login">Usuário: </label>                                    
+                            <input type="text" className="form-control input" id="login" />
                         </Col>
                         <Col md={6}>
-                            <label htmlFor="senha">Senha: </label>                                    
-                            <input type="password" className="form-control input" id="senha" />
+                            <label htmlFor="password">Senha: </label>                                    
+                            <input type="password" className="form-control input" id="password" />
                         </Col>
                     </Row>
                     <Row style={{marginTop: '32px', marginBottom: '32px'}}>
@@ -248,14 +252,14 @@ const CadastrarPaciente = props => {
                         </Col>
                         <Col md={6}>
                             Cadastro ativo?
-                            <div className="cadastro_ativo">
+                            <div className="active">
                                 <label>
-                                    <input type="radio" className="option-input radio" name="cadastro_ativo" defaultChecked />
+                                    <input type="radio" className="option-input radio" name="active" defaultChecked />
                                     Sim
                                 </label>
                                 <br />
                                 <label>
-                                    <input type="radio" className="option-input radio" name="cadastro_ativo" />
+                                    <input type="radio" className="option-input radio" name="active" />
                                     Não
                                 </label>
                             </div>
@@ -280,4 +284,4 @@ const mapDispatchToProps = dispatch => ({
    setPageTitle: title => dispatch(actions.setPageTitle(title))
 });
 
-export default connect(null, mapDispatchToProps)(CadastrarPaciente);
+export default connect(null, mapDispatchToProps)(StorePatients);
