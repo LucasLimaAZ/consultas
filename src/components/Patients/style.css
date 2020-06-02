@@ -3,7 +3,10 @@ form {
   margin-top: 40px;
 }
 
-/* RADIO BUTTONS */
+.table-responsive {
+  display: table;
+}
+
 .genders, .receipt, .active {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -11,6 +14,11 @@ form {
   -ms-flex-pack: distribute;
       justify-content: space-around;
   margin-top: 24px;
+}
+
+.edit-button, .delete-button {
+  background: #17a2b8;
+  color: #ffffff;
 }
 
 @-webkit-keyframes click-wave {

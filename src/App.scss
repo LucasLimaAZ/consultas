@@ -1,5 +1,11 @@
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 @import "vars";
+
+*{
+  outline: 0 !important;
+  outline-width: 0px !important;
+  outline-style: none !important;
+}
  
 .App {
   display: flex;
