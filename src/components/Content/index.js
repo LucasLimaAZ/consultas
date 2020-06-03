@@ -1,21 +1,20 @@
-import React from 'react';
-import classNames from 'classnames';
-import { Container } from 'reactstrap';
-import NavBar from './Navbar';
-import { Switch, Route } from 'react-router-dom';
+import React from 'react'
+import classNames from 'classnames'
+import { Container } from 'reactstrap'
+import NavBar from './Navbar'
+import { Switch } from 'react-router-dom'
+import { ProtectedRoute } from '../../protected.route'
 
-import StorePatients from '../Patients/storePatient';
-import Patients from '../Patients/patients';
+import StorePatients from '../Patients/storePatient'
+import Patients from '../Patients/patients'
 
 export default props => (
     <Container fluid className={classNames('content', {'is-open': props.isOpen})}>
-      <NavBar toggle={props.toggle}/>
-      <Switch>
-        <Route exact path="/" component={() => "Ainda não temos home..." } />
-        <Route exact path="/cadastrar-pacientes" component={StorePatients} />
-        <Route exact path="/pacientes" component={Patients} />
-        <Route exact path="/faq" component={() => "FAQ" } />
-        <Route exact path="/contact" component={() => "Contact" } />              
-      </Switch>
+		<NavBar toggle={props.toggle}/>
+		<Switch>
+			<ProtectedRoute exact path="/" component={() => "Ainda não temos home..." } />
+			<ProtectedRoute exact path="/cadastrar-pacientes" component={StorePatients} />
+			<ProtectedRoute exact path="/pacientes" component={Patients} />          
+		</Switch>
     </Container>
 )

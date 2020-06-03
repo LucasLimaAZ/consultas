@@ -1,0 +1,35 @@
+@import "../../vars";
+
+.form-background{
+    background: $lightBlue;
+    margin-top: 5%;
+    padding: 5%;
+    border-radius: 0.35rem;
+}
+
+.form-background form{
+    background: $lightBlue;
+    margin: 0;
+}
+
+.form-background form h2{
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.form-background form input{
+    margin-bottom: 16px;
+    border-radius: 0.35rem !important;
+}
+
+.form-background button{
+    background: #ffffff !important;
+    color: $darkBlue !important;
+    border: 1px solid $darkBlue !important;
+    &:hover{
+        background: $darkBlue !important;
+        color: #ffffff !important;
+        border: 1px solid #ffffff !important;
+    }
+}
