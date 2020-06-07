@@ -10,5 +10,5 @@ export const cpfMask = value => {
 export const currencyMask = value => {
 
     //fazer mascara de dinheiro
-    return value;
+    return value
 }

@@ -1,32 +1,32 @@
-import React, { useEffect, useState } from 'react';
-import './style.scss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserPlus } from '@fortawesome/free-solid-svg-icons';
-import { Container, Row, Col, Button } from 'reactstrap';
-import { connect } from 'react-redux';
-import * as actions from '../../store/actions';
-import { cpfMask, currencyMask } from '../Mask/index';
+import React, { useEffect, useState } from 'react'
+import './style.scss'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUserPlus } from '@fortawesome/free-solid-svg-icons'
+import { Container, Row, Col, Button } from 'reactstrap'
+import { connect } from 'react-redux'
+import * as actions from '../../store/actions'
+import { cpfMask, currencyMask } from '../Mask/index'
 
 const StorePatients = props => {
 
-    const [cpf, setCpf] = useState("");
-    const [currency, setCurrency] = useState("");
-    const [dateColor, setDateColor] = useState("form-control input nascimento");
+    const [cpf, setCpf] = useState("")
+    const [currency, setCurrency] = useState("")
+    const [dateColor, setDateColor] = useState("form-control input nascimento")
 
     useEffect(() => {
-        props.setPageTitle("Cadastrar Paciente");
-    });
+        props.setPageTitle("Cadastrar Paciente")
+    })
 
     const handleCpf = e => {
-        setCpf(cpfMask(e.target.value));
+        setCpf(cpfMask(e.target.value))
     }
 
     const handleCurrency = e => {
-        setCurrency(currencyMask(e.target.value));
+        setCurrency(currencyMask(e.target.value))
     }
 
     const handleDateChage = () => {
-        setDateColor("form-control input");
+        setDateColor("form-control input")
     }
 
     return(
@@ -277,11 +277,11 @@ const StorePatients = props => {
             </Col>
         </Row>
         </>
-    );
+    )
 }
 
 const mapDispatchToProps = dispatch => ({
    setPageTitle: title => dispatch(actions.setPageTitle(title))
-});
+})
 
-export default connect(null, mapDispatchToProps)(StorePatients);
+export default connect(null, mapDispatchToProps)(StorePatients)

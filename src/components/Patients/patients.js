@@ -1,20 +1,20 @@
-import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
-import * as actions from "../../store/actions";
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Row, Col } from 'reactstrap';
-import "./style.scss";
+import React, { useEffect } from 'react'
+import { connect } from 'react-redux'
+import * as actions from "../../store/actions"
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Row, Col } from 'reactstrap'
+import "./style.scss"
 
 const Patients = props => {
 
     useEffect(() => {
-        props.setPageTitle("Gerenciar pacientes");
-    });
+        props.setPageTitle("Gerenciar pacientes")
+    })
 
     const handleInput = (e) => {
-        let teste = props.filterPatients(e.target.value);
-        console.log(props.patients);
+        let teste = props.filterPatients(e.target.value)
+        console.log(props.patients)
     }
 
     return(
@@ -58,13 +58,13 @@ const Patients = props => {
                 </tbody>
             </table>
         </div>
-    );
+    )
 }
 
 const mapDispatchToProps = dispatch => ({
     setPageTitle: title => dispatch(actions.setPageTitle(title)),
     filterPatients: patient => dispatch(actions.filterPatients(patient))
-});
+})
 
 const mapStateToProps = store => {
     return{
@@ -72,4 +72,4 @@ const mapStateToProps = store => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Patients);
+export default connect(mapStateToProps, mapDispatchToProps)(Patients)
