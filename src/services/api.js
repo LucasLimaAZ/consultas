@@ -1,24 +1,5 @@
-import axios from "axios"
-import react, { Component } from "react"
+import axios from 'axios'
 
-const baseUrl = "https://breakingbadapi.com/api"
+const api = axios.create({ baseURL: 'https://127.0.0.1:8000/api' })
 
-export default class http extends Component{
-
-    get = endpoint => {
-        axios.get(baseUrl + endpoint)
-            .then(response => {
-                const data = response.data
-                return data
-            })
-    }
-
-    post = (endpoint, postData) => {
-        axios.post(baseUrl + endpoint, postData)
-            .then(response => {
-                const data = response.data
-                return data
-            })
-    }
-
-}
+export default api

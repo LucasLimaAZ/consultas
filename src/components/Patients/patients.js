@@ -4,12 +4,21 @@ import * as actions from "../../store/actions"
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Row, Col } from 'reactstrap'
+import api from '../../services/api'
 import "./style.scss"
 
 const Patients = props => {
 
     useEffect(() => {
         props.setPageTitle("Gerenciar pacientes")
+        api.get('/patients')
+            .then(response => {
+                const data = response.data
+                console.log(data)
+            })
+            .catch(err => {
+                console.log(err)
+            })
     })
 
     const handleInput = (e) => {
