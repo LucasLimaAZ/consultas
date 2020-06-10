@@ -37,18 +37,18 @@ const patientsReducer = (state = initState, action) => {
 
         case "FILTER_PATIENTS":
 
-            state = initState;
+            state = initState
             let filteredPatients = state.patients.filter(patient => {
-                let name = patient.name.toLocaleLowerCase();
-                return name.includes(action.payload.toLocaleLowerCase());
-            });
+                let name = patient.name.toLocaleLowerCase()
+                return name.includes(action.payload.toLocaleLowerCase())
+            })
             return {
                 patients: filteredPatients
-            };
+            }
             
-        default: return state;
+        default: return state
     }
 
 }
 
-export default patientsReducer;
+export default patientsReducer

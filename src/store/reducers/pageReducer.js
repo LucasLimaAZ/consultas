@@ -7,11 +7,11 @@ const pageReducer = (state = initState, action) => {
         case "SET_PAGE_TITLE":
             return {
               pageTitle: action.payload  
-            };
+            }
 
         default:
-            return state;
+            return state
     }
 }
 
-export default pageReducer;
+export default pageReducer

@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
-import { Navbar, Button, NavbarToggler, Collapse, Nav, NavItem, NavLink } from 'reactstrap';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
+import React, { useState, useEffect } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBars } from '@fortawesome/free-solid-svg-icons'
+import { Navbar, Button, NavbarToggler, Collapse, Nav, NavItem, NavLink } from 'reactstrap'
+import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
 
 const NavBar = props => {
 
@@ -11,8 +11,8 @@ const NavBar = props => {
   const toggle = () => setOpen(!isOpen)
 
   useEffect(() => {
-    //console.log(props);
-  });
+    //console.log(props)
+  })
   
   return (
     <Navbar color="light" light className="navbar shadow-sm p-3 mb-5 bg-white rounded" expand="md">
@@ -33,7 +33,7 @@ const NavBar = props => {
       </Nav>
       </Collapse>
     </Navbar>
-  );
+  )
 }
 
 const mapStateToProps = store => {
@@ -42,4 +42,4 @@ const mapStateToProps = store => {
   }
 }
 
-export default connect(mapStateToProps)(NavBar);
+export default connect(mapStateToProps)(NavBar)

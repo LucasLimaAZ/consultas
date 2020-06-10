@@ -1,7 +1,7 @@
 export {
     setPageTitle 
-} from "./page";
+} from "./page"
 
 export {
     filterPatients
-} from "./patients";
+} from "./patients"

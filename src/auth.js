@@ -1,11 +1,30 @@
+import api from './services/api'
+
 class Auth{
-    constructor(){
+    constructor(props){
         this.authenticated = false
     }
 
-    login(callBack){
-        this.authenticated = true
-        callBack()
+    login(data, callBack, elseCallBack){
+
+        api.post('/auth/login', data)
+            .then(response => {
+                if(response.status === 200){
+                    this.authenticated = true
+                    
+                    callBack()
+                }
+                else{
+                    this.authenticated = false
+                    elseCallBack()
+                }
+            })
+            .catch(err => {
+                this.authenticated = false
+                elseCallBack()
+                console.log(err)
+            })
+
     }
 
     logout(callBack){
