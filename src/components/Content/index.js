@@ -12,7 +12,7 @@ export default props => (
     <Container fluid className={classNames('content', {'is-open': props.isOpen})}>
 		<NavBar toggle={props.toggle}/>
 		<Switch>
-			<ProtectedRoute exact path="/" component={() => "Ainda não temos home..." } />
+			<ProtectedRoute exact path="/" component={() => "Em construção..." } />
 			<ProtectedRoute exact path="/cadastrar-pacientes" component={StorePatients} />
 			<ProtectedRoute exact path="/pacientes" component={Patients} />          
 		</Switch>

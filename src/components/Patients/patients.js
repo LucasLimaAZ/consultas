@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Row, Col } from 'reactstrap'
 import "./style.scss"
 import patientsService from "../../services/patientsService"
+import Swal from "sweetalert2"
 
 class Patients extends Component{
 
@@ -17,20 +18,58 @@ class Patients extends Component{
         }
     }
 
+    initialState = []
+
     componentDidMount(){
         this.props.setPageTitle("Gerenciar pacientes")
 
+        this.fetchPatients()
+    }
+
+    fetchPatients = () => {
         patientsService.fetchAll()
         .then(response => {
             this.setState({
                 patients: response.data.data
             })
+            this.initialState = response.data.data
         })
-
     }
 
-    handleInput = (e) => {
-        let teste = this.props.filterPatients(e.target.value)
+    handleInput = e => {
+        const filteredPatients = this.initialState.filter(patient => {
+            let name = patient.name.toLocaleLowerCase()
+            let search = e.target.value.toLocaleLowerCase()
+            return name.includes(search)
+        })
+
+        this.setState({
+            patients: filteredPatients
+        })
+    }
+
+    deletePatient = id => {
+        Swal.fire({
+            title: 'Tem certeza que deseja excluir este paciente?',
+            text: 'Todos os registros vinculados ao paciente serão completamente excluídos!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Excluir',
+            cancelButtonText: 'Cancelar'
+        })
+        .then(res => {
+            if(res.value){
+                patientsService.deletePatient(id)
+                .then(res => {
+                    if(res.status === 200)
+                        this.fetchPatients()
+                        Swal.fire("Excluído com sucesso!")
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+            }
+        })
     }
 
     render(){
@@ -39,7 +78,12 @@ class Patients extends Component{
                 <Row>
                     <Col md={12}>
                         <label htmlFor="search">Pesquisar:</label>
-                        <input type="text" className="form-control input" placeholder="Digite aqui o nome do paciente..." onChange={this.handleInput} />
+                        <input 
+                            type="text" 
+                            className="form-control input" 
+                            placeholder="Digite aqui o nome do paciente..." 
+                            onChange={this.handleInput} 
+                        />
                     </Col>
                 </Row>
                 <table className="table table-striped table-sm table-responsive">
@@ -60,12 +104,16 @@ class Patients extends Component{
                                 <td>{patient.rg}</td>
                                 <td>{patient.phone}</td>
                                 <td>
-                                    <button className="btn edit-button">
+                                    <button onClick={() => Swal.fire('Em construção')} className="btn edit-button">
                                         <FontAwesomeIcon icon={faEdit} />
                                     </button>
                                 </td>
                                 <td>
-                                    <button className="btn delete-button">
+                                    <button 
+                                        id={patient.id} 
+                                        onClick={ () => this.deletePatient(patient.id) } 
+                                        className="btn delete-button"
+                                    >
                                         <FontAwesomeIcon icon={faTrash} />
                                     </button>
                                 </td>
