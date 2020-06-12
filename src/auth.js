@@ -2,7 +2,7 @@ import api from './services/api'
 
 class Auth{
     constructor(props){
-        this.authenticated = false
+        this.authenticated = true
     }
 
     login(data, callBack, elseCallBack){
@@ -10,6 +10,7 @@ class Auth{
         api.post('/auth/login', data)
             .then(response => {
                 if(response.status === 200){
+                    localStorage.setItem("access_token", response.data.access_token)
                     this.authenticated = true
                     
                     callBack()

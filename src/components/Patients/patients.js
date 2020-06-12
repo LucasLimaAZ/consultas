@@ -1,73 +1,83 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState, Component } from 'react'
 import { connect } from 'react-redux'
 import * as actions from "../../store/actions"
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Row, Col } from 'reactstrap'
-import api from '../../services/api'
 import "./style.scss"
+import patientsService from "../../services/patientsService"
 
-const Patients = props => {
+class Patients extends Component{
 
-    useEffect(() => {
-        props.setPageTitle("Gerenciar pacientes")
-        api.get('/patients')
-            .then(response => {
-                const data = response.data
-                console.log(data)
-            })
-            .catch(err => {
-                console.log(err)
-            })
-    })
+    constructor(props){
+        super(props)
 
-    const handleInput = (e) => {
-        let teste = props.filterPatients(e.target.value)
-        console.log(props.patients)
+        this.state = {
+            patients: []
+        }
     }
 
-    return(
-        <div className="box">
-            <Row>
-                <Col md={12}>
-                    <label htmlFor="search">Pesquisar:</label>
-                    <input type="text" className="form-control input" placeholder="Digite aqui o nome do paciente..." onChange={handleInput} />
-                </Col>
-            </Row>
-            <table className="table table-striped table-sm table-responsive">
-                <thead>
-                    <tr>
-                        <th>Name:</th>
-                        <th>Login:</th>
-                        <th>Value:</th>
-                        <th>Editar:</th>
-                        <th>Deletar:</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {
-                    props.patients.map((patient, index) => (
-                        <tr key={index}>
-                            <td>{patient.name}</td>
-                            <td>{patient.login}</td>
-                            <td>{patient.value}</td>
-                            <td>
-                                <button className="btn edit-button">
-                                    <FontAwesomeIcon icon={faEdit} />
-                                </button>
-                            </td>
-                            <td>
-                                <button className="btn delete-button">
-                                    <FontAwesomeIcon icon={faTrash} />
-                                </button>
-                            </td>
+    componentDidMount(){
+        this.props.setPageTitle("Gerenciar pacientes")
+
+        patientsService.fetchAll()
+        .then(response => {
+            this.setState({
+                patients: response.data.data
+            })
+        })
+
+    }
+
+    handleInput = (e) => {
+        let teste = this.props.filterPatients(e.target.value)
+    }
+
+    render(){
+        return(
+            <div className="box">
+                <Row>
+                    <Col md={12}>
+                        <label htmlFor="search">Pesquisar:</label>
+                        <input type="text" className="form-control input" placeholder="Digite aqui o nome do paciente..." onChange={this.handleInput} />
+                    </Col>
+                </Row>
+                <table className="table table-striped table-sm table-responsive">
+                    <thead>
+                        <tr>
+                            <th>Name:</th>
+                            <th>RG:</th>
+                            <th>Celular:</th>
+                            <th>Editar:</th>
+                            <th>Deletar:</th>
                         </tr>
-                    ))
-                }
-                </tbody>
-            </table>
-        </div>
-    )
+                    </thead>
+                    <tbody>
+                    {
+                        this.state.patients.map((patient, index) => (
+                            <tr key={index}>
+                                <td>{patient.name}</td>
+                                <td>{patient.rg}</td>
+                                <td>{patient.phone}</td>
+                                <td>
+                                    <button className="btn edit-button">
+                                        <FontAwesomeIcon icon={faEdit} />
+                                    </button>
+                                </td>
+                                <td>
+                                    <button className="btn delete-button">
+                                        <FontAwesomeIcon icon={faTrash} />
+                                    </button>
+                                </td>
+                            </tr>
+                        ))
+                    }
+                    </tbody>
+                </table>
+            </div>
+        )
+    }
+    
 }
 
 const mapDispatchToProps = dispatch => ({
