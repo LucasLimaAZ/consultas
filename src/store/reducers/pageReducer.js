@@ -1,5 +1,5 @@
 const initState = {
-    pageTitle: "Gerenciador de consultas"
+    pageTitle: "Gerenciador de consultas (Version 6.15)"
 }
 
 const pageReducer = (state = initState, action) => {
