@@ -6,6 +6,7 @@ import { Row, Col, Button } from 'reactstrap'
 import { connect } from 'react-redux'
 import * as actions from '../../store/actions'
 import { cpfMask, currencyMask } from '../Mask/index'
+import patientsService from "../../services/patientsService"
 
 const StorePatients = props => {
 
@@ -20,7 +21,14 @@ const StorePatients = props => {
 
     const handleCpf = e => {
         setCpf(cpfMask(e.target.value))
-        setBody(e.target.value)
+        
+        let value = e.target.value
+        let name = e.target.name
+
+        setBody({
+            ...body,
+            [name]: value
+        })
     }
 
     const handleCurrency = e => {
@@ -44,6 +52,13 @@ const StorePatients = props => {
     const handleFormSubmit = e => {
         e.preventDefault()
         console.log(body)
+        patientsService.store(body)
+        .then(res => {
+            console.log(res)
+        })
+        .catch(err => {
+            console.log(err)
+        })
     }
 
     return(
