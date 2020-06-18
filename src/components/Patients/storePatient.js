@@ -310,7 +310,7 @@ const StorePatients = props => {
                     </h1>
                     <Row>
                         <Col md={4}>
-                            <label htmlFor="email">Usuário: </label>                                    
+                            <label htmlFor="email">Email: </label>                                    
                             <input onChange={handleChangeUser} type="email" className="form-control input" name="email" />
                         </Col>
                         <Col md={4}>
