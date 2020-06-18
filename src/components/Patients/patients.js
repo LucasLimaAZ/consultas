@@ -55,7 +55,9 @@ class Patients extends Component{
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Excluir',
-            cancelButtonText: 'Cancelar'
+            confirmButtonColor: 'red',
+            cancelButtonText: 'Cancelar',
+            cancelButtonColor: '#1492A5'
         })
         .then(res => {
             if(res.value){
