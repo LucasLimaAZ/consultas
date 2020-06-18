@@ -19,6 +19,11 @@ form{
 	color: #ffffff;
 }
 
+.edit-button:hover, .delete-button:hover{
+	background: $darkBlue;
+	color: #ffffff;
+}
+
 @keyframes click-wave {
 	0% {
 		height: 20px;
