@@ -34,7 +34,15 @@ const StorePatients = props => {
         setCurrency(currencyMask(e.target.value))
     }
 
-    const handleDateChage = () => {
+    const handleDateChage = e => {
+        let value = e.target.value
+        let name = e.target.name
+
+        setBody({
+            ...body,
+            [name]: value
+        })
+
         setDateColor("form-control input")
     }
 
@@ -56,6 +64,7 @@ const StorePatients = props => {
             ...body,
             user: {
                 ...body.user,
+                name: body.name,
                 [name]: value
             }
         })
@@ -111,8 +120,8 @@ const StorePatients = props => {
                             <input onChange={handleChangeBody} type="text" name="name" placeholder="Nome completo" className="form-control input" />
                         </Col>
                         <Col md={4}>
-                            <label htmlFor="landline">Telefone Fixo: </label>                                    
-                            <input onChange={handleChangeBody} type="text" name="landline" className="form-control input" placeholder="DDD + número"/>
+                            <label htmlFor="telephone">Telefone Fixo: </label>                                    
+                            <input onChange={handleChangeBody} type="text" name="telephone" className="form-control input" placeholder="DDD + número"/>
                         </Col>
                     </Row>
                     <Row style={{marginTop: '32px'}}>
@@ -184,7 +193,7 @@ const StorePatients = props => {
                     <Row style={{marginTop: '32px', marginBottom: '32px'}}>
                         <Col md={6}>
                             <label htmlFor="neighborhood">Bairro: </label>                                    
-                            <input onChange={handleChangeAddress} type="text" name="neighborhood" className="form-control input"/>
+                            <input type="text" name="neighborhood" className="form-control input"/>
                         </Col>
                         <Col md={6}>
                             <label htmlFor="cep">CEP: </label>
@@ -248,17 +257,17 @@ const StorePatients = props => {
                     <Row>
                         <Col md={6}>
                             <label htmlFor="emergency_contact">Contato de Emergência: </label>                                    
-                            <input onChange={handleChangeBody} type="text" name="emergency_contact" className="form-control input" placeholder="DDD + número" />
+                            <input type="text" name="emergency_contact" className="form-control input" placeholder="DDD + número" />
                         </Col>
                         <Col md={6}>
                             <label htmlFor="emergency_name">Nome: </label>
-                            <input onChange={handleChangeBody} type="text" name="emergency_name" className="form-control input" placeholder="Nome completo" />                               
+                            <input type="text" name="emergency_name" className="form-control input" placeholder="Nome completo" />                               
                         </Col>
                     </Row>
                     <Row style={{marginTop: '32px', marginBottom: '32px'}}>
                         <Col md={12}>
                             <label htmlFor="observation">Observação: </label>                                    
-                            <textarea onChange={handleChangeBody} className="form-control input" name="observation"></textarea>
+                            <textarea className="form-control input" name="observation"></textarea>
                         </Col>
                     </Row>
                 </div>
@@ -273,7 +282,7 @@ const StorePatients = props => {
                     <Row style={{marginBottom: '32px'}}>
                         <Col md={6}>
                             <label htmlFor="value">Valor: </label>                                    
-                            <input onChange={handleChangeUser} type="text" value={currency} onChange={handleCurrency} className="form-control input" name="value" />
+                            <input type="text" onChange={handleChangeUser} className="form-control input" name="value" />
                         </Col>
                         <Col md={6}>
                             Deseja recibo?
@@ -301,8 +310,8 @@ const StorePatients = props => {
                     </h1>
                     <Row>
                         <Col md={4}>
-                            <label htmlFor="login">Usuário: </label>                                    
-                            <input onChange={handleChangeUser} type="text" className="form-control input" name="login" />
+                            <label htmlFor="email">Usuário: </label>                                    
+                            <input onChange={handleChangeUser} type="email" className="form-control input" name="email" />
                         </Col>
                         <Col md={4}>
                             <label htmlFor="password">Senha: </label>                                    
