@@ -2,7 +2,7 @@ import api from './services/api'
 
 class Auth{
     constructor(props){
-        this.authenticated = false
+        this.authenticated = true
     }
 
     login(data, callBack, elseCallBack){

@@ -8,6 +8,8 @@ const api = axios.create({
 api.interceptors.request.use(
     request => {
         request.headers = {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
             'Authorization': "Bearer " + localStorage.getItem('access_token'),
         }
       return request
