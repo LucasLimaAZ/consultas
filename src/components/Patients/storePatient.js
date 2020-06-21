@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import * as actions from '../../store/actions'
 import { cpfMask, currencyMask } from '../Mask/index'
 import patientsService from "../../services/patientsService"
+import statesService from "../../services/statesService"
 import Swal from "sweetalert2"
 
 const StorePatients = props => {
@@ -16,7 +17,18 @@ const StorePatients = props => {
 
     useEffect(() => {
         props.setPageTitle("Cadastrar Paciente")
+        populateStates()
     })
+
+    const populateStates = () => {
+        statesService.fetchAll()
+        .then(res => {
+            console.log(res.data)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
 
     const handleCpf = e => {
         setCpf(cpfMask(e.target.value))
@@ -202,18 +214,7 @@ const StorePatients = props => {
                     </Row>
                     <Row style={{marginBottom: '32px'}}>
                         <Col md={6}>
-                            <label htmlFor="city_id">Municipio: </label>
-                            <select onChange={handleChangeAddress} name="city_id" className="form-control input">
-                                <option value="1">Novo Hamburgo</option>
-                                <option value="2">São Leopoldo</option>
-                                <option value="3">Sapucaia</option>
-                                <option value="4">Esteio</option>
-                                <option value="5">Canoas</option>
-                                <option value="6">Porto Alegre</option>
-                            </select>
-                        </Col>
-                        <Col md={6}>
-                            <label htmlFor="state">UF: </label>                                    
+                            <label htmlFor="state">Estado: </label>                                    
                             <select name="state" className="form-control input">
                                 <option value="ACRE">ACRE</option>
                                 <option value="ALAGOAS">ALAGOAS</option>
@@ -242,6 +243,12 @@ const StorePatients = props => {
                                 <option value="SÃO PAULO">SÃO PAULO</option>
                                 <option value="SERGIPE">SERGIPE</option>
                                 <option value="TOCANTINS">TOCANTINS</option>
+                            </select>
+                        </Col>
+                        <Col md={6}>
+                            <label htmlFor="city_id">Municipio: </label>
+                            <select onChange={handleChangeAddress} name="city_id" className="form-control input" disabled>
+                                <option>Selecione o estado</option>
                             </select>
                         </Col>
                     </Row>
