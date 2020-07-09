@@ -24,16 +24,18 @@ class Patients extends Component{
         this.props.setPageTitle("Gerenciar pacientes")
 
         this.fetchPatients()
+        this.props.fetchPatients()
+        console.log("pacientes: ", this.props.patients)
     }
 
     fetchPatients = () => {
-        patientsService.fetchAll()
-        .then(response => {
-            this.setState({
-                patients: response.data.data
-            })
-            this.initialState = response.data.data
-        })
+        // patientsService.fetchAll()
+        // .then(response => {
+        //     this.setState({
+        //         patients: response.data.data
+        //     })
+        //     this.initialState = response.data.data
+        // })
     }
 
     handleInput = e => {
@@ -132,7 +134,8 @@ class Patients extends Component{
 
 const mapDispatchToProps = dispatch => ({
     setPageTitle: title => dispatch(actions.setPageTitle(title)),
-    filterPatients: patient => dispatch(actions.filterPatients(patient))
+    filterPatients: patient => dispatch(actions.filterPatients(patient)),
+    fetchPatients: () => dispatch(actions.fetchPatients())
 })
 
 const mapStateToProps = store => {

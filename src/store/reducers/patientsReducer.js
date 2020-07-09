@@ -10,6 +10,11 @@ const patientsReducer = (state = {}, action) => {
             return {
                 patients: filteredPatients
             }
+
+        case "SET_PATIENTS":
+            return {
+                patients: action.payload
+            }
             
         default: return state
     }
