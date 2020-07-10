@@ -3,5 +3,6 @@ export {
 } from "./page"
 
 export {
-    filterPatients
+    filterPatients,
+    fetchPatients
 } from "./patients"
