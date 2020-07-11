@@ -23,6 +23,7 @@ const patientsReducer = (state = {}, action) => {
             let remainingPatients = state.patients.filter(patient => {
                 return patient.id != action.payload.id
             })
+            initState.patients = remainingPatients
             return {
                 patients: remainingPatients,
                 status: action.payload.jsonResponse.status
