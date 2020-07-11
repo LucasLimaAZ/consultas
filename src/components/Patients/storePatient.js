@@ -53,6 +53,16 @@ const StorePatients = props => {
                     document.querySelector("#neighborhood").value = res.data.bairro
                     document.querySelector("#state").value = res.data.uf
                     document.querySelector("#city").value = res.data.localidade
+                    setBody({
+                        ...body,
+                        address: {
+                            ...body.address,
+                            city_id: 1,
+                            cep: cep,
+                            street: res.data.logradouro
+                            //neighborhood: res.data.logradouro
+                        }
+                    })
                 }
             })
             .catch(err => console.log("Um erro ocorreu ao buscar o CEP: ", err))
@@ -102,6 +112,7 @@ const StorePatients = props => {
             ...body,
             address: {
                 ...body.address,
+                city_id: 1,
                 [name]: value
             }
         })
