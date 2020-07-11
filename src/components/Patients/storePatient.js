@@ -5,18 +5,30 @@ import { connect } from 'react-redux'
 import * as actions from '../../store/actions'
 import { cpfMask, currencyMask } from '../Mask/index'
 import patientsService from "../../services/patientsService"
+import statesService from "../../services/statesService"
 import Swal from "sweetalert2"
+import axios from "axios"
 
 const StorePatients = props => {
 
     const [cpf, setCpf] = useState("")
-    const [currency, setCurrency] = useState("")
     const [dateColor, setDateColor] = useState("form-control input nascimento")
     const [body, setBody] = useState({})
 
     useEffect(() => {
         props.setPageTitle("Cadastrar Paciente")
+        //populateStates()
     })
+
+    const populateStates = () => {
+        statesService.fetchAll()
+        .then(res => {
+            console.log(res.data)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
 
     const handleCpf = e => {
         setCpf(cpfMask(e.target.value))
@@ -30,8 +42,20 @@ const StorePatients = props => {
         })
     }
 
-    const handleCurrency = e => {
-        setCurrency(currencyMask(e.target.value))
+    const handleChangeCep = e => {
+        let cep = e.target.value
+
+        if(cep.length === 8)
+            axios.get(`https://viacep.com.br/ws/${cep}/json`)
+            .then(res => {
+                if(!res.data.erro){
+                    document.querySelector("#street").value = res.data.logradouro
+                    document.querySelector("#neighborhood").value = res.data.bairro
+                    document.querySelector("#state").value = res.data.uf
+                    document.querySelector("#city").value = res.data.localidade
+                }
+            })
+            .catch(err => console.log("Um erro ocorreu ao buscar o CEP: ", err))
     }
 
     const handleDateChage = e => {
@@ -182,67 +206,60 @@ const StorePatients = props => {
                     </h1>
                     <Row>
                         <Col md={6}>
-                            <label htmlFor="street">Logradouro: </label>
-                            <input onChange={handleChangeAddress} type="text" name="street" className="form-control input" placeholder="Rua, AV, etc..." />
+                            <label htmlFor="cep">CEP: </label>
+                            <input maxLength="8" onChange={handleChangeCep} type="text" name="cep" className="form-control input" />
                         </Col>
                         <Col md={6}>
-                            <label htmlFor="numero">Número: </label>
-                            <input onChange={handleChangeAddress} type="number" name="number" className="form-control input" />
+                            <label htmlFor="street">Logradouro: </label>
+                            <input onChange={handleChangeAddress} id="street" type="text" name="street" className="form-control input" placeholder="Rua, AV, etc..." />
                         </Col>
                     </Row>
                     <Row style={{marginTop: '32px', marginBottom: '32px'}}>
                         <Col md={6}>
-                            <label htmlFor="neighborhood">Bairro: </label>                                    
-                            <input type="text" name="neighborhood" className="form-control input"/>
+                            <label htmlFor="numero">Número: </label>
+                            <input onChange={handleChangeAddress} id="number" type="number" name="number" className="form-control input" />
                         </Col>
                         <Col md={6}>
-                            <label htmlFor="cep">CEP: </label>
-                            <input onChange={handleChangeAddress} type="text" name="cep" className="form-control input" />
+                            <label htmlFor="neighborhood">Bairro: </label>                                    
+                            <input id="neighborhood" type="text" name="neighborhood" className="form-control input"/>
                         </Col>
                     </Row>
                     <Row style={{marginBottom: '32px'}}>
                         <Col md={6}>
-                            <label htmlFor="city_id">Municipio: </label>
-                            <select onChange={handleChangeAddress} name="city_id" className="form-control input">
-                                <option value="1">Novo Hamburgo</option>
-                                <option value="2">São Leopoldo</option>
-                                <option value="3">Sapucaia</option>
-                                <option value="4">Esteio</option>
-                                <option value="5">Canoas</option>
-                                <option value="6">Porto Alegre</option>
+                            <label htmlFor="state">UF: </label>                                    
+                            <select name="state" id="state" className="form-control input">
+                                <option value="AC">AC</option>
+                                <option value="AL">AL</option>
+                                <option value="AP">AP</option>
+                                <option value="AM">AM</option>
+                                <option value="BA">BA</option>
+                                <option value="CE">CE</option>
+                                <option value="DF">DF</option>
+                                <option value="ES">ES</option>
+                                <option value="GO">GO</option>
+                                <option value="MA">MA</option>
+                                <option value="MT">MT</option>
+                                <option value="MS">MS</option>
+                                <option value="MG">MG</option>
+                                <option value="PA">PA</option>
+                                <option value="PB">PB</option>
+                                <option value="PR">PR</option>
+                                <option value="PE">PE</option>
+                                <option value="PI">PI</option>
+                                <option value="RJ">RJ</option>
+                                <option value="RN">RN</option>
+                                <option value="RS">RS</option>
+                                <option value="RO">RO</option>
+                                <option value="RR">RR</option>
+                                <option value="SC">SC</option>
+                                <option value="SP">SP</option>
+                                <option value="SE">SE</option>
+                                <option value="TO">TO</option>
                             </select>
                         </Col>
                         <Col md={6}>
-                            <label htmlFor="state">UF: </label>                                    
-                            <select name="state" className="form-control input">
-                                <option value="ACRE">ACRE</option>
-                                <option value="ALAGOAS">ALAGOAS</option>
-                                <option value="AMAPÁ">AMAPÁ</option>
-                                <option value="AMAZONAS">AMAZONAS</option>
-                                <option value="BAHIA">BAHIA</option>
-                                <option value="CEARÁ">CEARÁ</option>
-                                <option value="DISTRITO FEDERAL">DISTRITO FEDERAL</option>
-                                <option value="ESPÍRITO SANTO">ESPÍRITO SANTO</option>
-                                <option value="GOIÁS">GOIÁS</option>
-                                <option value="MARANHÃO">MARANHÃO</option>
-                                <option value="MATO GROSSO">MATO GROSSO</option>
-                                <option value="MATO GROSSO DO SUL">MATO GROSSO DO SUL</option>
-                                <option value="MINAS GERAIS">MINAS GERAIS</option>
-                                <option value="PARÁ">PARÁ</option>
-                                <option value="PARAÍBA">PARAÍBA</option>
-                                <option value="PARANÁ">PARANÁ</option>
-                                <option value="PERNAMBUCO">PERNAMBUCO</option>
-                                <option value="PIAUÍ">PIAUÍ</option>
-                                <option value="RIO DE JANEIRO">RIO DE JANEIRO</option>
-                                <option value="RIO GRANDE DO NORTE">RIO GRANDE DO NORTE</option>
-                                <option value="RIO GRANDE DO SUL">RIO GRANDE DO SUL</option>
-                                <option value="RONDÔNIA">RONDÔNIA</option>
-                                <option value="RORAIMA">RORAIMA</option>
-                                <option value="SANTA CATARINA">SANTA CATARINA</option>
-                                <option value="SÃO PAULO">SÃO PAULO</option>
-                                <option value="SERGIPE">SERGIPE</option>
-                                <option value="TOCANTINS">TOCANTINS</option>
-                            </select>
+                            <label htmlFor="city_id">Municipio: </label>
+                            <input type="text" onChange={handleChangeAddress} name="city" id="city" className="form-control input" />
                         </Col>
                     </Row>
                 </div>

@@ -28,7 +28,6 @@ const NavBar = props => {
                 {props.pageTitle}
               </h1>
             </div>
-            {/* <NavLink tag={Link} to={'/page-1'}>Usuário</NavLink> */}
           </NavItem>
       </Nav>
       </Collapse>

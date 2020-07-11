@@ -110,7 +110,7 @@ height: 100vh;
   }
 
   li a.dropdown-toggle::after {
-      display: inline-block;
+      display: none;
       position: relative;
       left: 68%;
   }
@@ -118,4 +118,8 @@ height: 100vh;
 
 .sidebar-item{
   cursor: pointer;
+}
+
+.loader{
+  text-align: center;
 }

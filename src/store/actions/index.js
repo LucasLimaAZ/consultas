@@ -3,5 +3,7 @@ export {
 } from "./page"
 
 export {
-    filterPatients
+    filterPatients,
+    fetchPatients,
+    deletePatient
 } from "./patients"
