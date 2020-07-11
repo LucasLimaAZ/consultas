@@ -8,3 +8,11 @@ export function* fetchAll(){
         payload: jsonResponse.data.data
     })
 }
+
+export function* deletePatient(action){
+    let jsonResponse = yield call(patientsService.deletePatient, action.payload)
+    yield put({
+        type: "DELETE_PATIENT",
+        payload: {jsonResponse: jsonResponse, id: action.payload}
+    })
+}

@@ -4,5 +4,6 @@ export {
 
 export {
     filterPatients,
-    fetchPatients
+    fetchPatients,
+    deletePatient
 } from "./patients"

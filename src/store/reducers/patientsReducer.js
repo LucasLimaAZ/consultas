@@ -1,9 +1,11 @@
+const initState = {}
+
 const patientsReducer = (state = {}, action) => {
 
     switch(action.type){
 
         case "FILTER_PATIENTS":
-            let filteredPatients = state.patients.filter(patient => {
+            let filteredPatients = initState.patients.filter(patient => {
                 let name = patient.name.toLocaleLowerCase()
                 return name.includes(action.payload.toLocaleLowerCase())
             })
@@ -12,8 +14,18 @@ const patientsReducer = (state = {}, action) => {
             }
 
         case "SET_PATIENTS":
+            initState.patients = action.payload
             return {
                 patients: action.payload
+            }
+
+        case "DELETE_PATIENT":
+            let remainingPatients = state.patients.filter(patient => {
+                return patient.id != action.payload.id
+            })
+            return {
+                patients: remainingPatients,
+                status: action.payload.jsonResponse.status
             }
             
         default: return state

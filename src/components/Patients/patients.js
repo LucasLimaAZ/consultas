@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Component } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import * as actions from "../../store/actions"
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
@@ -6,26 +6,20 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Row, Col } from 'reactstrap'
 import Loader from 'react-loader-spinner'
 import "./style.scss"
-import patientsService from "../../services/patientsService"
 import Swal from "sweetalert2"
 
 const Patients = props => {
 
+    const [initState, setInitState] = useState([])
+
     useEffect(() => {
         props.setPageTitle("Gerenciar pacientes")
         props.fetchPatients()
+        setInitState(props.patients)
     },[])
 
     const handleInput = e => {
-        const filteredPatients = this.initialState.filter(patient => {
-            let name = patient.name.toLocaleLowerCase()
-            let search = e.target.value.toLocaleLowerCase()
-            return name.includes(search)
-        })
-
-        this.setState({
-            patients: filteredPatients
-        })
+        props.filterPatients(e.target.value)
     }
 
     const deletePatient = id => {
@@ -40,17 +34,8 @@ const Patients = props => {
             cancelButtonColor: '#1492A5'
         })
         .then(res => {
-            if(res.value){
-                patientsService.deletePatient(id)
-                .then(res => {
-                    if(res.status === 200)
-                        this.fetchPatients()
-                        Swal.fire("Excluído com sucesso!")
-                })
-                .catch(err => {
-                    console.log(err)
-                })
-            }
+            if(res.value)
+                props.deletePatient(id)
         })
     }
     return(
@@ -114,7 +99,8 @@ const Patients = props => {
 const mapDispatchToProps = dispatch => ({
     setPageTitle: title => dispatch(actions.setPageTitle(title)),
     filterPatients: patient => dispatch(actions.filterPatients(patient)),
-    fetchPatients: () => dispatch(actions.fetchPatients())
+    fetchPatients: () => dispatch(actions.fetchPatients()),
+    deletePatient: id => dispatch(actions.deletePatient(id))
 })
 
 const mapStateToProps = store => {

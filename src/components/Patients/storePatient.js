@@ -17,7 +17,7 @@ const StorePatients = props => {
 
     useEffect(() => {
         props.setPageTitle("Cadastrar Paciente")
-        populateStates()
+        //populateStates()
     })
 
     const populateStates = () => {
@@ -247,8 +247,9 @@ const StorePatients = props => {
                         </Col>
                         <Col md={6}>
                             <label htmlFor="city_id">Municipio: </label>
-                            <select onChange={handleChangeAddress} name="city_id" className="form-control input" disabled>
+                            <select onChange={handleChangeAddress} name="city_id" className="form-control input">
                                 <option>Selecione o estado</option>
+                                <option value="3">Cidade de testes!!</option>
                             </select>
                         </Col>
                     </Row>
