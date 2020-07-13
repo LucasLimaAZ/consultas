@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import SideBar from './components/SideBar'
 import Content from './components/Content'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import { HashRouter as Router, Switch, Route } from 'react-router-dom'
 import './App.scss'
 import Login from './components/Login'
 
