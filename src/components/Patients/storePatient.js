@@ -3,15 +3,18 @@ import './style.scss'
 import { Row, Col, Button } from 'reactstrap'
 import { connect } from 'react-redux'
 import * as actions from '../../store/actions'
-import { cpfMask, currencyMask } from '../Mask/index'
+import { cpfMask, phoneMask, currencyMask } from '../Mask/index'
 import patientsService from "../../services/patientsService"
-import statesService from "../../services/statesService"
 import Swal from "sweetalert2"
 import axios from "axios"
 
 const StorePatients = props => {
 
     const [cpf, setCpf] = useState("")
+    const [emergencyContact, setEmergencyContact] = useState("")
+    const [value, setValue] = useState("R$ 0,00")
+    const [phone, setPhone] = useState("")
+    const [mobilephone, setMobilephone] = useState("")
     const [isCepValid, setIsCepValid] = useState(false)
     const [dateColor, setDateColor] = useState("form-control input nascimento")
     const [body, setBody] = useState({})
@@ -85,9 +88,29 @@ const StorePatients = props => {
         })
     }
 
+    const handleChangePhone = e => {
+        let value = e.target.value.replace(/[^0-9]/g, '')
+        let name = e.target.name
+
+        if(name == "telephone")
+            setPhone(phoneMask(value))
+        else
+            setMobilephone(phoneMask(value))
+
+        setBody({
+            ...body,
+            [name]: value
+        })
+    }
+
     const handleChangeUser = e => {
         let value = e.target.value
         let name = e.target.name
+
+        if(name == "value"){
+            setValue(currencyMask(value))
+            value = value.replace(/[^0-9]/g, '')
+        }
 
         setBody({
             ...body,
@@ -112,12 +135,26 @@ const StorePatients = props => {
         })
     }
 
+    const handlePlusInformationChange = e => {
+        let value = e.target.value
+        let name = e.target.name
+
+        if(name == "emergency_contact")
+            setEmergencyContact(phoneMask(value))
+
+        setBody({
+            ...body,
+            plusInformation: {
+                ...body.plusInformation,
+                [name]: value
+            }
+        })
+    }
+
     const handleFormSubmit = e => {
         e.preventDefault()
-        console.log(body)
         patientsService.store(body)
         .then(res => {
-            console.log(res)
             Swal.fire({
                 title: "Paciente cadastrado com sucesso!",
                 icon: "success",
@@ -125,10 +162,9 @@ const StorePatients = props => {
             })
         })
         .catch(err => {
-            console.log(err)
             Swal.fire({
                 title: "Ocorreu um erro.",
-                text: "Por favor tente novamente mais tarde",
+                text: "Por favor tente novamente mais tarde.",
                 icon: "warning",
                 confirmButtonColor: "#1492A5"
             })
@@ -136,7 +172,7 @@ const StorePatients = props => {
     }
 
     return(
-        <form onSubmit={handleFormSubmit}>
+        <form autoComplete="new-password" onSubmit={handleFormSubmit}>
         <Row>
             <Col md={{size: 6}}>
                 <div className="box">
@@ -157,11 +193,12 @@ const StorePatients = props => {
                         <Col md={4}>
                             <label htmlFor="telephone">Telefone Fixo: </label>                                    
                             <input
-                                onChange={handleChangeBody} 
+                                onChange={handleChangePhone} 
                                 type="text" 
                                 name="telephone" 
                                 className="form-control input" 
                                 placeholder="DDD + número"
+                                value={phone}
                             />
                         </Col>
                     </Row>
@@ -169,11 +206,12 @@ const StorePatients = props => {
                         <Col md={4}>
                             <label htmlFor="phone">Celular: </label>
                             <input 
-                                onChange={handleChangeBody} 
+                                onChange={handleChangePhone} 
                                 type="text" 
                                 name="phone" 
                                 className="form-control input" 
                                 placeholder="DDD + número"
+                                value={mobilephone}
                             />
                         </Col>
                         <Col md={4}>
@@ -353,6 +391,8 @@ const StorePatients = props => {
                                 name="emergency_contact" 
                                 className="form-control input" 
                                 placeholder="DDD + número" 
+                                onChange={handlePlusInformationChange}
+                                value={emergencyContact}
                             />
                         </Col>
                         <Col md={6}>
@@ -362,13 +402,19 @@ const StorePatients = props => {
                                 name="emergency_name" 
                                 className="form-control input" 
                                 placeholder="Nome completo" 
+                                onChange={handlePlusInformationChange}
                             />                               
                         </Col>
                     </Row>
                     <Row style={{marginTop: '32px', marginBottom: '32px'}}>
                         <Col md={12}>
                             <label htmlFor="observation">Observação: </label>                                    
-                            <textarea className="form-control input" name="observation"></textarea>
+                            <textarea 
+                                className="form-control input" 
+                                name="observation"
+                                onChange={handlePlusInformationChange}
+                            >
+                            </textarea>
                         </Col>
                     </Row>
                 </div>
@@ -388,6 +434,7 @@ const StorePatients = props => {
                                 onChange={handleChangeUser} 
                                 className="form-control input" 
                                 name="value" 
+                                value={value}
                             />
                         </Col>
                         <Col md={6}>
@@ -431,6 +478,7 @@ const StorePatients = props => {
                                 type="email" 
                                 className="form-control input" 
                                 name="email" 
+                                autoComplete="new-password"
                             />
                         </Col>
                         <Col md={4}>
@@ -440,6 +488,7 @@ const StorePatients = props => {
                                 type="password" 
                                 className="form-control input" 
                                 name="password" 
+                                autoComplete="new-password"
                             />
                         </Col>
                         <Col md={4}>
