@@ -48,10 +48,11 @@ const StorePatients = props => {
                         ...body,
                         address: {
                             ...body.address,
-                            city_id: 1,
+                            city: res.data.localidade,
                             cep: cep,
-                            street: res.data.logradouro
-                            //neighborhood: res.data.logradouro
+                            street: res.data.logradouro,
+                            state: res.data.uf,
+                            neighborhood: res.data.bairro
                         }
                     })
                 }
@@ -106,7 +107,6 @@ const StorePatients = props => {
             ...body,
             address: {
                 ...body.address,
-                city_id: 1,
                 [name]: value
             }
         })
@@ -325,7 +325,7 @@ const StorePatients = props => {
                             </select>
                         </Col>
                         <Col md={6}>
-                            <label htmlFor="city_id">Municipio: </label>
+                            <label htmlFor="city">Municipio: </label>
                             <input 
                                 type="text" 
                                 onChange={handleChangeAddress} 
