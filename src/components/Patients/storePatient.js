@@ -3,32 +3,25 @@ import './style.scss'
 import { Row, Col, Button } from 'reactstrap'
 import { connect } from 'react-redux'
 import * as actions from '../../store/actions'
-import { cpfMask, currencyMask } from '../Mask/index'
+import { cpfMask, phoneMask, currencyMask } from '../Mask/index'
 import patientsService from "../../services/patientsService"
-import statesService from "../../services/statesService"
 import Swal from "sweetalert2"
 import axios from "axios"
 
 const StorePatients = props => {
 
     const [cpf, setCpf] = useState("")
+    const [emergencyContact, setEmergencyContact] = useState("")
+    const [value, setValue] = useState("R$ 0,00")
+    const [phone, setPhone] = useState("")
+    const [mobilephone, setMobilephone] = useState("")
+    const [isCepValid, setIsCepValid] = useState(false)
     const [dateColor, setDateColor] = useState("form-control input nascimento")
     const [body, setBody] = useState({})
 
     useEffect(() => {
         props.setPageTitle("Cadastrar Paciente")
-        //populateStates()
     })
-
-    const populateStates = () => {
-        statesService.fetchAll()
-        .then(res => {
-            console.log(res.data)
-        })
-        .catch(err => {
-            console.log(err)
-        })
-    }
 
     const handleCpf = e => {
         setCpf(cpfMask(e.target.value))
@@ -49,10 +42,25 @@ const StorePatients = props => {
             axios.get(`https://viacep.com.br/ws/${cep}/json`)
             .then(res => {
                 if(!res.data.erro){
+                    setIsCepValid(true)
                     document.querySelector("#street").value = res.data.logradouro
                     document.querySelector("#neighborhood").value = res.data.bairro
                     document.querySelector("#state").value = res.data.uf
                     document.querySelector("#city").value = res.data.localidade
+                    setBody({
+                        ...body,
+                        address: {
+                            ...body.address,
+                            city: res.data.localidade,
+                            cep: cep,
+                            street: res.data.logradouro,
+                            state: res.data.uf,
+                            neighborhood: res.data.bairro
+                        }
+                    })
+                }
+                else{
+                    setIsCepValid(false)
                 }
             })
             .catch(err => console.log("Um erro ocorreu ao buscar o CEP: ", err))
@@ -80,9 +88,29 @@ const StorePatients = props => {
         })
     }
 
+    const handleChangePhone = e => {
+        let value = e.target.value.replace(/[^0-9]/g, '')
+        let name = e.target.name
+
+        if(name == "telephone")
+            setPhone(phoneMask(value))
+        else
+            setMobilephone(phoneMask(value))
+
+        setBody({
+            ...body,
+            [name]: value
+        })
+    }
+
     const handleChangeUser = e => {
         let value = e.target.value
         let name = e.target.name
+
+        if(name == "value"){
+            setValue(currencyMask(value))
+            value = value.replace(/[^0-9]/g, '')
+        }
 
         setBody({
             ...body,
@@ -107,12 +135,26 @@ const StorePatients = props => {
         })
     }
 
+    const handlePlusInformationChange = e => {
+        let value = e.target.value
+        let name = e.target.name
+
+        if(name == "emergency_contact")
+            setEmergencyContact(phoneMask(value))
+
+        setBody({
+            ...body,
+            plusInformation: {
+                ...body.plusInformation,
+                [name]: value
+            }
+        })
+    }
+
     const handleFormSubmit = e => {
         e.preventDefault()
-        console.log(body)
         patientsService.store(body)
         .then(res => {
-            console.log(res)
             Swal.fire({
                 title: "Paciente cadastrado com sucesso!",
                 icon: "success",
@@ -120,10 +162,9 @@ const StorePatients = props => {
             })
         })
         .catch(err => {
-            console.log(err)
             Swal.fire({
                 title: "Ocorreu um erro.",
-                text: "Por favor tente novamente mais tarde",
+                text: "Por favor tente novamente mais tarde.",
                 icon: "warning",
                 confirmButtonColor: "#1492A5"
             })
@@ -131,7 +172,7 @@ const StorePatients = props => {
     }
 
     return(
-        <form onSubmit={handleFormSubmit}>
+        <form autoComplete="new-password" onSubmit={handleFormSubmit}>
         <Row>
             <Col md={{size: 6}}>
                 <div className="box">
@@ -141,17 +182,37 @@ const StorePatients = props => {
                     <Row>
                         <Col md={8}>
                             <label htmlFor="name">Nome: </label>
-                            <input onChange={handleChangeBody} type="text" name="name" placeholder="Nome completo" className="form-control input" />
+                            <input 
+                                onChange={handleChangeBody} 
+                                type="text" 
+                                name="name" 
+                                placeholder="Nome completo" 
+                                className="form-control input" 
+                            />
                         </Col>
                         <Col md={4}>
                             <label htmlFor="telephone">Telefone Fixo: </label>                                    
-                            <input onChange={handleChangeBody} type="text" name="telephone" className="form-control input" placeholder="DDD + número"/>
+                            <input
+                                onChange={handleChangePhone} 
+                                type="text" 
+                                name="telephone" 
+                                className="form-control input" 
+                                placeholder="DDD + número"
+                                value={phone}
+                            />
                         </Col>
                     </Row>
                     <Row style={{marginTop: '32px'}}>
                         <Col md={4}>
                             <label htmlFor="phone">Celular: </label>
-                            <input onChange={handleChangeBody} type="text" name="phone" className="form-control input" placeholder="DDD + número"/>
+                            <input 
+                                onChange={handleChangePhone} 
+                                type="text" 
+                                name="phone" 
+                                className="form-control input" 
+                                placeholder="DDD + número"
+                                value={mobilephone}
+                            />
                         </Col>
                         <Col md={4}>
                             <label htmlFor="cpf">CPF: </label>
@@ -167,7 +228,12 @@ const StorePatients = props => {
                         </Col>
                         <Col md={4}>
                             <label htmlFor="rg">RG: </label>
-                            <input onChange={handleChangeBody} type="text" name="rg" className="form-control input"/>
+                            <input 
+                                onChange={handleChangeBody} 
+                                type="text" 
+                                name="rg" 
+                                className="form-control input"
+                            />
                         </Col>
                     </Row>
                     <Row style={{marginTop: '32px', marginBottom: '32px'}}>
@@ -186,12 +252,20 @@ const StorePatients = props => {
                             Gênero
                             <div className="genders">
                                 <label>
-                                    <input type="radio" className="option-input radio" name="genders" defaultChecked />
+                                    <input 
+                                        type="radio" 
+                                        className="option-input radio" 
+                                        name="genders" 
+                                        defaultChecked 
+                                    />
                                     Masculino
                                 </label>
                                 <br />
                                 <label>
-                                    <input type="radio" className="option-input radio" name="genders" />
+                                    <input type="radio" 
+                                        className="option-input radio" 
+                                        name="genders" 
+                                    />
                                     Feminino
                                 </label>
                             </div>
@@ -207,27 +281,58 @@ const StorePatients = props => {
                     <Row>
                         <Col md={6}>
                             <label htmlFor="cep">CEP: </label>
-                            <input maxLength="8" onChange={handleChangeCep} type="text" name="cep" className="form-control input" />
+                            <input 
+                                maxLength="8" 
+                                onChange={handleChangeCep} 
+                                type="text" 
+                                name="cep" 
+                                className="form-control input" 
+                            />
                         </Col>
                         <Col md={6}>
                             <label htmlFor="street">Logradouro: </label>
-                            <input onChange={handleChangeAddress} id="street" type="text" name="street" className="form-control input" placeholder="Rua, AV, etc..." />
+                            <input 
+                                onChange={handleChangeAddress} 
+                                id="street" 
+                                type="text" 
+                                name="street" 
+                                className="form-control input" 
+                                placeholder="Rua, AV, etc..." 
+                                disabled={isCepValid}
+                            />
                         </Col>
                     </Row>
                     <Row style={{marginTop: '32px', marginBottom: '32px'}}>
                         <Col md={6}>
                             <label htmlFor="numero">Número: </label>
-                            <input onChange={handleChangeAddress} id="number" type="number" name="number" className="form-control input" />
+                            <input 
+                                onChange={handleChangeAddress} 
+                                id="number" 
+                                type="number" 
+                                name="number" 
+                                className="form-control input" 
+                            />
                         </Col>
                         <Col md={6}>
                             <label htmlFor="neighborhood">Bairro: </label>                                    
-                            <input id="neighborhood" type="text" name="neighborhood" className="form-control input"/>
+                            <input 
+                                id="neighborhood" 
+                                type="text" 
+                                name="neighborhood" 
+                                className="form-control input"
+                                disabled={isCepValid}
+                            />
                         </Col>
                     </Row>
                     <Row style={{marginBottom: '32px'}}>
                         <Col md={6}>
                             <label htmlFor="state">UF: </label>                                    
-                            <select name="state" id="state" className="form-control input">
+                            <select 
+                                name="state" 
+                                id="state" 
+                                className="form-control input"
+                                disabled={isCepValid}
+                            >
                                 <option value="AC">AC</option>
                                 <option value="AL">AL</option>
                                 <option value="AP">AP</option>
@@ -258,8 +363,15 @@ const StorePatients = props => {
                             </select>
                         </Col>
                         <Col md={6}>
-                            <label htmlFor="city_id">Municipio: </label>
-                            <input type="text" onChange={handleChangeAddress} name="city" id="city" className="form-control input" />
+                            <label htmlFor="city">Municipio: </label>
+                            <input 
+                                type="text" 
+                                onChange={handleChangeAddress} 
+                                name="city" 
+                                id="city" 
+                                className="form-control input"
+                                disabled={isCepValid} 
+                            />
                         </Col>
                     </Row>
                 </div>
@@ -274,17 +386,35 @@ const StorePatients = props => {
                     <Row>
                         <Col md={6}>
                             <label htmlFor="emergency_contact">Contato de Emergência: </label>                                    
-                            <input type="text" name="emergency_contact" className="form-control input" placeholder="DDD + número" />
+                            <input 
+                                type="text"
+                                name="emergency_contact" 
+                                className="form-control input" 
+                                placeholder="DDD + número" 
+                                onChange={handlePlusInformationChange}
+                                value={emergencyContact}
+                            />
                         </Col>
                         <Col md={6}>
                             <label htmlFor="emergency_name">Nome: </label>
-                            <input type="text" name="emergency_name" className="form-control input" placeholder="Nome completo" />                               
+                            <input 
+                                type="text" 
+                                name="emergency_name" 
+                                className="form-control input" 
+                                placeholder="Nome completo" 
+                                onChange={handlePlusInformationChange}
+                            />                               
                         </Col>
                     </Row>
                     <Row style={{marginTop: '32px', marginBottom: '32px'}}>
                         <Col md={12}>
                             <label htmlFor="observation">Observação: </label>                                    
-                            <textarea className="form-control input" name="observation"></textarea>
+                            <textarea 
+                                className="form-control input" 
+                                name="observation"
+                                onChange={handlePlusInformationChange}
+                            >
+                            </textarea>
                         </Col>
                     </Row>
                 </div>
@@ -299,18 +429,33 @@ const StorePatients = props => {
                     <Row style={{marginBottom: '32px'}}>
                         <Col md={6}>
                             <label htmlFor="value">Valor: </label>                                    
-                            <input type="text" onChange={handleChangeUser} className="form-control input" name="value" />
+                            <input 
+                                type="text"
+                                onChange={handleChangeUser} 
+                                className="form-control input" 
+                                name="value" 
+                                value={value}
+                            />
                         </Col>
                         <Col md={6}>
                             Deseja recibo?
                             <div className="receipt">
                                 <label>
-                                    <input type="radio" className="option-input radio" name="receipt" defaultChecked />
+                                    <input 
+                                        type="radio" 
+                                        className="option-input radio" 
+                                        name="receipt" 
+                                        defaultChecked 
+                                    />
                                     Sim
                                 </label>
                                 <br />
                                 <label>
-                                    <input type="radio" className="option-input radio" name="receipt" />
+                                    <input 
+                                        type="radio" 
+                                        className="option-input radio" 
+                                        name="receipt" 
+                                    />
                                     Não
                                 </label>
                             </div>
@@ -328,15 +473,32 @@ const StorePatients = props => {
                     <Row>
                         <Col md={4}>
                             <label htmlFor="email">Email: </label>                                    
-                            <input onChange={handleChangeUser} type="email" className="form-control input" name="email" />
+                            <input 
+                                onChange={handleChangeUser} 
+                                type="email" 
+                                className="form-control input" 
+                                name="email" 
+                                autoComplete="new-password"
+                            />
                         </Col>
                         <Col md={4}>
                             <label htmlFor="password">Senha: </label>                                    
-                            <input onChange={handleChangeUser} type="password" className="form-control input" name="password" />
+                            <input 
+                                onChange={handleChangeUser} 
+                                type="password" 
+                                className="form-control input" 
+                                name="password" 
+                                autoComplete="new-password"
+                            />
                         </Col>
                         <Col md={4}>
                             <label htmlFor="password_confirmation">Repetir Senha: </label>                                    
-                            <input onChange={handleChangeUser} type="password" className="form-control input" name="password_confirmation" />
+                            <input 
+                                onChange={handleChangeUser} 
+                                type="password" 
+                                className="form-control input" 
+                                name="password_confirmation" 
+                            />
                         </Col>
                     </Row>
                     <Row style={{marginTop: '32px', marginBottom: '32px'}}>
@@ -352,12 +514,21 @@ const StorePatients = props => {
                             Cadastro ativo?
                             <div className="active">
                                 <label>
-                                    <input type="radio" className="option-input radio" name="active" defaultChecked />
+                                    <input 
+                                        type="radio" 
+                                        className="option-input radio" 
+                                        name="active" 
+                                        defaultChecked 
+                                    />
                                     Sim
                                 </label>
                                 <br />
                                 <label>
-                                    <input type="radio" className="option-input radio" name="active" />
+                                    <input 
+                                        type="radio" 
+                                        className="option-input radio" 
+                                        name="active" 
+                                    />
                                     Não
                                 </label>
                             </div>
