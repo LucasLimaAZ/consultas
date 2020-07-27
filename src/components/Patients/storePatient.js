@@ -73,7 +73,7 @@ const StorePatients = props => {
                 .catch(err => console.log("Um erro ocorreu ao buscar o CEP: ", err))
     }
 
-    const handleDateChage = e => {
+    const handleDateChange = e => {
         let value = e.target.value
         let name = e.target.name
 
@@ -169,9 +169,16 @@ const StorePatients = props => {
         })
     }
 
+    const handleVerifyDate = () => {
+        let date = new Date()
+        let birthday = new Date(body.birthday)
+        let age = date.getFullYear() - birthday.getFullYear()
+        return !(age > 130 || age < 0)
+    }
+
     const handleFormSubmit = async e => {
         e.preventDefault()
-        if (handleVerifyPasswords()) {
+        if (handleVerifyPasswords() && handleVerifyDate()) {
             await setBody({
                 ...body,
                 foreign: foreign
@@ -192,8 +199,12 @@ const StorePatients = props => {
                         confirmButtonColor: "#1492A5"
                     })
                 })
-        } else
-            Swal.fire("As senhas divergem.")
+        } else{
+            if(!handleVerifyPasswords())
+                return Swal.fire("As senhas divergem.")
+            if(!handleVerifyDate())
+                return Swal.fire("Por favor informe uma data de nascimento válida.")
+        }
     }
 
     const handleForeignChange = () => {
@@ -280,8 +291,8 @@ const StorePatients = props => {
                                     name="birthday"
                                     className={dateColor}
                                     placeholder="Data de Nascimento"
-                                    onChange={handleDateChage}
-                                    onKeyDown={handleDateChage}
+                                    onChange={handleDateChange}
+                                    onKeyDown={handleDateChange}
                                 />
                             </Col>
                             <Col md={6}>
