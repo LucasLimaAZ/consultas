@@ -1,21 +1,18 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import * as actions from "../../store/actions"
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Row, Col } from 'reactstrap'
+import { Row, Col, Table } from 'reactstrap'
 import Loader from 'react-loader-spinner'
 import "./style.scss"
 import Swal from "sweetalert2"
 
 const Patients = props => {
 
-    const [initState, setInitState] = useState([])
-
     useEffect(() => {
         props.setPageTitle("Gerenciar pacientes")
         props.fetchPatients()
-        setInitState(props.patients)
     },[])
 
     const handleInput = e => {
@@ -51,9 +48,10 @@ const Patients = props => {
                     />
                 </Col>
             </Row>
+            <>
                 {
                     props.patients.patients ? (
-                        <table className="table table-striped table-sm table-responsive">
+                        <Table striped responsive>
                             <thead>
                                 <tr>
                                     <th>Name:</th>
@@ -86,11 +84,12 @@ const Patients = props => {
                                 </tr>
                             ))}
                             </tbody>
-                        </table>
+                        </Table>
                     ) : (
                         <Loader className="loader" type="TailSpin" color="#17A2B8" height={100} width={100} />
                     )
                 }
+            </>
         </div>
     )
     

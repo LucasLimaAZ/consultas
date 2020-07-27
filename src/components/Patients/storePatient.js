@@ -11,6 +11,7 @@ import axios from "axios"
 const StorePatients = props => {
 
     const [cpf, setCpf] = useState("")
+    const [cep, setCep] = useState("")
     const [foreign, setForeign] = useState(false)
     const [emergencyContact, setEmergencyContact] = useState("")
     const [value, setValue] = useState("R$ 0,00")
@@ -36,8 +37,13 @@ const StorePatients = props => {
         })
     }
 
+    const handleVerifyPasswords = () => {
+        return body.user.password === body.user.password_confirmation
+    }
+
     const handleChangeCep = e => {
-        let cep = e.target.value
+        let cep = e.target.value.replace(/[^0-9]/g, '')
+        setCep(cep)
 
         if (cep.length === 8)
             axios.get(`https://viacep.com.br/ws/${cep}/json`)
@@ -165,26 +171,29 @@ const StorePatients = props => {
 
     const handleFormSubmit = async e => {
         e.preventDefault()
-        await setBody({
-            ...body,
-            foreign: foreign
-        })
-        await patientsService.store(body)
-            .then(() => {
-                Swal.fire({
-                    title: "Paciente cadastrado com sucesso!",
-                    icon: "success",
-                    confirmButtonColor: "#1492A5"
-                })
+        if (handleVerifyPasswords()) {
+            await setBody({
+                ...body,
+                foreign: foreign
             })
-            .catch(err => {
-                Swal.fire({
-                    title: "Ocorreu um erro.",
-                    text: "Por favor tente novamente mais tarde.",
-                    icon: "warning",
-                    confirmButtonColor: "#1492A5"
+            await patientsService.store(body)
+                .then(() => {
+                    Swal.fire({
+                        title: "Paciente cadastrado com sucesso!",
+                        icon: "success",
+                        confirmButtonColor: "#1492A5"
+                    })
                 })
-            })
+                .catch(() => {
+                    Swal.fire({
+                        title: "Ocorreu um erro.",
+                        text: "Por favor tente novamente mais tarde.",
+                        icon: "warning",
+                        confirmButtonColor: "#1492A5"
+                    })
+                })
+        } else
+            Swal.fire("As senhas divergem.")
     }
 
     const handleForeignChange = () => {
@@ -328,6 +337,7 @@ const StorePatients = props => {
                                     type="text"
                                     name="cep"
                                     className="form-control input"
+                                    value={cep}
                                 />
                             </Col>
                             <Col md={6}>
@@ -350,6 +360,7 @@ const StorePatients = props => {
                                     onChange={handleChangeAddress}
                                     id="number"
                                     type="number"
+                                    min="1"
                                     name="number"
                                     className="form-control input"
                                 />
@@ -380,45 +391,45 @@ const StorePatients = props => {
                                             />
                                         </>
                                     )
-                                    : (
-                                    <>
-                                        <label htmlFor="state">UF: </label>
-                                        <select
-                                            name="state"
-                                            id="state"
-                                            className="form-control input"
-                                            disabled={isCepValid}
-                                        >
-                                            <option value="AC">AC</option>
-                                            <option value="AL">AL</option>
-                                            <option value="AP">AP</option>
-                                            <option value="AM">AM</option>
-                                            <option value="BA">BA</option>
-                                            <option value="CE">CE</option>
-                                            <option value="DF">DF</option>
-                                            <option value="ES">ES</option>
-                                            <option value="GO">GO</option>
-                                            <option value="MA">MA</option>
-                                            <option value="MT">MT</option>
-                                            <option value="MS">MS</option>
-                                            <option value="MG">MG</option>
-                                            <option value="PA">PA</option>
-                                            <option value="PB">PB</option>
-                                            <option value="PR">PR</option>
-                                            <option value="PE">PE</option>
-                                            <option value="PI">PI</option>
-                                            <option value="RJ">RJ</option>
-                                            <option value="RN">RN</option>
-                                            <option value="RS">RS</option>
-                                            <option value="RO">RO</option>
-                                            <option value="RR">RR</option>
-                                            <option value="SC">SC</option>
-                                            <option value="SP">SP</option>
-                                            <option value="SE">SE</option>
-                                            <option value="TO">TO</option>
-                                        </select>
-                                    </>
-                                    )
+                                        : (
+                                            <>
+                                                <label htmlFor="state">UF: </label>
+                                                <select
+                                                    name="state"
+                                                    id="state"
+                                                    className="form-control input"
+                                                    disabled={isCepValid}
+                                                >
+                                                    <option value="AC">AC</option>
+                                                    <option value="AL">AL</option>
+                                                    <option value="AP">AP</option>
+                                                    <option value="AM">AM</option>
+                                                    <option value="BA">BA</option>
+                                                    <option value="CE">CE</option>
+                                                    <option value="DF">DF</option>
+                                                    <option value="ES">ES</option>
+                                                    <option value="GO">GO</option>
+                                                    <option value="MA">MA</option>
+                                                    <option value="MT">MT</option>
+                                                    <option value="MS">MS</option>
+                                                    <option value="MG">MG</option>
+                                                    <option value="PA">PA</option>
+                                                    <option value="PB">PB</option>
+                                                    <option value="PR">PR</option>
+                                                    <option value="PE">PE</option>
+                                                    <option value="PI">PI</option>
+                                                    <option value="RJ">RJ</option>
+                                                    <option value="RN">RN</option>
+                                                    <option value="RS">RS</option>
+                                                    <option value="RO">RO</option>
+                                                    <option value="RR">RR</option>
+                                                    <option value="SC">SC</option>
+                                                    <option value="SP">SP</option>
+                                                    <option value="SE">SE</option>
+                                                    <option value="TO">TO</option>
+                                                </select>
+                                            </>
+                                        )
                                 }
                             </Col>
                             <Col md={6}>
