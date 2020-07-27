@@ -3,10 +3,6 @@ form {
   margin-top: 40px;
 }
 
-.table-responsive {
-  display: table;
-}
-
 .genders, .receipt, .active {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -117,4 +113,3 @@ form {
 }
 
 /* END RADIO BUTTONS */
-/*# sourceMappingURL=style.css.map */
