@@ -19,7 +19,7 @@ const StorePatients = props => {
     const [mobilephone, setMobilephone] = useState("")
     const [isCepValid, setIsCepValid] = useState(false)
     const [dateColor, setDateColor] = useState("form-control input nascimento")
-    const [body, setBody] = useState({})
+    const [body, setBody] = useState({address: {state: "AC"}})
 
     useEffect(() => {
         props.setPageTitle("Cadastrar Paciente")
@@ -71,6 +71,14 @@ const StorePatients = props => {
                     }
                 })
                 .catch(err => console.log("Um erro ocorreu ao buscar o CEP: ", err))
+        else
+            setBody({
+                ...body,
+                address: {
+                    ...body.address,
+                    cep: cep
+                }
+            })
     }
 
     const handleDateChange = e => {
@@ -199,10 +207,10 @@ const StorePatients = props => {
                         confirmButtonColor: "#1492A5"
                     })
                 })
-        } else{
-            if(!handleVerifyPasswords())
+        } else {
+            if (!handleVerifyPasswords())
                 return Swal.fire("As senhas divergem.")
-            if(!handleVerifyDate())
+            if (!handleVerifyDate())
                 return Swal.fire("Por favor informe uma data de nascimento válida.")
         }
     }
@@ -235,6 +243,7 @@ const StorePatients = props => {
                                     name="name"
                                     placeholder="Nome completo"
                                     className="form-control input"
+                                    required
                                 />
                             </Col>
                             <Col md={4}>
@@ -246,6 +255,7 @@ const StorePatients = props => {
                                     className="form-control input"
                                     placeholder={foreign ? "Formato internacional" : "DDD + número"}
                                     value={phone}
+                                    required
                                 />
                             </Col>
                         </Row>
@@ -259,6 +269,7 @@ const StorePatients = props => {
                                     className="form-control input"
                                     placeholder={foreign ? "Formato internacional" : "DDD + número"}
                                     value={mobilephone}
+                                    required
                                 />
                             </Col>
                             <Col md={4}>
@@ -271,6 +282,7 @@ const StorePatients = props => {
                                     maxLength="14"
                                     placeholder="___.___.___-__"
                                     value={cpf}
+                                    required
                                 />
                             </Col>
                             <Col md={4}>
@@ -280,6 +292,7 @@ const StorePatients = props => {
                                     type="text"
                                     name="rg"
                                     className="form-control input"
+                                    required
                                 />
                             </Col>
                         </Row>
@@ -293,6 +306,7 @@ const StorePatients = props => {
                                     placeholder="Data de Nascimento"
                                     onChange={handleDateChange}
                                     onKeyDown={handleDateChange}
+                                    required
                                 />
                             </Col>
                             <Col md={6}>
@@ -349,6 +363,7 @@ const StorePatients = props => {
                                     name="cep"
                                     className="form-control input"
                                     value={cep}
+                                    required
                                 />
                             </Col>
                             <Col md={6}>
@@ -361,6 +376,7 @@ const StorePatients = props => {
                                     className="form-control input"
                                     placeholder="Rua, AV, etc..."
                                     disabled={isCepValid}
+                                    required
                                 />
                             </Col>
                         </Row>
@@ -374,6 +390,7 @@ const StorePatients = props => {
                                     min="1"
                                     name="number"
                                     className="form-control input"
+                                    required
                                 />
                             </Col>
                             <Col md={6}>
@@ -384,6 +401,8 @@ const StorePatients = props => {
                                     name="neighborhood"
                                     className="form-control input"
                                     disabled={isCepValid}
+                                    onChange={handleChangeAddress}
+                                    required
                                 />
                             </Col>
                         </Row>
@@ -399,6 +418,8 @@ const StorePatients = props => {
                                                 id="state"
                                                 className="form-control input"
                                                 disabled={isCepValid}
+                                                onChange={handleChangeAddress}
+                                                required
                                             />
                                         </>
                                     )
@@ -410,6 +431,8 @@ const StorePatients = props => {
                                                     id="state"
                                                     className="form-control input"
                                                     disabled={isCepValid}
+                                                    onChange={handleChangeAddress}
+                                                    required
                                                 >
                                                     <option value="AC">AC</option>
                                                     <option value="AL">AL</option>
@@ -452,6 +475,7 @@ const StorePatients = props => {
                                     id="city"
                                     className="form-control input"
                                     disabled={isCepValid}
+                                    required
                                 />
                             </Col>
                         </Row>
@@ -516,6 +540,7 @@ const StorePatients = props => {
                                     className="form-control input"
                                     name="value"
                                     value={value}
+                                    required
                                 />
                             </Col>
                             <Col md={6}>
@@ -560,6 +585,7 @@ const StorePatients = props => {
                                     className="form-control input"
                                     name="email"
                                     autoComplete="new-password"
+                                    required
                                 />
                             </Col>
                             <Col md={4}>
@@ -570,6 +596,7 @@ const StorePatients = props => {
                                     className="form-control input"
                                     name="password"
                                     autoComplete="new-password"
+                                    required
                                 />
                             </Col>
                             <Col md={4}>
@@ -579,6 +606,7 @@ const StorePatients = props => {
                                     type="password"
                                     className="form-control input"
                                     name="password_confirmation"
+                                    required
                                 />
                             </Col>
                         </Row>
