@@ -19,7 +19,7 @@ const StorePatients = props => {
     const [mobilephone, setMobilephone] = useState("")
     const [isCepValid, setIsCepValid] = useState(false)
     const [dateColor, setDateColor] = useState("form-control input nascimento")
-    const [body, setBody] = useState({address: {state: "AC"}})
+    const [body, setBody] = useState({address: {state: "AC"}, user: {role_id: 1, gender_id: 1}})
 
     useEffect(() => {
         props.setPageTitle("Cadastrar Paciente")
@@ -186,6 +186,8 @@ const StorePatients = props => {
 
     const handleFormSubmit = async e => {
         e.preventDefault()
+        if(value === "R$ 0,00")
+            return Swal.fire("Por favor informe o valor da consulta.");
         if (handleVerifyPasswords() && handleVerifyDate()) {
             await setBody({
                 ...body,
@@ -199,7 +201,15 @@ const StorePatients = props => {
                         confirmButtonColor: "#1492A5"
                     })
                 })
-                .catch(() => {
+                .catch(e => {
+                    if(e.message == "Request failed with status code 422"){
+                        return Swal.fire({
+                            title: "Email já cadastrado.",
+                            text: "Por favor tente com um endereço de email diferente.",
+                            icon: "warning",
+                            confirmButtonColor: "#1492A5"
+                        })
+                    }
                     Swal.fire({
                         title: "Ocorreu um erro.",
                         text: "Por favor tente novamente mais tarde.",
@@ -612,11 +622,14 @@ const StorePatients = props => {
                         </Row>
                         <Row style={{ marginTop: '32px', marginBottom: '32px' }}>
                             <Col md={4}>
-                                <label htmlFor="role">Hierarquia: </label>
-                                <select className="form-control input" name="role">
-                                    <option>Teste 1</option>
-                                    <option>Teste 2</option>
-                                    <option>Teste 3</option>
+                                <label htmlFor="role_id">Hierarquia: </label>
+                                <select 
+                                    className="form-control input" 
+                                    name="role"
+                                >
+                                    <option value="1">Admin</option>
+                                    <option value="1">Médico</option>
+                                    <option value="2">Paciente</option>
                                 </select>
                             </Col>
                             <Col md={4}>
