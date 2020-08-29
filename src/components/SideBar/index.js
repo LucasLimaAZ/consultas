@@ -1,6 +1,6 @@
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHome, faPowerOff, faHospitalAlt, faUserMd, faUsers } from '@fortawesome/free-solid-svg-icons'
+import { faHome, faPowerOff, faHospitalAlt, faUserMd, faUsers, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 import SubMenu from './SubMenu'
 import { NavItem, NavLink, Nav } from 'reactstrap'
 import classNames from 'classnames'
@@ -10,7 +10,7 @@ import "./style.scss"
 const SideBar = props => (
 	<div className={classNames('sidebar', {'is-open': props.isOpen})}>
 		<div className="sidebar-header">
-		<span color="info" onClick={props.toggle} style={{color: '#fff'}}>&times</span>
+		<span color="info" onClick={props.toggle} style={{color: '#fff'}}><FontAwesomeIcon icon={faTimesCircle} /></span>
 		<h3 className="sidebar-title"><FontAwesomeIcon icon={faHospitalAlt} /> Consultas</h3>
 		</div>
 		<div className="side-menu">

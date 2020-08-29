@@ -4,10 +4,6 @@ form{
 	margin-top: 40px;
 }
 
-.table-responsive {
-    display: table;
-}
-
 .genders, .receipt, .active{
 	display:flex;
 	justify-content: space-around;
@@ -98,3 +94,13 @@ form{
 }
 
 /* END RADIO BUTTONS */
+
+.foreignCheckbox{
+	width: 50px;
+	height: 18px;
+}
+
+.foreignLabel{
+	color: #666;
+	vertical-align: top;
+}

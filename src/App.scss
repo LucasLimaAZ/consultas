@@ -5,6 +5,7 @@
   outline: 0 !important;
   outline-width: 0px !important;
   outline-style: none !important;
+  min-height: 0 !important;
 }
  
 .App {
@@ -91,7 +92,7 @@ height: 100vh;
 
 @media only screen and (max-width: 500px) {
   body {
-    overflow:  hidden;
+    overflow-x:  hidden;
   }
 
   .content.is-open {
