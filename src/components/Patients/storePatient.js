@@ -386,14 +386,13 @@ const StorePatients = props => {
                         </Row>
                         <Row style={{ marginTop: '32px', marginBottom: '32px' }}>
                             <Col md={6}>
-                                <label htmlFor="numero">Número: </label>
+                                <label htmlFor="complement">Complemento: </label>
                                 <input
-                                    onChange={handleChangeAddress}
-                                    id="number"
-                                    type="number"
-                                    min="1"
-                                    name="number"
+                                    id="complement"
+                                    type="text"
+                                    name="complement"
                                     className="form-control input"
+                                    onChange={handleChangeAddress}
                                 />
                             </Col>
                             <Col md={6}>
@@ -409,7 +408,18 @@ const StorePatients = props => {
                             </Col>
                         </Row>
                         <Row style={{ marginBottom: '32px' }}>
-                            <Col md={6}>
+                            <Col md={3}>
+                                <label htmlFor="numero">Número: </label>
+                                <input
+                                    onChange={handleChangeAddress}
+                                    id="number"
+                                    type="number"
+                                    min="1"
+                                    name="number"
+                                    className="form-control input"
+                                />
+                            </Col>
+                            <Col md={3}>
                                 {
                                     foreign ? (
                                         <>
