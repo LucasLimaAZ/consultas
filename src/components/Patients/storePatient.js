@@ -187,7 +187,7 @@ const StorePatients = props => {
     const handleFormSubmit = async e => {
         e.preventDefault()
         if(value === "R$ 0,00")
-            return Swal.fire("Por favor informe o valor da consulta.");
+            return Swal.fire("Por favor informe o valor da consulta.")
         if (handleVerifyPasswords() && handleVerifyDate()) {
             await setBody({
                 ...body,
@@ -243,7 +243,7 @@ const StorePatients = props => {
                     <div className="box">
                         <h1 className="subtitle">
                             Dados do paciente
-                    </h1>
+                        </h1>
                         <Row>
                             <Col md={8}>
                                 <label htmlFor="name">Nome: </label>

@@ -1,0 +1,33 @@
+@import '../../vars.scss';
+
+.dropzone {
+    cursor: pointer;
+}
+
+.dropzone svg {
+    color: $lightBlue;
+}
+
+.dropzone .container {
+    padding: 0;
+}
+
+.dropzone p {
+    padding-top: 16px;
+    color: $lightBlue !important;
+}
+
+.dropzone h5 {
+    margin-top: 16px;
+    color: $lightBlue;
+}
+
+.storeAppointmentButton{
+    background-color: $lightBlue;
+    border-color: $lightBlue;
+}
+
+.storeAppointmentButton:hover, .storeAppointmentButton:focus, .storeAppointmentButton:active{
+    background-color: $darkBlue !important;
+    border-color: $lightBlue !important;
+}
