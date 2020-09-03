@@ -187,7 +187,7 @@ const StorePatients = props => {
     const handleFormSubmit = async e => {
         e.preventDefault()
         if(value === "R$ 0,00")
-            return Swal.fire("Por favor informe o valor da consulta.");
+            return Swal.fire("Por favor informe o valor da consulta.")
         if (handleVerifyPasswords() && handleVerifyDate()) {
             await setBody({
                 ...body,
@@ -243,7 +243,7 @@ const StorePatients = props => {
                     <div className="box">
                         <h1 className="subtitle">
                             Dados do paciente
-                    </h1>
+                        </h1>
                         <Row>
                             <Col md={8}>
                                 <label htmlFor="name">Nome: </label>
@@ -265,7 +265,6 @@ const StorePatients = props => {
                                     className="form-control input"
                                     placeholder={foreign ? "Formato internacional" : "DDD + número"}
                                     value={phone}
-                                    required
                                 />
                             </Col>
                         </Row>
@@ -279,7 +278,6 @@ const StorePatients = props => {
                                     className="form-control input"
                                     placeholder={foreign ? "Formato internacional" : "DDD + número"}
                                     value={mobilephone}
-                                    required
                                 />
                             </Col>
                             <Col md={4}>
@@ -302,7 +300,6 @@ const StorePatients = props => {
                                     type="text"
                                     name="rg"
                                     className="form-control input"
-                                    required
                                 />
                             </Col>
                         </Row>
@@ -316,7 +313,6 @@ const StorePatients = props => {
                                     placeholder="Data de Nascimento"
                                     onChange={handleDateChange}
                                     onKeyDown={handleDateChange}
-                                    required
                                 />
                             </Col>
                             <Col md={6}>
@@ -373,7 +369,6 @@ const StorePatients = props => {
                                     name="cep"
                                     className="form-control input"
                                     value={cep}
-                                    required
                                 />
                             </Col>
                             <Col md={6}>
@@ -386,21 +381,18 @@ const StorePatients = props => {
                                     className="form-control input"
                                     placeholder="Rua, AV, etc..."
                                     disabled={isCepValid}
-                                    required
                                 />
                             </Col>
                         </Row>
                         <Row style={{ marginTop: '32px', marginBottom: '32px' }}>
                             <Col md={6}>
-                                <label htmlFor="numero">Número: </label>
+                                <label htmlFor="complement">Complemento: </label>
                                 <input
-                                    onChange={handleChangeAddress}
-                                    id="number"
-                                    type="number"
-                                    min="1"
-                                    name="number"
+                                    id="complement"
+                                    type="text"
+                                    name="complement"
                                     className="form-control input"
-                                    required
+                                    onChange={handleChangeAddress}
                                 />
                             </Col>
                             <Col md={6}>
@@ -412,12 +404,22 @@ const StorePatients = props => {
                                     className="form-control input"
                                     disabled={isCepValid}
                                     onChange={handleChangeAddress}
-                                    required
                                 />
                             </Col>
                         </Row>
                         <Row style={{ marginBottom: '32px' }}>
-                            <Col md={6}>
+                            <Col md={3}>
+                                <label htmlFor="numero">Número: </label>
+                                <input
+                                    onChange={handleChangeAddress}
+                                    id="number"
+                                    type="number"
+                                    min="1"
+                                    name="number"
+                                    className="form-control input"
+                                />
+                            </Col>
+                            <Col md={3}>
                                 {
                                     foreign ? (
                                         <>
@@ -429,7 +431,6 @@ const StorePatients = props => {
                                                 className="form-control input"
                                                 disabled={isCepValid}
                                                 onChange={handleChangeAddress}
-                                                required
                                             />
                                         </>
                                     )
@@ -442,7 +443,6 @@ const StorePatients = props => {
                                                     className="form-control input"
                                                     disabled={isCepValid}
                                                     onChange={handleChangeAddress}
-                                                    required
                                                 >
                                                     <option value="AC">AC</option>
                                                     <option value="AL">AL</option>
@@ -485,7 +485,6 @@ const StorePatients = props => {
                                     id="city"
                                     className="form-control input"
                                     disabled={isCepValid}
-                                    required
                                 />
                             </Col>
                         </Row>
