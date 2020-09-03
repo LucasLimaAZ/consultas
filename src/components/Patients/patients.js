@@ -98,7 +98,7 @@ const Patients = props => {
 const mapDispatchToProps = dispatch => ({
     setPageTitle: title => dispatch(actions.setPageTitle(title)),
     filterPatients: patient => dispatch(actions.filterPatients(patient)),
-    fetchPatients: () => dispatch(actions.fetchPatients()),
+    fetchPatients: () => dispatch(actions.fetchAllPatients()),
     deletePatient: id => dispatch(actions.deletePatient(id))
 })
 

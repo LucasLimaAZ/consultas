@@ -45,8 +45,8 @@ const submenus = [
 	target: "cadastrar-atendimento",					
 	},
 	{
-	title: "Agendamentos",
-	target: "agendamentos",				
+	title: "Atendimentos",
+	target: "atendimentos",				
 	},
 	{
 	title: "Material de Apoio",

@@ -5,5 +5,12 @@ export {
 export {
     filterPatients,
     fetchPatients,
+    fetchAllPatients,
     deletePatient
 } from "./patients"
+
+export {
+    storeAppointments,
+    fetchAllAppointments,
+    deleteAppointment
+} from "./appointments"
