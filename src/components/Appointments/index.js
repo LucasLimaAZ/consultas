@@ -25,6 +25,15 @@ const Appointments = props => {
         })
     }
 
+    const uploadFiles = () => {
+        console.log(props.selectedFiles)
+        let files = new FormData()
+        props.selectedFiles.files.forEach(file => {
+            files.append(file.name, file)
+        })
+        console.log(files)
+    }
+
     const handleStoreAppointment = async e => {
         e.preventDefault()
         await props.storeAppointment(requestBody)
@@ -146,6 +155,7 @@ const Appointments = props => {
                                         : ""
                                     }
                                 </Button>
+                                <Button onClick={uploadFiles}>Upload Files</Button>
                             </Col>
                         </Row>
                     </div>
@@ -159,7 +169,8 @@ const Appointments = props => {
 const mapStateToProps = store => {
     return{
         patients: store.patientsReducer,
-        appointments: store.appointmentsReducer
+        appointments: store.appointmentsReducer,
+        selectedFiles: store.filesReducer
     }
 }
 
