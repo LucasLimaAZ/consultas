@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { connect } from "react-redux"
 import { Row, Col, Button } from "reactstrap"
 import * as actions from "../../store/actions"
-import StyledDropzone from "../Dropzone"
+import StyledDropzone, { files } from "../Dropzone"
 import Loader from 'react-loader-spinner'
 import "./style.scss"
 import Swal from "sweetalert2"
@@ -13,7 +13,8 @@ const Appointments = props => {
 
     useEffect(() => {
         props.setPageTitle("Novo Atendimento")
-        props.fetchAllPatients()
+        props.fetchPatients(1)
+        console.log(files)
     },[])
 
     const handleRequestBody = e => {
@@ -165,7 +166,7 @@ const mapStateToProps = store => {
 const mapDispatchToProps = dispatch => ({
     storeAppointment: data => dispatch(actions.storeAppointments(data)),
     setPageTitle: title => dispatch(actions.setPageTitle(title)),
-    fetchAllPatients: () => dispatch(actions.fetchAllPatients())
+    fetchPatients: () => dispatch(actions.fetchPatients(1))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Appointments)

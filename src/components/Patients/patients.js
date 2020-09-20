@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import * as actions from "../../store/actions"
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Row, Col, Table } from 'reactstrap'
+import { Row, Col, Table, Pagination, PaginationItem, PaginationLink } from 'reactstrap'
 import Loader from 'react-loader-spinner'
 import "./style.scss"
 import Swal from "sweetalert2"
@@ -12,11 +12,16 @@ const Patients = props => {
 
     useEffect(() => {
         props.setPageTitle("Gerenciar pacientes")
-        props.fetchPatients()
+        props.fetchPatients(1)
     },[])
 
     const handleInput = e => {
         props.filterPatients(e.target.value)
+    }
+
+    const handlePaginationClick = async page => {
+        await props.fetchPatients(page)
+        console.log("patients props", props.patients)
     }
 
     const deletePatient = id => {
@@ -84,6 +89,45 @@ const Patients = props => {
                                 </tr>
                             ))}
                             </tbody>
+                            <Pagination aria-label="Page navigation example">
+
+                                <PaginationItem>
+                                    <PaginationLink 
+                                        first 
+                                        onClick={() => handlePaginationClick(props.patients.paginationData.from)} 
+                                    />
+                                </PaginationItem>
+                                <PaginationItem>
+                                    <PaginationLink 
+                                        previous
+                                        onClick={() => handlePaginationClick(props.patients.paginationData.current_page - 1)} 
+                                        disabled={props.patients.paginationData.current_page == props.patients.paginationData.from}
+                                    />
+                                </PaginationItem>
+                                
+                                {Array(props.patients.paginationData.last_page).fill(1).map((el, i) =>
+                                    <PaginationItem key={i}>
+                                        <PaginationLink onClick={() => handlePaginationClick(i + 1)}>
+                                        {i + 1}
+                                        </PaginationLink>
+                                    </PaginationItem>
+                                )}
+                                
+                                <PaginationItem>
+                                    <PaginationLink 
+                                        next 
+                                        onClick={() => handlePaginationClick(props.patients.paginationData.current_page + 1)}
+                                        disabled={props.patients.paginationData.current_page == props.patients.paginationData.last_page}
+                                    />
+                                </PaginationItem>
+                                <PaginationItem>
+                                    <PaginationLink 
+                                        last
+                                        onClick={() => handlePaginationClick(props.patients.paginationData.last_page)} 
+                                    />
+                                </PaginationItem>
+
+                            </Pagination>
                         </Table>
                     ) : (
                         <Loader className="loader" type="TailSpin" color="#17A2B8" height={100} width={100} />
@@ -98,7 +142,7 @@ const Patients = props => {
 const mapDispatchToProps = dispatch => ({
     setPageTitle: title => dispatch(actions.setPageTitle(title)),
     filterPatients: patient => dispatch(actions.filterPatients(patient)),
-    fetchPatients: () => dispatch(actions.fetchAllPatients()),
+    fetchPatients: page => dispatch(actions.fetchPatients(page)),
     deletePatient: id => dispatch(actions.deletePatient(id))
 })
 

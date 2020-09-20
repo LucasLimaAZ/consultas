@@ -1,7 +1,7 @@
 import api from './api'
 
 const fetchAll = () => api.get('/patients?page=-1')
-const fetch = () => api.get('/patients')
+const fetch = page => api.get(`/patients?page=${page}`)
 const store = body => api.post('/patients', body)
 const deletePatient = id => api.delete(`/patients/${id}`)
 

@@ -10,13 +10,22 @@ const patientsReducer = (state = {}, action) => {
                 return name.includes(action.payload.toLocaleLowerCase())
             })
             return {
+                ...state,
                 patients: filteredPatients
             }
 
         case "SET_PATIENTS":
+            console.log("setando patients: ", action.payload)
             initState.patients = action.payload
             return {
+                ...state,
                 patients: action.payload
+            }
+
+        case "SET_PAGINATION_DATA":
+            return {
+                ...state,
+                paginationData: action.payload
             }
 
         case "DELETE_PATIENT":
@@ -25,6 +34,7 @@ const patientsReducer = (state = {}, action) => {
             })
             initState.patients = remainingPatients
             return {
+                ...state,
                 patients: remainingPatients,
                 status: action.payload.jsonResponse.status
             }

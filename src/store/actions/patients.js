@@ -3,8 +3,9 @@ export const filterPatients = patient => ({
     payload: patient
 })
 
-export const fetchPatients = () => ({
-    type: "FETCH_PATIENTS_SAGA"
+export const fetchPatients = page => ({
+    type: "FETCH_PATIENTS_SAGA",
+    payload: page
 })
 
 export const fetchAllPatients = () => ({

@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from 'react'
+import React, { useMemo } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { faUpload } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -53,7 +53,7 @@ const StyledDropzone = () => {
         isDragAccept
     ])
 
-    const files = acceptedFiles.map(file => (
+    export const files = acceptedFiles.map(file => (
         <li key={file.path}>
           {file.path} - {file.size} bytes
         </li>
@@ -71,5 +71,7 @@ const StyledDropzone = () => {
         </div>
     )
 }
+
+export const files = "teste";
 
 export default StyledDropzone
