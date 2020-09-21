@@ -14,7 +14,7 @@ const Files = props => {
     },[])
 
     return(
-        <Container>
+        <div className="box">
             <Row>
                 <Col md={12}>
                     {
@@ -55,7 +55,7 @@ const Files = props => {
                     }
                 </Col>
             </Row>
-        </Container>
+        </div>
     )
 }
 
