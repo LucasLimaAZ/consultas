@@ -13,7 +13,7 @@ const Appointments = props => {
 
     useEffect(() => {
         props.setPageTitle("Novo Atendimento")
-        props.fetchAllPatients()
+        props.fetchPatients(1)
     },[])
 
     const handleRequestBody = e => {
@@ -24,6 +24,16 @@ const Appointments = props => {
         })
     }
 
+    const uploadFiles = async () => {
+        let files = new FormData()
+        await props.files.selectedFiles.forEach(file => {
+            console.log(file)
+            files.append('files[]', file)
+        })
+        if (files)
+            await props.uploadFiles(files)
+    }
+
     const handleStoreAppointment = async e => {
         e.preventDefault()
         await props.storeAppointment(requestBody)
@@ -32,6 +42,7 @@ const Appointments = props => {
             icon: "success",
             confirmButtonColor: "#1492A5"
         })
+        await uploadFiles()
     }
 
     return (
@@ -158,14 +169,16 @@ const Appointments = props => {
 const mapStateToProps = store => {
     return{
         patients: store.patientsReducer,
-        appointments: store.appointmentsReducer
+        appointments: store.appointmentsReducer,
+        files: store.filesReducer
     }
 }
 
 const mapDispatchToProps = dispatch => ({
     storeAppointment: data => dispatch(actions.storeAppointments(data)),
     setPageTitle: title => dispatch(actions.setPageTitle(title)),
-    fetchAllPatients: () => dispatch(actions.fetchAllPatients())
+    fetchPatients: () => dispatch(actions.fetchPatients(1)),
+    uploadFiles: files => dispatch(actions.uploadFiles(files))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Appointments)

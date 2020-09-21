@@ -2,6 +2,8 @@ import React, { useMemo, useEffect } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { faUpload } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { connect } from 'react-redux'
+import * as actions from '../../store/actions'
 
 const baseStyle = {
     flex: 1,
@@ -31,7 +33,7 @@ const rejectStyle = {
     borderColor: '#ff1744'
 }
 
-const StyledDropzone = () => {
+const StyledDropzone = props => {
 
     const {
         acceptedFiles,
@@ -41,6 +43,11 @@ const StyledDropzone = () => {
         isDragAccept,
         isDragReject
     } = useDropzone()
+
+    useEffect(() => {
+        props.setSelectedFiles(acceptedFiles)
+    }, [acceptedFiles])
+
 
     const style = useMemo(() => ({
         ...baseStyle,
@@ -72,4 +79,14 @@ const StyledDropzone = () => {
     )
 }
 
-export default StyledDropzone
+const mapStateToProps = store => {
+    return{
+        files: store.filesReducer,
+    }
+}
+
+const mapDispatchToProps = dispatch => ({
+    setSelectedFiles: files => dispatch(actions.setSelectedFiles(files)),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(StyledDropzone)

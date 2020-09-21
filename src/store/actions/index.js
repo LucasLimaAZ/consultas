@@ -14,3 +14,9 @@ export {
     fetchAllAppointments,
     deleteAppointment
 } from "./appointments"
+
+export {
+    setSelectedFiles,
+    uploadFiles,
+    fetchFiles
+} from "./files"
