@@ -50,7 +50,13 @@ const Files = props => {
                         </Table> 
                         ) :
                         (
-                            <Loader className="loader" type="TailSpin" color="#17A2B8" height={100} width={100} />
+                            <Loader 
+                                className="loader" 
+                                type="TailSpin" 
+                                color="#17A2B8" 
+                                height={100} 
+                                width={100} 
+                            />
                         )
                     }
                 </Col>

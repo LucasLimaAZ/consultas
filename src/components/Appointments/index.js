@@ -14,7 +14,26 @@ const Appointments = props => {
     useEffect(() => {
         props.setPageTitle("Novo Atendimento")
         props.fetchPatients(1)
-    },[])
+        if (props.appointments.success) {
+            Swal.fire({
+                title: "Paciente cadastrado com sucesso!",
+                icon: "success",
+                confirmButtonColor: "#1492A5"
+            })
+        }
+        else if (props.appointments.response) {
+            Swal.fire({
+                title: "Ocorreu um erro.",
+                text: "Por favor tente novamente mais tarde.",
+                icon: "warning",
+                confirmButtonColor: "#1492A5"
+            })
+            console.error(props.appointments.response)
+        }
+    },[
+        props.appointments.success,
+        props.appointments.response
+    ])
 
     const handleRequestBody = e => {
         setRequestBody({
@@ -27,21 +46,15 @@ const Appointments = props => {
     const uploadFiles = async () => {
         let files = new FormData()
         await props.files.selectedFiles.forEach(file => {
-            console.log(file)
             files.append('files[]', file)
         })
-        if (files)
+        if (props.files.selectedFiles.length > 0)
             await props.uploadFiles(files)
     }
 
     const handleStoreAppointment = async e => {
         e.preventDefault()
         await props.storeAppointment(requestBody)
-        await Swal.fire({
-            title: "Atendimento cadastrado com sucesso!",
-            icon: "success",
-            confirmButtonColor: "#1492A5"
-        })
         await uploadFiles()
     }
 

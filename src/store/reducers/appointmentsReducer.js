@@ -1,6 +1,7 @@
 const initState = {
     isLoading: false,
-    success: false
+    success: false,
+    response: false
 }
 
 const appointmentsReducer = (state = initState, action) => {
@@ -17,14 +18,16 @@ const appointmentsReducer = (state = initState, action) => {
             return {
                 ...state,
                 success: true,
-                isLoading: false
+                isLoading: false,
+                response: action.payload
             }
 
         case "SET_APPOINTMENTS_FAILURE":
             return {
                 ...state,
                 success: false,
-                isLoading: false
+                isLoading: false,
+                response: action.payload
             }
 
         case "SET_APPOINTMENTS":
