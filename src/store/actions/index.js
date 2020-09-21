@@ -16,5 +16,7 @@ export {
 } from "./appointments"
 
 export {
-    setSelectedFiles
+    setSelectedFiles,
+    uploadFiles,
+    fetchFiles
 } from "./files"

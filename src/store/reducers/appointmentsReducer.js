@@ -14,14 +14,15 @@ const appointmentsReducer = (state = initState, action) => {
             }
 
         case "SET_APPOINTMENTS_SUCCESS":
-            console.log("AUEBA reducer")
             return {
+                ...state,
                 success: true,
                 isLoading: false
             }
 
         case "SET_APPOINTMENTS_FAILURE":
             return {
+                ...state,
                 success: false,
                 isLoading: false
             }
@@ -29,6 +30,7 @@ const appointmentsReducer = (state = initState, action) => {
         case "SET_APPOINTMENTS":
             initState.appointments = action.payload
             return {
+                ...state,
                 appointments: action.payload
             }
 
@@ -38,6 +40,7 @@ const appointmentsReducer = (state = initState, action) => {
             })
             initState.appointments = remainingAppointments
             return {
+                ...state,
                 appointments: remainingAppointments,
                 status: action.payload.jsonResponse.status
             }

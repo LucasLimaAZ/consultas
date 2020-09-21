@@ -1,7 +1,6 @@
 const initFiles = {
-    files: [{
-        teste: "teste1"
-    }]
+    files: [],
+    selectedFiles: []
 }
 
 const filesReducer = (state = initFiles, action) => {
@@ -10,6 +9,13 @@ const filesReducer = (state = initFiles, action) => {
 
         case "SET_SELECTED_FILES":
             return {
+                ...state,
+                selectedFiles: action.payload
+            }
+
+        case "SET_FILES":
+            return {
+                ...state,
                 files: action.payload
             }
 

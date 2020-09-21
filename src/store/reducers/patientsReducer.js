@@ -15,7 +15,6 @@ const patientsReducer = (state = {}, action) => {
             }
 
         case "SET_PATIENTS":
-            console.log("setando patients: ", action.payload)
             initState.patients = action.payload
             return {
                 ...state,

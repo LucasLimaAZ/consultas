@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { connect } from "react-redux"
 import { Row, Col, Button } from "reactstrap"
 import * as actions from "../../store/actions"
-import StyledDropzone, { files } from "../Dropzone"
+import StyledDropzone from "../Dropzone"
 import Loader from 'react-loader-spinner'
 import "./style.scss"
 import Swal from "sweetalert2"
@@ -14,7 +14,6 @@ const Appointments = props => {
     useEffect(() => {
         props.setPageTitle("Novo Atendimento")
         props.fetchPatients(1)
-        console.log(files)
     },[])
 
     const handleRequestBody = e => {
@@ -25,13 +24,14 @@ const Appointments = props => {
         })
     }
 
-    const uploadFiles = () => {
-        console.log(props.selectedFiles)
+    const uploadFiles = async () => {
         let files = new FormData()
-        props.selectedFiles.files.forEach(file => {
-            files.append(file.name, file)
+        await props.files.selectedFiles.forEach(file => {
+            console.log(file)
+            files.append('files[]', file)
         })
-        console.log(files)
+        if (files)
+            await props.uploadFiles(files)
     }
 
     const handleStoreAppointment = async e => {
@@ -42,6 +42,7 @@ const Appointments = props => {
             icon: "success",
             confirmButtonColor: "#1492A5"
         })
+        await uploadFiles()
     }
 
     return (
@@ -155,7 +156,6 @@ const Appointments = props => {
                                         : ""
                                     }
                                 </Button>
-                                <Button onClick={uploadFiles}>Upload Files</Button>
                             </Col>
                         </Row>
                     </div>
@@ -170,14 +170,15 @@ const mapStateToProps = store => {
     return{
         patients: store.patientsReducer,
         appointments: store.appointmentsReducer,
-        selectedFiles: store.filesReducer
+        files: store.filesReducer
     }
 }
 
 const mapDispatchToProps = dispatch => ({
     storeAppointment: data => dispatch(actions.storeAppointments(data)),
     setPageTitle: title => dispatch(actions.setPageTitle(title)),
-    fetchPatients: () => dispatch(actions.fetchPatients(1))
+    fetchPatients: () => dispatch(actions.fetchPatients(1)),
+    uploadFiles: files => dispatch(actions.uploadFiles(files))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Appointments)
