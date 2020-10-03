@@ -14,33 +14,35 @@ const Appointments = props => {
     useEffect(() => {
         props.setPageTitle("Novo Atendimento")
         props.fetchPatients(1)
-        if (props.appointments.success) {
-            Swal.fire({
-                title: "Paciente cadastrado com sucesso!",
-                icon: "success",
-                confirmButtonColor: "#1492A5"
-            })
-        }
-        else if (props.appointments.response) {
-            Swal.fire({
-                title: "Ocorreu um erro.",
-                text: "Por favor tente novamente mais tarde.",
-                icon: "warning",
-                confirmButtonColor: "#1492A5"
-            })
-            console.error(props.appointments.response)
-        }
-    },[
-        props.appointments.success,
-        props.appointments.response
-    ])
+        checkSuccess()
+    },[props.appointments]) 
 
     const handleRequestBody = e => {
         setRequestBody({
             ...requestBody,
-            receipt: true,
             [e.target.name]: e.target.value
         })
+    }
+
+    const checkSuccess = () => {
+        if (props.appointments.success) {
+            Swal.fire({
+                title: "Sucesso!",
+                text: "Paciente cadastrado com sucesso.",
+                icon: "success",
+                confirmButtonColor: "#1492A5"
+            })
+            props.appointments.success = false
+        }
+        if (props.appointments.error) {
+            Swal.fire({
+                title: "Ooops!",
+                text: "Ocorreu um erro, tente novamente mais tarde.",
+                icon: "warning",
+                confirmButtonColor: "#1492A5"
+            })
+            props.appointments.error = false
+        }
     }
 
     const uploadFiles = async () => {
