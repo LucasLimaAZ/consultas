@@ -14,34 +14,50 @@ const Appointments = props => {
     useEffect(() => {
         props.setPageTitle("Novo Atendimento")
         props.fetchPatients(1)
-    },[])
+        checkSuccess()
+    },[props.appointments]) 
 
     const handleRequestBody = e => {
         setRequestBody({
             ...requestBody,
-            receipt: true,
             [e.target.name]: e.target.value
         })
+    }
+
+    const checkSuccess = () => {
+        if (props.appointments.success) {
+            Swal.fire({
+                title: "Sucesso!",
+                text: "Paciente cadastrado com sucesso.",
+                icon: "success",
+                confirmButtonColor: "#1492A5"
+            })
+            props.appointments.success = false
+        }
+        if (props.appointments.error) {
+            Swal.fire({
+                title: "Ooops!",
+                text: "Ocorreu um erro, tente novamente mais tarde.",
+                icon: "warning",
+                confirmButtonColor: "#1492A5"
+            })
+            props.appointments.error = false
+        }
     }
 
     const uploadFiles = async () => {
         let files = new FormData()
         await props.files.selectedFiles.forEach(file => {
-            console.log(file)
             files.append('files[]', file)
         })
-        if (files)
-            await props.uploadFiles(files)
+        if (props.files.selectedFiles.length > 0){
+            await props.uploadFiles(files, requestBody.patient_id)
+        }
     }
 
     const handleStoreAppointment = async e => {
         e.preventDefault()
         await props.storeAppointment(requestBody)
-        await Swal.fire({
-            title: "Atendimento cadastrado com sucesso!",
-            icon: "success",
-            confirmButtonColor: "#1492A5"
-        })
         await uploadFiles()
     }
 
@@ -178,7 +194,7 @@ const mapDispatchToProps = dispatch => ({
     storeAppointment: data => dispatch(actions.storeAppointments(data)),
     setPageTitle: title => dispatch(actions.setPageTitle(title)),
     fetchPatients: () => dispatch(actions.fetchPatients(1)),
-    uploadFiles: files => dispatch(actions.uploadFiles(files))
+    uploadFiles: (files, patient_id) => dispatch(actions.uploadFiles(files, patient_id))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Appointments)

@@ -7,13 +7,13 @@ import { Row, Col, Table } from 'reactstrap'
 import Loader from 'react-loader-spinner'
 import "./style.scss"
 import Swal from "sweetalert2"
+import { Link } from 'react-router-dom'
 
 const ListAppointments = props => {
 
     useEffect(() => {
         props.setPageTitle("Gerenciar atendimentos")
         props.fetchAppointments()
-        console.log(props.appointments)
     }, [])
 
     const deleteAppointment = id => {
@@ -35,6 +35,8 @@ const ListAppointments = props => {
     return (
         <div className="box">
             {
+                props.appointments.appointments?.length == 0 ?
+                <p style={{color: '#666'}}>Nenhum atendimento cadastrado.</p> : 
                 props.appointments.appointments ? (
                     <Table striped responsive>
                         <thead>
@@ -53,9 +55,11 @@ const ListAppointments = props => {
                                     <td>{appointment.time}</td>
                                     <td>{appointment.patient_id}</td>
                                     <td>
-                                        <button onClick={() => Swal.fire('Em construção')} className="btn edit-button">
-                                            <FontAwesomeIcon icon={faEdit} />
-                                        </button>
+                                        <Link to="/cadastrar-atendimento">
+                                            <button className="btn edit-button">
+                                                <FontAwesomeIcon icon={faEdit} />
+                                            </button>
+                                        </Link>
                                     </td>
                                     <td>
                                         <button

@@ -1,5 +1,6 @@
 import React, { useEffect } from "react"
-import { Col, Container, Row, Table } from "reactstrap"
+import "./style.scss"
+import { Col, Row, Table } from "reactstrap"
 import { connect } from "react-redux"
 import * as actions from "../../store/actions"
 import Loader from 'react-loader-spinner'
@@ -11,33 +12,61 @@ const Files = props => {
     useEffect(() => {
         props.fetchFiles(1)
         props.setPageTitle("Material de Apoio")
+        props.fetchAllPatients()
     },[])
 
+    const handlePatientChange = e => {
+        if (e.target.value != "Selecione um paciente")
+            props.fetchFilesByPatient(e.target.value)
+    }
+
     return(
-        <div className="box">
             <Row>
-                <Col md={12}>
+                <Col md={4}>
+                    <div className="box">
+                        <label htmlFor="selected-patient">Paciente: </label>
+                        <select className="selected-patient" onChange={handlePatientChange}>
+                            <option>Selecione um paciente</option>
+                            {
+                                props.patients?.map(patient => (
+                                    <option value={patient.id}>{patient.name}</option>
+                                ))
+                            }
+                        </select>
+                    </div>
+                </Col>
+                <Col md={8}>
+                    <div className="box">
                     {
-                        props.files.length > 0 ? 
+                        props.loader ?
                         (
+                        <Loader 
+                            className="loader" 
+                            type="TailSpin" 
+                            color="#17A2B8" 
+                            height={100} 
+                            width={100} 
+                        />
+                        ) :
+                        (
+                        props.files?.length == 0 ? 
+                        <p style={{color: '#666'}}>Nenhum material de apoio cadastrado.</p> :
                         <Table responsive striped>
                             <thead>
                                 <tr>
                                     <th>Arquivo: </th>
-                                    <th>Paciente: </th>
                                     <th>Upload: </th>
                                     <th>Visualizar: </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {
-                                    props.files.map(file => (
+                                    props.files?.map(file => (
                                         <tr>
                                             <td>{file.name}</td>
-                                            <td>Fulano da Silva</td>
-                                            <td>{file.created_at}</td>
+                                            <td>{file.created_at.split('.')[0].replace("T", " ")}</td>
                                             <td style={{textAlign: 'center'}}>
-                                                <a href={file.path}>
+                                                <a target="_blank" href={file.path}>
                                                     <button className="btn edit-button">
                                                         <FontAwesomeIcon icon={faEye} />
                                                     </button>
@@ -47,27 +76,28 @@ const Files = props => {
                                     ))
                                 }
                             </tbody>
-                        </Table> 
-                        ) :
-                        (
-                            <Loader className="loader" type="TailSpin" color="#17A2B8" height={100} width={100} />
+                        </Table>  
                         )
                     }
+                    </div>
                 </Col>
             </Row>
-        </div>
     )
 }
 
 const mapStateToProps = store => {
     return {
-        files: store.filesReducer.files
+        files: store.filesReducer.files,
+        loader: store.filesReducer.loader,
+        patients: store.patientsReducer.patients
     }
 }
 
 const mapDispatchToProps = dispatch => ({
     fetchFiles: page => dispatch(actions.fetchFiles(page)),
-    setPageTitle: title => dispatch(actions.setPageTitle(title))
+    setPageTitle: title => dispatch(actions.setPageTitle(title)),
+    fetchAllPatients: () => dispatch(actions.fetchAllPatients()),
+    fetchFilesByPatient: patient => dispatch(actions.fetchFilesByPatient(patient))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Files)

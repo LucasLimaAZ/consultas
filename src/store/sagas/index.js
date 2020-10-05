@@ -5,12 +5,14 @@ import * as filesSagas from './files'
 
 export function* watchSagas(){
     yield all([
-        yield takeEvery("FETCH_PATIENTS_SAGA", patientsSagas.fetchPatients),
-        yield takeEvery("FETCH_ALL_PATIENTS_SAGA", patientsSagas.fetchAll),
-        yield takeEvery("DELETE_PATIENT_SAGA", patientsSagas.deletePatient),
-        yield takeEvery("STORE_APPOINTMENTS_SAGA", appointmentsSagas.storeAppointment),
-        yield takeEvery("FETCH_ALL_APPOINTMENTS_SAGA", appointmentsSagas.fetchAll),
-        yield takeEvery("UPLOAD_FILES", filesSagas.upload),
-        yield takeEvery("FETCH_FILES", filesSagas.fetchFiles)
+        takeEvery("FETCH_PATIENTS_SAGA", patientsSagas.fetchPatients),
+        takeEvery("FETCH_ALL_PATIENTS_SAGA", patientsSagas.fetchAll),
+        takeEvery("DELETE_PATIENT_SAGA", patientsSagas.deletePatient),
+        takeEvery("STORE_APPOINTMENTS_SAGA", appointmentsSagas.storeAppointment),
+        takeEvery("DELETE_APPOINTMENT_SAGA", appointmentsSagas.deleteAppointment),
+        takeEvery("FETCH_ALL_APPOINTMENTS_SAGA", appointmentsSagas.fetchAll),
+        takeEvery("UPLOAD_FILES", filesSagas.upload),
+        takeEvery("FETCH_FILES", filesSagas.fetchFiles),
+        takeEvery("FETCH_FILES_BY_PATIENT", filesSagas.fetchByPatient)
     ])
 }
