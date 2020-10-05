@@ -9,8 +9,10 @@ export function* watchSagas(){
         takeEvery("FETCH_ALL_PATIENTS_SAGA", patientsSagas.fetchAll),
         takeEvery("DELETE_PATIENT_SAGA", patientsSagas.deletePatient),
         takeEvery("STORE_APPOINTMENTS_SAGA", appointmentsSagas.storeAppointment),
+        takeEvery("DELETE_APPOINTMENT_SAGA", appointmentsSagas.deleteAppointment),
         takeEvery("FETCH_ALL_APPOINTMENTS_SAGA", appointmentsSagas.fetchAll),
         takeEvery("UPLOAD_FILES", filesSagas.upload),
-        takeEvery("FETCH_FILES", filesSagas.fetchFiles)
+        takeEvery("FETCH_FILES", filesSagas.fetchFiles),
+        takeEvery("FETCH_FILES_BY_PATIENT", filesSagas.fetchByPatient)
     ])
 }

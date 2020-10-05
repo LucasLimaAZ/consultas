@@ -7,6 +7,7 @@ import { Row, Col, Table, Pagination, PaginationItem, PaginationLink } from 'rea
 import Loader from 'react-loader-spinner'
 import "./style.scss"
 import Swal from "sweetalert2"
+import { Link } from 'react-router-dom'
 
 const Patients = props => {
 
@@ -72,9 +73,11 @@ const Patients = props => {
                                     <td>{patient.rg}</td>
                                     <td>{patient.phone}</td>
                                     <td>
-                                        <button onClick={() => Swal.fire('Em construção')} className="btn edit-button">
-                                            <FontAwesomeIcon icon={faEdit} />
-                                        </button>
+                                        <Link to="/cadastrar-pacientes">
+                                            <button className="btn edit-button">
+                                                <FontAwesomeIcon icon={faEdit} />
+                                            </button>
+                                        </Link>
                                     </td>
                                     <td>
                                         <button 
@@ -93,18 +96,18 @@ const Patients = props => {
                                 <PaginationItem>
                                     <PaginationLink 
                                         first 
-                                        onClick={() => handlePaginationClick(props.patients.paginationData.from)} 
+                                        onClick={() => handlePaginationClick(props.patients.paginationData?.from)} 
                                     />
                                 </PaginationItem>
                                 <PaginationItem>
                                     <PaginationLink 
                                         previous
-                                        onClick={() => handlePaginationClick(props.patients.paginationData.current_page - 1)} 
-                                        disabled={props.patients.paginationData.current_page == props.patients.paginationData.from}
+                                        onClick={() => handlePaginationClick(props.patients.paginationData?.current_page - 1)} 
+                                        disabled={props.patients.paginationData?.current_page == props.patients.paginationData?.from}
                                     />
                                 </PaginationItem>
                                 
-                                {Array(props.patients.paginationData.last_page).fill(1).map((el, i) =>
+                                {Array(props.patients.paginationData?.last_page).fill(1).map((el, i) =>
                                     <PaginationItem key={i}>
                                         <PaginationLink onClick={() => handlePaginationClick(i + 1)}>
                                         {i + 1}
@@ -115,14 +118,14 @@ const Patients = props => {
                                 <PaginationItem>
                                     <PaginationLink 
                                         next 
-                                        onClick={() => handlePaginationClick(props.patients.paginationData.current_page + 1)}
-                                        disabled={props.patients.paginationData.current_page == props.patients.paginationData.last_page}
+                                        onClick={() => handlePaginationClick(props.patients.paginationData?.current_page + 1)}
+                                        disabled={props.patients.paginationData?.current_page == props.patients.paginationData?.last_page}
                                     />
                                 </PaginationItem>
                                 <PaginationItem>
                                     <PaginationLink 
                                         last
-                                        onClick={() => handlePaginationClick(props.patients.paginationData.last_page)} 
+                                        onClick={() => handlePaginationClick(props.patients.paginationData?.last_page)} 
                                     />
                                 </PaginationItem>
 

@@ -15,3 +15,8 @@ export const fetchFiles = page => ({
     type: "FETCH_FILES",
     payload: page
 })
+
+export const fetchFilesByPatient = patient => ({
+    type: "FETCH_FILES_BY_PATIENT",
+    payload: patient
+})

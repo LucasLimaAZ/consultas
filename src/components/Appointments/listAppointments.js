@@ -7,6 +7,7 @@ import { Row, Col, Table } from 'reactstrap'
 import Loader from 'react-loader-spinner'
 import "./style.scss"
 import Swal from "sweetalert2"
+import { Link } from 'react-router-dom'
 
 const ListAppointments = props => {
 
@@ -54,9 +55,11 @@ const ListAppointments = props => {
                                     <td>{appointment.time}</td>
                                     <td>{appointment.patient_id}</td>
                                     <td>
-                                        <button onClick={() => Swal.fire('Em construção')} className="btn edit-button">
-                                            <FontAwesomeIcon icon={faEdit} />
-                                        </button>
+                                        <Link to="/cadastrar-atendimento">
+                                            <button className="btn edit-button">
+                                                <FontAwesomeIcon icon={faEdit} />
+                                            </button>
+                                        </Link>
                                     </td>
                                     <td>
                                         <button

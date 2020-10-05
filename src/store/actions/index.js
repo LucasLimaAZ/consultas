@@ -18,5 +18,6 @@ export {
 export {
     setSelectedFiles,
     uploadFiles,
-    fetchFiles
+    fetchFiles,
+    fetchFilesByPatient
 } from "./files"
