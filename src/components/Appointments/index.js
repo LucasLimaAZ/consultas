@@ -50,8 +50,9 @@ const Appointments = props => {
         await props.files.selectedFiles.forEach(file => {
             files.append('files[]', file)
         })
-        if (props.files.selectedFiles.length > 0)
-            await props.uploadFiles(files)
+        if (props.files.selectedFiles.length > 0){
+            await props.uploadFiles(files, requestBody.patient_id)
+        }
     }
 
     const handleStoreAppointment = async e => {
@@ -193,7 +194,7 @@ const mapDispatchToProps = dispatch => ({
     storeAppointment: data => dispatch(actions.storeAppointments(data)),
     setPageTitle: title => dispatch(actions.setPageTitle(title)),
     fetchPatients: () => dispatch(actions.fetchPatients(1)),
-    uploadFiles: files => dispatch(actions.uploadFiles(files))
+    uploadFiles: (files, patient_id) => dispatch(actions.uploadFiles(files, patient_id))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Appointments)

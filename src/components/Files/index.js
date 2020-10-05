@@ -11,6 +11,7 @@ const Files = props => {
     useEffect(() => {
         props.fetchFiles(1)
         props.setPageTitle("Material de Apoio")
+        props.fetchAllPatients()
     },[])
 
     return(
@@ -18,7 +19,9 @@ const Files = props => {
             <Row>
                 <Col md={12}>
                     {
-                        props.files.length > 0 ? 
+                        props.files?.length == 0 ? 
+                        <p style={{color: '#666'}}>Nenhum material de apoio cadastrado.</p> :
+                        props.files ?
                         (
                         <Table responsive striped>
                             <thead>
@@ -67,13 +70,15 @@ const Files = props => {
 
 const mapStateToProps = store => {
     return {
-        files: store.filesReducer.files
+        files: store.filesReducer.files,
+        patients: store.patientsReducer.patients
     }
 }
 
 const mapDispatchToProps = dispatch => ({
     fetchFiles: page => dispatch(actions.fetchFiles(page)),
-    setPageTitle: title => dispatch(actions.setPageTitle(title))
+    setPageTitle: title => dispatch(actions.setPageTitle(title)),
+    fetchAllPatients: () => dispatch(actions.fetchAllPatients())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Files)

@@ -21,7 +21,6 @@ const Patients = props => {
 
     const handlePaginationClick = async page => {
         await props.fetchPatients(page)
-        console.log("patients props", props.patients)
     }
 
     const deletePatient = id => {

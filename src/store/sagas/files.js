@@ -7,7 +7,13 @@ export function* upload(action){
         type: "TOGGLE_FILES_LOADER"
     })
 
-    let jsonResponse = yield call(filesService.upload, action.payload)
+    let jsonResponse = yield call(filesService.upload, action.payload.files)
+    yield jsonResponse.data.forEach(file => console.log("Attaching ", file.id, " and ", action.payload.patient))
+    yield jsonResponse.data.forEach(file => call(
+        filesService.attach, 
+        action.payload.patient, 
+        file.id
+    ))
 
     if(jsonResponse.status === 200){
         yield put({

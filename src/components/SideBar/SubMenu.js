@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import  { Collapse, NavItem, NavLink } from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import classNames from 'classnames';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react'
+import  { Collapse, NavItem, NavLink } from 'reactstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import classNames from 'classnames'
+import { Link } from 'react-router-dom'
 
 const SubMenu = props => {
   
   const [collapsed, setCollapsed] = useState(true)
   const toggleNavbar = () => setCollapsed(!collapsed)
-  const { icon, title, items } = props;
+  const { icon, title, items } = props
  
   return (
     <div>
@@ -27,7 +27,7 @@ const SubMenu = props => {
             ))}
       </Collapse>
     </div>
-  );
+  )
 }
 
-export default SubMenu;
+export default SubMenu

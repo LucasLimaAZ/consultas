@@ -13,7 +13,6 @@ const ListAppointments = props => {
     useEffect(() => {
         props.setPageTitle("Gerenciar atendimentos")
         props.fetchAppointments()
-        console.log(props.appointments)
     }, [])
 
     const deleteAppointment = id => {
@@ -35,6 +34,8 @@ const ListAppointments = props => {
     return (
         <div className="box">
             {
+                props.appointments.appointments?.length == 0 ?
+                <p style={{color: '#666'}}>Nenhum atendimento cadastrado.</p> : 
                 props.appointments.appointments ? (
                     <Table striped responsive>
                         <thead>

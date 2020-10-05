@@ -1,7 +1,4 @@
-const initFiles = {
-    files: [],
-    selectedFiles: []
-}
+const initFiles = {}
 
 const filesReducer = (state = initFiles, action) => {
 
