@@ -3,11 +3,10 @@ import { connect } from 'react-redux'
 import * as actions from "../../store/actions"
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Row, Col, Table } from 'reactstrap'
+import { Table } from 'reactstrap'
 import Loader from 'react-loader-spinner'
 import "./style.scss"
 import Swal from "sweetalert2"
-import { Link } from 'react-router-dom'
 
 const ListAppointments = props => {
 
@@ -32,6 +31,16 @@ const ListAppointments = props => {
                     props.deleteAppointment(id)
             })
     }
+
+    const handleEdit = id => {
+        let currentAppointment = props.appointments.appointments
+        .filter(appointment => appointment.id == id)[0]
+        props.history.push({ 
+            pathname: 'cadastrar-atendimento', 
+            state: currentAppointment
+        })
+    }
+
     return (
         <div className="box">
             {
@@ -55,11 +64,12 @@ const ListAppointments = props => {
                                     <td>{appointment.time}</td>
                                     <td>{appointment.patient_id}</td>
                                     <td>
-                                        <Link to="/cadastrar-atendimento">
-                                            <button className="btn edit-button">
-                                                <FontAwesomeIcon icon={faEdit} />
-                                            </button>
-                                        </Link>
+                                        <button 
+                                            className="btn edit-button" 
+                                            onClick={() => handleEdit(appointment.id)}
+                                        >
+                                            <FontAwesomeIcon icon={faEdit} />
+                                        </button>
                                     </td>
                                     <td>
                                         <button
@@ -75,7 +85,13 @@ const ListAppointments = props => {
                         </tbody>
                     </Table>
                 ) : (
-                        <Loader className="loader" type="TailSpin" color="#17A2B8" height={100} width={100} />
+                        <Loader 
+                            className="loader" 
+                            type="TailSpin" 
+                            color="#17A2B8" 
+                            height={100} 
+                            width={100} 
+                        />
                     )
             }
         </div>

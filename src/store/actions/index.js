@@ -12,7 +12,8 @@ export {
 export {
     storeAppointments,
     fetchAllAppointments,
-    deleteAppointment
+    deleteAppointment,
+    updateAppointments
 } from "./appointments"
 
 export {

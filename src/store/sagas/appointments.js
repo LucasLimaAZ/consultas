@@ -30,7 +30,37 @@ export function* storeAppointment(action) {
         })
     }
 
+}
 
+export function* updateAppointment(action) {
+
+    yield put({
+        type: "TOGGLE_APPOINTMENTS_LOADER"
+    })
+
+    try {
+        let jsonResponse = yield call(appointmentsService.update, action.payload)
+
+        if (jsonResponse.status === 200) {
+            yield put({
+                type: "SET_APPOINTMENTS_SUCCESS",
+                payload: jsonResponse
+            })
+        }
+        else {
+            yield put({
+                type: "SET_APPOINTMENTS_FAILURE",
+                payload: jsonResponse
+            })
+        }
+    }
+    catch (err) {
+        yield put({
+            type: "SET_APPOINTMENTS_FAILURE",
+            payload: err
+        })
+    }
+    
 }
 
 export function* fetchAll() {
