@@ -12,9 +12,15 @@ const Appointments = props => {
     const [requestBody, setRequestBody] = useState({})
 
     useEffect(() => {
-        props.setPageTitle("Novo Atendimento")
-        props.fetchPatients(1)
+        props.setPageTitle(
+            props.location.state ?
+            "ATUALIZAR ATENDIMENTO" :
+            "NOVO ATENDIMENTO "
+        )
+        props.fetchPatients()
         checkSuccess()
+        if (props.location.state)
+            setRequestBody(props.location.state)
     },[props.appointments]) 
 
     const handleRequestBody = e => {
@@ -57,7 +63,14 @@ const Appointments = props => {
 
     const handleStoreAppointment = async e => {
         e.preventDefault()
-        await props.storeAppointment(requestBody)
+
+        if (props.location.state) {
+            await props.updateAppointment(requestBody)
+        }
+        else {
+            await props.storeAppointment(requestBody)
+        }
+            
         await uploadFiles()
     }
 
@@ -76,6 +89,7 @@ const Appointments = props => {
                                     placeholder="Buscar..." 
                                     className="form-control input"
                                     required
+                                    value={requestBody.patient_id}
                                 >
                                     <option>Selecione...</option>
                                     {
@@ -97,6 +111,7 @@ const Appointments = props => {
                                     className="form-control input" 
                                     placeholder="http://exemplo.com.br/link" 
                                     required
+                                    value={requestBody.link}
                                 />
                             </Col>
                             <Col md={2}>
@@ -107,6 +122,7 @@ const Appointments = props => {
                                     type="date" 
                                     className="form-control input" 
                                     required
+                                    value={requestBody.date}
                                 />
                             </Col>
                             <Col md={2}>
@@ -117,6 +133,7 @@ const Appointments = props => {
                                     type="time" 
                                     className="form-control input" 
                                     required
+                                    value={requestBody.time}
                                 />
                             </Col>
                         </Row>
@@ -127,6 +144,7 @@ const Appointments = props => {
                                     onChange={handleRequestBody} 
                                     name="notes" 
                                     className="form-control"
+                                    value={requestBody.notes}
                                 ></textarea>
                             </Col>
                             <Col md={6}>
@@ -135,6 +153,7 @@ const Appointments = props => {
                                     onChange={handleRequestBody} 
                                     name="cronogram" 
                                     className="form-control"
+                                    value={requestBody.cronogram}
                                 ></textarea>
                             </Col>
                         </Row>
@@ -145,6 +164,7 @@ const Appointments = props => {
                                     onChange={handleRequestBody} 
                                     name="abstract" 
                                     className="form-control"
+                                    value={requestBody.abstract}
                                 ></textarea>
                             </Col>
                             <Col md={6}>
@@ -153,6 +173,7 @@ const Appointments = props => {
                                     onChange={handleRequestBody} 
                                     name="todo_list" 
                                     className="form-control"
+                                    value={requestBody.todo_list}
                                 ></textarea>
                             </Col>
                         </Row>
@@ -163,12 +184,21 @@ const Appointments = props => {
                             <Col md={12} style={{textAlign: 'center', marginTop: '32px'}}>
                                 <Button
                                     className="storeAppointmentButton shadow-none"
-                                    disabled={props.appointments.isLoading}
+                                    disabled={props.appointments?.isLoading}
                                 >
-                                    CADASTRAR ATENDIMENTO 
+                                    {
+                                        props.location.state ?
+                                        "ATUALIZAR ATENDIMENTO" :
+                                        "CADASTRAR ATENDIMENTO "
+                                    }
                                     {
                                         props.appointments.isLoading ?
-                                            <Loader type="TailSpin" color="#ffffff" height={40} width={40} />
+                                            <Loader 
+                                                type="TailSpin" 
+                                                color="#ffffff"
+                                                height={40} 
+                                                width={40} 
+                                            />
                                         : ""
                                     }
                                 </Button>
@@ -192,8 +222,9 @@ const mapStateToProps = store => {
 
 const mapDispatchToProps = dispatch => ({
     storeAppointment: data => dispatch(actions.storeAppointments(data)),
+    updateAppointment: data => dispatch(actions.updateAppointments(data)),
     setPageTitle: title => dispatch(actions.setPageTitle(title)),
-    fetchPatients: () => dispatch(actions.fetchPatients(1)),
+    fetchPatients: () => dispatch(actions.fetchAllPatients()),
     uploadFiles: (files, patient_id) => dispatch(actions.uploadFiles(files, patient_id))
 })
 
