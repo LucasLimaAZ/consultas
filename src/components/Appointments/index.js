@@ -21,6 +21,8 @@ const Appointments = props => {
         checkSuccess()
         if (props.location.state)
             setRequestBody(props.location.state)
+        else if (props.location.patient)
+            setRequestBody({patient_id: props.location.patient})
     },[props.appointments]) 
 
     const handleRequestBody = e => {

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import * as actions from "../../store/actions"
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faEdit, faTrash, faUserMd } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Row, Col, Table, Pagination, PaginationItem, PaginationLink } from 'reactstrap'
 import Loader from 'react-loader-spinner'
@@ -22,6 +22,13 @@ const Patients = props => {
 
     const handlePaginationClick = async page => {
         await props.fetchPatients(page)
+    }
+
+    const newAppointment = id => {
+        props.history.push({ 
+            pathname: 'cadastrar-atendimento', 
+            patient: id
+        })
     }
 
     const deletePatient = id => {
@@ -62,6 +69,7 @@ const Patients = props => {
                                     <th>Name:</th>
                                     <th>RG:</th>
                                     <th>Celular:</th>
+                                    <th style={{textAlign: 'center'}}>Atendimento:</th>
                                     <th>Editar:</th>
                                     <th>Deletar:</th>
                                 </tr>
@@ -72,6 +80,15 @@ const Patients = props => {
                                     <td>{patient.name}</td>
                                     <td>{patient.rg}</td>
                                     <td>{patient.phone}</td>
+                                    <td style={{textAlign: 'center'}}>
+                                        <button 
+                                            id={patient.id} 
+                                            onClick={ () => newAppointment(patient.id) } 
+                                            className="btn edit-button"
+                                        >
+                                            <FontAwesomeIcon icon={faUserMd} />
+                                        </button>
+                                    </td>
                                     <td>
                                         <Link to="/cadastrar-pacientes">
                                             <button className="btn edit-button">
