@@ -6,6 +6,8 @@ export {
     filterPatients,
     fetchPatients,
     fetchAllPatients,
+    fetchPatientInfo,
+    fetchPatientAppointments,
     deletePatient
 } from "./patients"
 
