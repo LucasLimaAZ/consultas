@@ -11,7 +11,20 @@ form{
 }
 
 .edit-button, .delete-button{
+	width: 45px;
+	height: 45px;
 	background: $lightBlue;
+	color: #ffffff;
+}
+
+.color-button {
+	border: $lightBlue;
+	background: $lightBlue;
+	color: #ffffff;
+}
+
+.color-button:hover, .color-button:active, .color-button:focus{
+	background: $darkBlue;
 	color: #ffffff;
 }
 
@@ -103,4 +116,8 @@ form{
 .foreignLabel{
 	color: #666;
 	vertical-align: top;
+}
+
+.patient-record-title{
+	color: #666;
 }
