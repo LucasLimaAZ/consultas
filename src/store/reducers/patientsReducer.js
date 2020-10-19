@@ -27,10 +27,10 @@ const patientsReducer = (state = {}, action) => {
                 patient: action.payload
             }
 
-        case "SET_APPOINTMENTS":
+        case "SET_PATIENT_APPOINTMENTS":
             return {
                 ...state,
-                appointments: action.paylad
+                appointments: action.payload
             }
 
         case "SET_PAGINATION_DATA":

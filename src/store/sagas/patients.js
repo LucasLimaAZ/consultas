@@ -28,7 +28,7 @@ export function* fetchAppointments(action){
     let jsonResponse = yield call(patientsService.fetchAppointments, action.payload)
 
     yield put({
-        type: "SET_APPOINTMENTS",
+        type: "SET_PATIENT_APPOINTMENTS",
         payload: jsonResponse.data
     })
 }

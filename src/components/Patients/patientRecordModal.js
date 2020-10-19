@@ -3,7 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useState } from 'react'
 import * as actions from '../../store/actions'
 import { connect } from 'react-redux'
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Table } from 'reactstrap'
+import Loader from 'react-loader-spinner'
 
 const ModalExample = (props) => {
 	const { patientInfo, className } = props
@@ -25,28 +26,59 @@ const ModalExample = (props) => {
 			<Button className="edit-button" style={{border: '#17a2b8'}} onClick={toggle}>
 				<FontAwesomeIcon icon={faClipboard} /></Button>
 			<Modal isOpen={modal} toggle={toggle} className={className}>
-				<ModalHeader toggle={toggle}>Ficha do Paciente</ModalHeader>
+				<ModalHeader toggle={toggle}>
+					<h4 className="patient-record-title">
+						FICHA DO PACIENTE <FontAwesomeIcon icon={faClipboard} />
+					</h4>
+				</ModalHeader>
 				<ModalBody>
-				Nome: {patientInfo?.name}
-				<br />
-				<Button className="color-button" onClick={toggleNested}>Atendimentos</Button>
+				<b>Nome:</b> {patientInfo?.name} <br />
+				<b>Data de Nascimento:</b> {patientInfo?.birthday} <br />
+				<b>Telefone:</b> {patientInfo?.phone} <br />
+				<b>CPF:</b> {patientInfo?.cpf} <br />
+				<b>RG:</b> {patientInfo?.rg} <br />
 				<Modal isOpen={nestedModal} toggle={toggleNested} onClosed={closeAll ? toggle : undefined}>
 					<ModalHeader>Atendimentos do Paciente</ModalHeader>
 					<ModalBody>
-						<ul>
-							<li>Teste 1</li>
-							<li>Teste 2</li>
-							<li>Teste 3</li>
-							<li>Teste 4</li>
-						</ul>
+						{
+							props.patient.appointments ?
+							(
+								<Table responsive striped>
+									<thead>
+										<tr>
+											<th>Data: </th>
+											<th>Hora: </th>
+											<th>Resumo: </th>
+										</tr>
+									</thead>
+									<tbody>
+										{props.patient.appointments?.map(appointment => (
+											<tr>
+												<td>{appointment.date}</td>
+												<td>{appointment.time}</td>
+												<td>{appointment.abstract}</td>
+											</tr>
+										))}
+									</tbody>
+								</Table>
+							) :
+							<Loader 
+								className="loader" 
+								type="TailSpin" 
+								color="#17A2B8" 
+								height={100} 
+								width={100} 
+							/>
+						}
 					</ModalBody>
 					<ModalFooter>
-					<Button className="color-button" onClick={toggleNested}>Fechar</Button>
+					<Button className="color-button shadow-none" onClick={toggleNested}>Fechar</Button>
 					</ModalFooter>
 				</Modal>
 				</ModalBody>
 				<ModalFooter>
-					<Button className="color-button" onClick={toggle}>Fechar</Button>
+					<Button className="color-button shadow-none" onClick={toggleNested}>Atendimentos</Button>
+					<Button className="color-button shadow-none" onClick={toggle}>Fechar</Button>
 				</ModalFooter>
 			</Modal>
 		</div>
@@ -55,7 +87,7 @@ const ModalExample = (props) => {
 
 const mapStateToProps = store => {
 	return {
-		patient: store.patientsReducer.patient
+		patient: store.patientsReducer
 	}
 }
 
