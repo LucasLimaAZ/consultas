@@ -21,6 +21,18 @@ const patientsReducer = (state = {}, action) => {
                 patients: action.payload
             }
 
+        case "SET_PATIENT":
+            return {
+                ...state,
+                patient: action.payload
+            }
+
+        case "SET_PATIENT_APPOINTMENTS":
+            return {
+                ...state,
+                appointments: action.payload
+            }
+
         case "SET_PAGINATION_DATA":
             return {
                 ...state,

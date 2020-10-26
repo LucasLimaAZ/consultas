@@ -1,7 +1,10 @@
 const initState = {
     isLoading: false,
     success: false,
-    error: false
+    error: false,
+    errorMessage: '',
+    madeAppointments: [],
+    todaysAppointments: []
 }
 
 const appointmentsReducer = (state = initState, action) => {
@@ -25,6 +28,7 @@ const appointmentsReducer = (state = initState, action) => {
             return {
                 ...state,
                 error: true,
+                errorMessage: action.payload,
                 isLoading: false
             }
 
@@ -33,6 +37,20 @@ const appointmentsReducer = (state = initState, action) => {
             return {
                 ...state,
                 appointments: action.payload
+            }
+
+        case "SET_TODAYS_APPOINTMENTS":
+            initState.todaysAppointments = action.payload
+            return {
+                ...state,
+                todaysAppointments: action.payload
+            }
+
+        case "SET_MADE_APPOINTMENTS":
+            initState.madeAppointments = action.payload
+            return {
+                ...state,
+                madeAppointments: action.payload
             }
 
         case "DELETE_APPOINTMENT":

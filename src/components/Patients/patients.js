@@ -3,11 +3,12 @@ import { connect } from 'react-redux'
 import * as actions from "../../store/actions"
 import { faEdit, faTrash, faUserMd } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Row, Col, Table, Pagination, PaginationItem, PaginationLink } from 'reactstrap'
+import { Row, Col, Table, Pagination, PaginationItem, PaginationLink, Button } from 'reactstrap'
 import Loader from 'react-loader-spinner'
 import "./style.scss"
 import Swal from "sweetalert2"
 import { Link } from 'react-router-dom'
+import PatientRecordModal from "./patientRecordModal"
 
 const Patients = props => {
 
@@ -69,7 +70,8 @@ const Patients = props => {
                                     <th>Name:</th>
                                     <th>RG:</th>
                                     <th>Celular:</th>
-                                    <th style={{textAlign: 'center'}}>Atendimento:</th>
+                                    <th>Ficha:</th>
+                                    <th style={{textAlign: 'center'}}>Novo Atendimento:</th>
                                     <th>Editar:</th>
                                     <th>Deletar:</th>
                                 </tr>
@@ -80,6 +82,7 @@ const Patients = props => {
                                     <td>{patient.name}</td>
                                     <td>{patient.rg}</td>
                                     <td>{patient.phone}</td>
+                                    <td><PatientRecordModal patientInfo={patient} /></td>
                                     <td style={{textAlign: 'center'}}>
                                         <button 
                                             id={patient.id} 
@@ -149,7 +152,13 @@ const Patients = props => {
                             </Pagination>
                         </Table>
                     ) : (
-                        <Loader className="loader" type="TailSpin" color="#17A2B8" height={100} width={100} />
+                        <Loader 
+                            className="loader" 
+                            type="TailSpin" 
+                            color="#17A2B8" 
+                            height={100} 
+                            width={100} 
+                        />
                     )
                 }
             </>

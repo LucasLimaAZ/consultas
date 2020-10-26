@@ -36,7 +36,7 @@ const Appointments = props => {
         if (props.appointments.success) {
             Swal.fire({
                 title: "Sucesso!",
-                text: "Paciente cadastrado com sucesso.",
+                text: "Atendimento cadastrado com sucesso.",
                 icon: "success",
                 confirmButtonColor: "#1492A5"
             })

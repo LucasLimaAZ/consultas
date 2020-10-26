@@ -24,6 +24,24 @@ export function* fetchAll(){
     })
 }
 
+export function* fetchAppointments(action){
+    let jsonResponse = yield call(patientsService.fetchAppointments, action.payload)
+
+    yield put({
+        type: "SET_PATIENT_APPOINTMENTS",
+        payload: jsonResponse.data
+    })
+}
+
+export function* find(action){
+    let jsonResponse = yield call(patientsService.find, action.payload)
+
+    yield put({
+        type: "SET_PATIENT",
+        payload: jsonResponse.data
+    })
+}
+
 export function* deletePatient(action){
     let jsonResponse = yield call(patientsService.deletePatient, action.payload)
     
