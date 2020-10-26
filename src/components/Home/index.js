@@ -5,13 +5,15 @@ import { Col, Row, Table } from "reactstrap";
 import * as actions from "../../store/actions"
 import { connect } from "react-redux"
 import "./style.scss"
+import Loader from "react-loader-spinner";
 
 const Home = props => {
 
     useEffect(() => {
         props.fetchPatients()
-        props.fetchAppointments()
+        props.fetchMadeAppointments()
         props.fetchFiles()
+        props.fetchTodaysAppointments()
     },[])
 
     return(
@@ -32,21 +34,20 @@ const Home = props => {
                 <Col md={4}>
                     <div className="box padding">
                         <div className="flex">
-                            <h1 className={props.appointments?.length > 0 ? "box-num animate" : "box-num"}>
-                                {props.appointments?.length > 0 ? 
-                                props.appointments[0]?.paginationData?.total : 0}
+                            <h1 className={props.madeAppointments > 0 ? "box-num animate" : "box-num"}>
+                                {props.madeAppointments}
                             </h1>
                             <h1 className="box-icon"><FontAwesomeIcon icon={faClipboardList} /></h1>
                         </div>
-                        <h4 className="box-info">Atendimentos</h4>
+                        <h4 className="box-info">Atendimentos realizados</h4>
                     </div>
                 </Col>
 
                 <Col md={4}>
                     <div className="box padding">
                         <div className="flex">
-                            <h1 className={props.files?.length ? "box-num animate" : "box-num"}>
-                                {props.files?.length}
+                            <h1 className={props.files ? "box-num animate" : "box-num"}>
+                                {props.files?.length > 0 ? props.files.length : '0'}
                             </h1>
                             <h1 className="box-icon"><FontAwesomeIcon icon={faBook} /></h1>
                         </div>
@@ -68,11 +69,26 @@ const Home = props => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Teste</td>
-                                    <td>12:00</td>
-                                    <td>Lorem ipsum dolor sit amet.</td>
-                                </tr>
+                                {
+                                    props.appointments?.map(appointment => (
+                                        <tr>
+                                            <td>{appointment.patient_id}</td>
+                                            <td>{appointment.time}</td>
+                                            <td>{appointment.abstract}</td>
+                                        </tr>
+                                    ))
+                                }
+                                {
+                                    !props.appointments ? 
+                                        <Loader 
+                                            className="loader" 
+                                            type="TailSpin" 
+                                            color="#17A2B8" 
+                                            height={100} 
+                                            width={100} 
+                                        />
+                                    : false
+                                }
                             </tbody>
                         </Table>
                     </div>
@@ -85,15 +101,17 @@ const Home = props => {
 const mapStateToProps = store => {
     return{
         patients: store.patientsReducer,
-        appointments: store.appointmentsReducer.appointments,
+        appointments: store.appointmentsReducer.todaysAppointments,
+        madeAppointments: store.appointmentsReducer.madeAppointments,
         files: store.filesReducer.files
     }
 }
 
 const mapDispatchToProps = dispatch => ({
     fetchPatients: () => dispatch(actions.fetchPatients(1)),
-    fetchAppointments: () => dispatch(actions.fetchAllAppointments(1)),
-    fetchFiles: () => dispatch(actions.fetchFiles(1))
+    fetchTodaysAppointments: () => dispatch(actions.fetchTodaysAppointments()),
+    fetchFiles: () => dispatch(actions.fetchFiles(1)),
+    fetchMadeAppointments: () => dispatch(actions.fetchMadeAppointments())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home)

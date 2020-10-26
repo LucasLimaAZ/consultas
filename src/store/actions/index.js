@@ -15,7 +15,9 @@ export {
     storeAppointments,
     fetchAllAppointments,
     deleteAppointment,
-    updateAppointments
+    updateAppointments,
+    fetchMadeAppointments,
+    fetchTodaysAppointments
 } from "./appointments"
 
 export {
