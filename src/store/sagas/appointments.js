@@ -71,6 +71,22 @@ export function* fetchAll() {
     })
 }
 
+export function* fetchMadeAppointments() {
+    let jsonResponse = yield call(appointmentsService.fetchMade)
+    yield put({
+        type: "SET_MADE_APPOINTMENTS",
+        payload: jsonResponse.data
+    })
+}
+
+export function* fetchTodaysAppointments() {
+    let jsonResponse = yield call(appointmentsService.fetchTodays)
+    yield put({
+        type: "SET_TODAYS_APPOINTMENTS",
+        payload: jsonResponse.data
+    })
+}
+
 export function* deleteAppointment(action) {
     let jsonResponse = yield call(appointmentsService.deleteAppointment, action.payload)
     yield put({

@@ -8,6 +8,14 @@ export const updateAppointments = data => ({
     payload: data
 })
 
+export const fetchTodaysAppointments = () => ({
+    type: "FETCH_TODAYS_APPOINTMENTS_SAGA"
+})
+
+export const fetchMadeAppointments = () => ({
+    type: "FETCH_MADE_APPOINTMENTS_SAGA"
+})
+
 export const fetchAllAppointments = () => ({
     type: "FETCH_ALL_APPOINTMENTS_SAGA"
 })
