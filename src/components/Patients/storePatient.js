@@ -359,17 +359,38 @@ const StorePatients = props => {
                         <h1 className="subtitle">
                             Endereço
                     </h1>
+                        {foreign ? <Row style={{ marginTop: '32px', marginBottom: '32px' }}>
+                            <Col md={12}>
+                                <label htmlFor="country">País:</label>
+                                <input
+                                    name="country"
+                                    onChange={handleChangeAddress}
+                                    className="form-control input"
+                                    text="text"
+                                    id="country"
+                                />
+                            </Col>
+                        </Row> : ''}
                         <Row>
                             <Col md={6}>
                                 <label htmlFor="cep">CEP: </label>
+                                {foreign ? 
                                 <input
+                                    maxLength="8"
+                                    onChange={handleChangeAddress}
+                                    type="text"
+                                    name="foreign_cep"
+                                    className="form-control input"
+                                    placeholder="Formato internacional"
+                                />
+                                : <input
                                     maxLength="8"
                                     onChange={handleChangeCep}
                                     type="text"
                                     name="cep"
                                     className="form-control input"
                                     value={cep}
-                                />
+                                />} 
                             </Col>
                             <Col md={6}>
                                 <label htmlFor="street">Logradouro: </label>
