@@ -62,7 +62,7 @@ const ListAppointments = props => {
                                 <tr key={index}>
                                     <td>{appointment.date}</td>
                                     <td>{appointment.time}</td>
-                                    <td>{appointment.patient_id}</td>
+                                    <td>{appointment.patient.name}</td>
                                     <td>
                                         <button 
                                             className="btn edit-button" 
