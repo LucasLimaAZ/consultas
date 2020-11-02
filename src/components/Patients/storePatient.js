@@ -374,14 +374,23 @@ const StorePatients = props => {
                         <Row>
                             <Col md={6}>
                                 <label htmlFor="cep">CEP: </label>
+                                {foreign ? 
                                 <input
+                                    maxLength="8"
+                                    onChange={handleChangeAddress}
+                                    type="text"
+                                    name="foreign_cep"
+                                    className="form-control input"
+                                    placeholder="Formato internacional"
+                                />
+                                : <input
                                     maxLength="8"
                                     onChange={handleChangeCep}
                                     type="text"
                                     name="cep"
                                     className="form-control input"
                                     value={cep}
-                                />
+                                />} 
                             </Col>
                             <Col md={6}>
                                 <label htmlFor="street">Logradouro: </label>
