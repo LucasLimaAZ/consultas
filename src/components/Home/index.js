@@ -72,7 +72,7 @@ const Home = props => {
                                 {
                                     props.appointments?.map(appointment => (
                                         <tr>
-                                            <td>{appointment.patient_id}</td>
+                                            <td>{appointment.patient?.name}</td>
                                             <td>{appointment.time}</td>
                                             <td>{appointment.abstract}</td>
                                         </tr>
