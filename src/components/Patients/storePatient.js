@@ -316,7 +316,7 @@ const StorePatients = props => {
                                 />
                             </Col>
                             <Col md={6}>
-                                Gênero
+                                Sexo
                             <div className="genders">
                                     <label>
                                         <input
