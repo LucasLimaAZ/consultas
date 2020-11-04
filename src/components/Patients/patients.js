@@ -64,7 +64,7 @@ const Patients = props => {
             <>
                 {
                     props.patients.patients ? (
-                        <Table striped responsive>
+                        <Table responsive>
                             <thead>
                                 <tr>
                                     <th>Name:</th>

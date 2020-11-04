@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import * as actions from "../../store/actions"
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faCalendar, faClock, faEdit, faTrash, faUser } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Table } from 'reactstrap'
 import Loader from 'react-loader-spinner'
@@ -42,48 +42,42 @@ const ListAppointments = props => {
     }
 
     return (
-        <div className="box">
+        <div>
             {
                 props.appointments.appointments?.length == 0 ?
                 <p style={{color: '#666'}}>Nenhum atendimento cadastrado.</p> : 
                 props.appointments.appointments ? (
-                    <Table striped responsive>
-                        <thead>
-                            <tr>
-                                <th>Data:</th>
-                                <th>Hora:</th>
-                                <th>Paciente:</th>
-                                <th>Editar:</th>
-                                <th>Deletar:</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {props.appointments.appointments.map((appointment, index) => (
-                                <tr key={index}>
-                                    <td>{appointment.date}</td>
-                                    <td>{appointment.time}</td>
-                                    <td>{appointment.patient.name}</td>
-                                    <td>
-                                        <button 
-                                            className="btn edit-button" 
-                                            onClick={() => handleEdit(appointment.id)}
-                                        >
-                                            <FontAwesomeIcon icon={faEdit} />
-                                        </button>
-                                    </td>
-                                    <td>
-                                        <button
-                                            id={appointment.id}
-                                            onClick={() => deleteAppointment(appointment.id)}
-                                            className="btn delete-button"
-                                        >
-                                            <FontAwesomeIcon icon={faTrash} />
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </Table>
+                    props.appointments.appointments.map((appointment, index) => (
+                        <div 
+                            key={index} 
+                            className="appointment" 
+                            onClick={() => handleEdit(appointment.id)}
+                        >
+                            <div className="appointment-item">
+                                <FontAwesomeIcon className="light-icon" icon={faCalendar} />
+                                {appointment.date} 
+                            </div>
+                            <div className="appointment-item">
+                                <FontAwesomeIcon className="light-icon" icon={faClock} />
+                                {appointment.time} 
+                            </div>
+                            <div className="appointment-item">
+                                <FontAwesomeIcon className="light-icon" icon={faUser} />
+                                {appointment.patient.name} 
+                            </div>
+                            <div className="appointment-item">
+                            </div>
+                            <div className="appointment-item">
+                                <a
+                                    id={appointment.id}
+                                    onClick={() => deleteAppointment(appointment.id)}
+                                    className="delete-button"
+                                >
+                                    <FontAwesomeIcon icon={faTrash} />
+                                </a>
+                            </div>
+                        </div>
+                    ))
                 ) : (
                         <Loader 
                             className="loader" 
