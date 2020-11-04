@@ -4,10 +4,6 @@ form{
 	margin-top: 40px;
 }
 
-.table-responsive {
-    display: table;
-}
-
 .genders, .receipt, .active{
 	display:flex;
 	justify-content: space-around;
@@ -15,7 +11,19 @@ form{
 }
 
 .edit-button, .delete-button{
+	max-width: 50px;
 	background: $lightBlue;
+	color: #ffffff;
+}
+
+.color-button {
+	border: $lightBlue;
+	background: $lightBlue;
+	color: #ffffff;
+}
+
+.color-button:hover, .color-button:active, .color-button:focus{
+	background: $darkBlue;
 	color: #ffffff;
 }
 
@@ -107,4 +115,8 @@ form{
 .foreignLabel{
 	color: #666;
 	vertical-align: top;
+}
+
+.patient-record-title{
+	color: #666;
 }

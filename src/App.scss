@@ -5,6 +5,7 @@
   outline: 0 !important;
   outline-width: 0px !important;
   outline-style: none !important;
+  min-height: 0 !important;
 }
  
 .App {
@@ -47,6 +48,12 @@ input::placeholder, .nascimento::-webkit-datetime-edit{
   font-weight: 200;
   font-size: 30px;
   margin: 0;
+}
+
+@media only screen and (max-width: 1023px) {
+  .title {
+    font-size: 22px;
+  }
 }
 
 .sidebar-title{

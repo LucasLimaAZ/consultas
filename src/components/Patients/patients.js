@@ -1,25 +1,35 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import * as actions from "../../store/actions"
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faEdit, faTrash, faUserMd } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Row, Col } from 'reactstrap'
+import { Row, Col, Table, Pagination, PaginationItem, PaginationLink, Button } from 'reactstrap'
 import Loader from 'react-loader-spinner'
 import "./style.scss"
 import Swal from "sweetalert2"
+import { Link } from 'react-router-dom'
+import PatientRecordModal from "./patientRecordModal"
 
 const Patients = props => {
 
-    const [initState, setInitState] = useState([])
-
     useEffect(() => {
         props.setPageTitle("Gerenciar pacientes")
-        props.fetchPatients()
-        setInitState(props.patients)
+        props.fetchPatients(1)
     },[])
 
     const handleInput = e => {
         props.filterPatients(e.target.value)
+    }
+
+    const handlePaginationClick = async page => {
+        await props.fetchPatients(page)
+    }
+
+    const newAppointment = id => {
+        props.history.push({ 
+            pathname: 'cadastrar-atendimento', 
+            patient: id
+        })
     }
 
     const deletePatient = id => {
@@ -51,14 +61,17 @@ const Patients = props => {
                     />
                 </Col>
             </Row>
+            <>
                 {
                     props.patients.patients ? (
-                        <table className="table table-striped table-sm table-responsive">
+                        <Table responsive>
                             <thead>
                                 <tr>
                                     <th>Name:</th>
                                     <th>RG:</th>
                                     <th>Celular:</th>
+                                    <th>Ficha:</th>
+                                    <th style={{textAlign: 'center'}}>Novo Atendimento:</th>
                                     <th>Editar:</th>
                                     <th>Deletar:</th>
                                 </tr>
@@ -69,10 +82,22 @@ const Patients = props => {
                                     <td>{patient.name}</td>
                                     <td>{patient.rg}</td>
                                     <td>{patient.phone}</td>
-                                    <td>
-                                        <button onClick={() => Swal.fire('Em construção')} className="btn edit-button">
-                                            <FontAwesomeIcon icon={faEdit} />
+                                    <td><PatientRecordModal patientInfo={patient} /></td>
+                                    <td style={{textAlign: 'center'}}>
+                                        <button 
+                                            id={patient.id} 
+                                            onClick={ () => newAppointment(patient.id) } 
+                                            className="btn edit-button"
+                                        >
+                                            <FontAwesomeIcon icon={faUserMd} />
                                         </button>
+                                    </td>
+                                    <td>
+                                        <Link to="/cadastrar-pacientes">
+                                            <button className="btn edit-button">
+                                                <FontAwesomeIcon icon={faEdit} />
+                                            </button>
+                                        </Link>
                                     </td>
                                     <td>
                                         <button 
@@ -86,11 +111,57 @@ const Patients = props => {
                                 </tr>
                             ))}
                             </tbody>
-                        </table>
+                            <Pagination aria-label="Page navigation example">
+
+                                <PaginationItem>
+                                    <PaginationLink 
+                                        first 
+                                        onClick={() => handlePaginationClick(props.patients.paginationData?.from)} 
+                                    />
+                                </PaginationItem>
+                                <PaginationItem>
+                                    <PaginationLink 
+                                        previous
+                                        onClick={() => handlePaginationClick(props.patients.paginationData?.current_page - 1)} 
+                                        disabled={props.patients.paginationData?.current_page == props.patients.paginationData?.from}
+                                    />
+                                </PaginationItem>
+                                
+                                {Array(props.patients.paginationData?.last_page).fill(1).map((el, i) =>
+                                    <PaginationItem key={i}>
+                                        <PaginationLink onClick={() => handlePaginationClick(i + 1)}>
+                                        {i + 1}
+                                        </PaginationLink>
+                                    </PaginationItem>
+                                )}
+                                
+                                <PaginationItem>
+                                    <PaginationLink 
+                                        next 
+                                        onClick={() => handlePaginationClick(props.patients.paginationData?.current_page + 1)}
+                                        disabled={props.patients.paginationData?.current_page == props.patients.paginationData?.last_page}
+                                    />
+                                </PaginationItem>
+                                <PaginationItem>
+                                    <PaginationLink 
+                                        last
+                                        onClick={() => handlePaginationClick(props.patients.paginationData?.last_page)} 
+                                    />
+                                </PaginationItem>
+
+                            </Pagination>
+                        </Table>
                     ) : (
-                        <Loader className="loader" type="TailSpin" color="#17A2B8" height={100} width={100} />
+                        <Loader 
+                            className="loader" 
+                            type="TailSpin" 
+                            color="#17A2B8" 
+                            height={100} 
+                            width={100} 
+                        />
                     )
                 }
+            </>
         </div>
     )
     
@@ -99,7 +170,7 @@ const Patients = props => {
 const mapDispatchToProps = dispatch => ({
     setPageTitle: title => dispatch(actions.setPageTitle(title)),
     filterPatients: patient => dispatch(actions.filterPatients(patient)),
-    fetchPatients: () => dispatch(actions.fetchPatients()),
+    fetchPatients: page => dispatch(actions.fetchPatients(page)),
     deletePatient: id => dispatch(actions.deletePatient(id))
 })
 

@@ -11,6 +11,7 @@ import axios from "axios"
 const StorePatients = props => {
 
     const [cpf, setCpf] = useState("")
+    const [cep, setCep] = useState("")
     const [foreign, setForeign] = useState(false)
     const [emergencyContact, setEmergencyContact] = useState("")
     const [value, setValue] = useState("R$ 0,00")
@@ -18,7 +19,7 @@ const StorePatients = props => {
     const [mobilephone, setMobilephone] = useState("")
     const [isCepValid, setIsCepValid] = useState(false)
     const [dateColor, setDateColor] = useState("form-control input nascimento")
-    const [body, setBody] = useState({})
+    const [body, setBody] = useState({address: {state: "AC"}, user: {role_id: 1, gender_id: 1}})
 
     useEffect(() => {
         props.setPageTitle("Cadastrar Paciente")
@@ -36,8 +37,13 @@ const StorePatients = props => {
         })
     }
 
+    const handleVerifyPasswords = () => {
+        return body.user.password === body.user.password_confirmation
+    }
+
     const handleChangeCep = e => {
-        let cep = e.target.value
+        let cep = e.target.value.replace(/[^0-9]/g, '')
+        setCep(cep)
 
         if (cep.length === 8)
             axios.get(`https://viacep.com.br/ws/${cep}/json`)
@@ -65,9 +71,17 @@ const StorePatients = props => {
                     }
                 })
                 .catch(err => console.log("Um erro ocorreu ao buscar o CEP: ", err))
+        else
+            setBody({
+                ...body,
+                address: {
+                    ...body.address,
+                    cep: cep
+                }
+            })
     }
 
-    const handleDateChage = e => {
+    const handleDateChange = e => {
         let value = e.target.value
         let name = e.target.name
 
@@ -163,28 +177,52 @@ const StorePatients = props => {
         })
     }
 
+    const handleVerifyDate = () => {
+        let date = new Date()
+        let birthday = new Date(body.birthday)
+        let age = date.getFullYear() - birthday.getFullYear()
+        return !(age > 130 || age < 0)
+    }
+
     const handleFormSubmit = async e => {
         e.preventDefault()
-        await setBody({
-            ...body,
-            foreign: foreign
-        })
-        await patientsService.store(body)
-            .then(() => {
-                Swal.fire({
-                    title: "Paciente cadastrado com sucesso!",
-                    icon: "success",
-                    confirmButtonColor: "#1492A5"
-                })
+        if(value === "R$ 0,00")
+            return Swal.fire("Por favor informe o valor da consulta.")
+        if (handleVerifyPasswords() && handleVerifyDate()) {
+            await setBody({
+                ...body,
+                foreign: foreign
             })
-            .catch(err => {
-                Swal.fire({
-                    title: "Ocorreu um erro.",
-                    text: "Por favor tente novamente mais tarde.",
-                    icon: "warning",
-                    confirmButtonColor: "#1492A5"
+            await patientsService.store(body)
+                .then(() => {
+                    Swal.fire({
+                        title: "Paciente cadastrado com sucesso!",
+                        icon: "success",
+                        confirmButtonColor: "#1492A5"
+                    })
                 })
-            })
+                .catch(e => {
+                    if(e.message == "Request failed with status code 422"){
+                        return Swal.fire({
+                            title: "Email já cadastrado.",
+                            text: "Por favor tente com um endereço de email diferente.",
+                            icon: "warning",
+                            confirmButtonColor: "#1492A5"
+                        })
+                    }
+                    Swal.fire({
+                        title: "Ocorreu um erro.",
+                        text: "Por favor tente novamente mais tarde.",
+                        icon: "warning",
+                        confirmButtonColor: "#1492A5"
+                    })
+                })
+        } else {
+            if (!handleVerifyPasswords())
+                return Swal.fire("As senhas divergem.")
+            if (!handleVerifyDate())
+                return Swal.fire("Por favor informe uma data de nascimento válida.")
+        }
     }
 
     const handleForeignChange = () => {
@@ -205,7 +243,7 @@ const StorePatients = props => {
                     <div className="box">
                         <h1 className="subtitle">
                             Dados do paciente
-                    </h1>
+                        </h1>
                         <Row>
                             <Col md={8}>
                                 <label htmlFor="name">Nome: </label>
@@ -215,6 +253,7 @@ const StorePatients = props => {
                                     name="name"
                                     placeholder="Nome completo"
                                     className="form-control input"
+                                    required
                                 />
                             </Col>
                             <Col md={4}>
@@ -251,6 +290,7 @@ const StorePatients = props => {
                                     maxLength="14"
                                     placeholder="___.___.___-__"
                                     value={cpf}
+                                    required
                                 />
                             </Col>
                             <Col md={4}>
@@ -271,12 +311,12 @@ const StorePatients = props => {
                                     name="birthday"
                                     className={dateColor}
                                     placeholder="Data de Nascimento"
-                                    onChange={handleDateChage}
-                                    onKeyDown={handleDateChage}
+                                    onChange={handleDateChange}
+                                    onKeyDown={handleDateChange}
                                 />
                             </Col>
                             <Col md={6}>
-                                Gênero
+                                Sexo
                             <div className="genders">
                                     <label>
                                         <input
@@ -319,16 +359,38 @@ const StorePatients = props => {
                         <h1 className="subtitle">
                             Endereço
                     </h1>
+                        {foreign ? <Row style={{ marginTop: '32px', marginBottom: '32px' }}>
+                            <Col md={12}>
+                                <label htmlFor="country">País:</label>
+                                <input
+                                    name="country"
+                                    onChange={handleChangeAddress}
+                                    className="form-control input"
+                                    text="text"
+                                    id="country"
+                                />
+                            </Col>
+                        </Row> : ''}
                         <Row>
                             <Col md={6}>
                                 <label htmlFor="cep">CEP: </label>
+                                {foreign ? 
                                 <input
+                                    maxLength="8"
+                                    onChange={handleChangeAddress}
+                                    type="text"
+                                    name="foreign_cep"
+                                    className="form-control input"
+                                    placeholder="Formato internacional"
+                                />
+                                : <input
                                     maxLength="8"
                                     onChange={handleChangeCep}
                                     type="text"
                                     name="cep"
                                     className="form-control input"
-                                />
+                                    value={cep}
+                                />} 
                             </Col>
                             <Col md={6}>
                                 <label htmlFor="street">Logradouro: </label>
@@ -345,13 +407,13 @@ const StorePatients = props => {
                         </Row>
                         <Row style={{ marginTop: '32px', marginBottom: '32px' }}>
                             <Col md={6}>
-                                <label htmlFor="numero">Número: </label>
+                                <label htmlFor="complement">Complemento: </label>
                                 <input
-                                    onChange={handleChangeAddress}
-                                    id="number"
-                                    type="number"
-                                    name="number"
+                                    id="complement"
+                                    type="text"
+                                    name="complement"
                                     className="form-control input"
+                                    onChange={handleChangeAddress}
                                 />
                             </Col>
                             <Col md={6}>
@@ -362,11 +424,23 @@ const StorePatients = props => {
                                     name="neighborhood"
                                     className="form-control input"
                                     disabled={isCepValid}
+                                    onChange={handleChangeAddress}
                                 />
                             </Col>
                         </Row>
                         <Row style={{ marginBottom: '32px' }}>
-                            <Col md={6}>
+                            <Col md={3}>
+                                <label htmlFor="numero">Número: </label>
+                                <input
+                                    onChange={handleChangeAddress}
+                                    id="number"
+                                    type="number"
+                                    min="1"
+                                    name="number"
+                                    className="form-control input"
+                                />
+                            </Col>
+                            <Col md={3}>
                                 {
                                     foreign ? (
                                         <>
@@ -377,48 +451,50 @@ const StorePatients = props => {
                                                 id="state"
                                                 className="form-control input"
                                                 disabled={isCepValid}
+                                                onChange={handleChangeAddress}
                                             />
                                         </>
                                     )
-                                    : (
-                                    <>
-                                        <label htmlFor="state">UF: </label>
-                                        <select
-                                            name="state"
-                                            id="state"
-                                            className="form-control input"
-                                            disabled={isCepValid}
-                                        >
-                                            <option value="AC">AC</option>
-                                            <option value="AL">AL</option>
-                                            <option value="AP">AP</option>
-                                            <option value="AM">AM</option>
-                                            <option value="BA">BA</option>
-                                            <option value="CE">CE</option>
-                                            <option value="DF">DF</option>
-                                            <option value="ES">ES</option>
-                                            <option value="GO">GO</option>
-                                            <option value="MA">MA</option>
-                                            <option value="MT">MT</option>
-                                            <option value="MS">MS</option>
-                                            <option value="MG">MG</option>
-                                            <option value="PA">PA</option>
-                                            <option value="PB">PB</option>
-                                            <option value="PR">PR</option>
-                                            <option value="PE">PE</option>
-                                            <option value="PI">PI</option>
-                                            <option value="RJ">RJ</option>
-                                            <option value="RN">RN</option>
-                                            <option value="RS">RS</option>
-                                            <option value="RO">RO</option>
-                                            <option value="RR">RR</option>
-                                            <option value="SC">SC</option>
-                                            <option value="SP">SP</option>
-                                            <option value="SE">SE</option>
-                                            <option value="TO">TO</option>
-                                        </select>
-                                    </>
-                                    )
+                                        : (
+                                            <>
+                                                <label htmlFor="state">UF: </label>
+                                                <select
+                                                    name="state"
+                                                    id="state"
+                                                    className="form-control input"
+                                                    disabled={isCepValid}
+                                                    onChange={handleChangeAddress}
+                                                >
+                                                    <option value="AC">AC</option>
+                                                    <option value="AL">AL</option>
+                                                    <option value="AP">AP</option>
+                                                    <option value="AM">AM</option>
+                                                    <option value="BA">BA</option>
+                                                    <option value="CE">CE</option>
+                                                    <option value="DF">DF</option>
+                                                    <option value="ES">ES</option>
+                                                    <option value="GO">GO</option>
+                                                    <option value="MA">MA</option>
+                                                    <option value="MT">MT</option>
+                                                    <option value="MS">MS</option>
+                                                    <option value="MG">MG</option>
+                                                    <option value="PA">PA</option>
+                                                    <option value="PB">PB</option>
+                                                    <option value="PR">PR</option>
+                                                    <option value="PE">PE</option>
+                                                    <option value="PI">PI</option>
+                                                    <option value="RJ">RJ</option>
+                                                    <option value="RN">RN</option>
+                                                    <option value="RS">RS</option>
+                                                    <option value="RO">RO</option>
+                                                    <option value="RR">RR</option>
+                                                    <option value="SC">SC</option>
+                                                    <option value="SP">SP</option>
+                                                    <option value="SE">SE</option>
+                                                    <option value="TO">TO</option>
+                                                </select>
+                                            </>
+                                        )
                                 }
                             </Col>
                             <Col md={6}>
@@ -494,6 +570,7 @@ const StorePatients = props => {
                                     className="form-control input"
                                     name="value"
                                     value={value}
+                                    required
                                 />
                             </Col>
                             <Col md={6}>
@@ -538,6 +615,7 @@ const StorePatients = props => {
                                     className="form-control input"
                                     name="email"
                                     autoComplete="new-password"
+                                    required
                                 />
                             </Col>
                             <Col md={4}>
@@ -548,6 +626,7 @@ const StorePatients = props => {
                                     className="form-control input"
                                     name="password"
                                     autoComplete="new-password"
+                                    required
                                 />
                             </Col>
                             <Col md={4}>
@@ -557,16 +636,20 @@ const StorePatients = props => {
                                     type="password"
                                     className="form-control input"
                                     name="password_confirmation"
+                                    required
                                 />
                             </Col>
                         </Row>
                         <Row style={{ marginTop: '32px', marginBottom: '32px' }}>
                             <Col md={4}>
-                                <label htmlFor="role">Hierarquia: </label>
-                                <select className="form-control input" name="role">
-                                    <option>Teste 1</option>
-                                    <option>Teste 2</option>
-                                    <option>Teste 3</option>
+                                <label htmlFor="role_id">Hierarquia: </label>
+                                <select 
+                                    className="form-control input" 
+                                    name="role"
+                                >
+                                    <option value="1">Admin</option>
+                                    <option value="1">Médico</option>
+                                    <option value="2">Paciente</option>
                                 </select>
                             </Col>
                             <Col md={4}>
