@@ -13,7 +13,7 @@ export {
 
 export {
     storeAppointments,
-    fetchAllAppointments,
+    fetchAppointments,
     deleteAppointment,
     updateAppointments,
     fetchMadeAppointments,

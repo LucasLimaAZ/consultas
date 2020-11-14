@@ -11,7 +11,7 @@ const appointmentsReducer = (state = initState, action) => {
 
     switch (action.type) {
 
-        case "TOGGLE_APPOINTMENTS_LOADER":
+        case "SET_APPOINTMENTS_LOADER":
             return {
                 ...state,
                 isLoading: true
@@ -22,6 +22,13 @@ const appointmentsReducer = (state = initState, action) => {
                 ...state,
                 success: true,
                 isLoading: false
+            }
+        
+        case "SET_APPOINTMENTS_PAGINATION_DATA":
+            return {
+                ...state,
+                paginationData: action.payload,
+                loader: false
             }
 
         case "SET_APPOINTMENTS_FAILURE":
@@ -36,7 +43,8 @@ const appointmentsReducer = (state = initState, action) => {
             initState.appointments = action.payload
             return {
                 ...state,
-                appointments: action.payload
+                appointments: action.payload,
+                isLoading: false
             }
 
         case "SET_TODAYS_APPOINTMENTS":

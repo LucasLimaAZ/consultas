@@ -87,3 +87,13 @@ tr{
     color: $lightBlue;
     margin-right: 10px;
 }
+
+.selectedPage button{
+    background: $lightBlue !important;
+    color: white !important;
+}
+
+.page button, .page-link{
+    color: $lightBlue !important;
+    background: white !important;
+}
