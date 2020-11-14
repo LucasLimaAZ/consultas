@@ -12,7 +12,7 @@ const filesReducer = (state = initFiles, action) => {
                 selectedFiles: action.payload
             }
 
-        case "SET_LOADER": 
+        case "SET_FILES_LOADER": 
             return {
                 ...state,
                 loader: true
