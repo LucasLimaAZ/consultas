@@ -63,7 +63,15 @@ const Patients = props => {
             </Row>
             <>
                 {
-                    props.patients.patients ? (
+                    !props.patients.patients || props.patients.loader ? (
+                        <Loader 
+                            className="loader" 
+                            type="TailSpin" 
+                            color="#17A2B8" 
+                            height={100} 
+                            width={100} 
+                        />
+                    ) : (
                         <Table responsive>
                             <thead>
                                 <tr>
@@ -151,14 +159,6 @@ const Patients = props => {
 
                             </Pagination>
                         </Table>
-                    ) : (
-                        <Loader 
-                            className="loader" 
-                            type="TailSpin" 
-                            color="#17A2B8" 
-                            height={100} 
-                            width={100} 
-                        />
                     )
                 }
             </>
