@@ -95,7 +95,7 @@ const ModalExample = (props) => {
 											<tr>
 												<th>Arquivo: </th>
 												<th>Data de Upload: </th>
-												<th>Vizualizar: </th>
+												<th>Visualizar: </th>
 											</tr>
 										</thead>
 										<tbody>

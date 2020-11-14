@@ -31,3 +31,59 @@
     background-color: $darkBlue !important;
     border-color: $lightBlue !important;
 }
+
+tr{
+    border: 0;
+}
+
+.table td, .table th {
+    border-top: 0 !important;
+}
+
+.appointment {
+    box-shadow: 0 .125rem .25rem rgba(0,0,0,.035) !important;
+    margin-bottom: 1% !important;
+    padding: 1% !important;
+    display: flex;
+    align-items: center;
+    background: white;
+    vertical-align: middle;
+    border-radius: 4px;
+}
+
+.appointment:hover {
+    cursor: pointer;
+    transition: 0.25s;
+    box-shadow: 0px 2px 5px rgba(0,0,0,.2) !important;
+}
+
+.appointment-item {
+    flex: 1 1 0px;
+}
+
+.edit-button {
+    background: inherit;
+    color: $darkBlue !important;
+}
+
+.edit-button:hover{
+    background: inherit;
+    color: $lightBlue !important;
+    cursor: pointer;
+}
+
+.delete-button {
+    background: inherit;
+    color: $darkBlue !important;
+}
+
+.delete-button:hover{
+    background: inherit;
+    color: $lightBlue !important;
+    cursor: pointer;
+}
+
+.light-icon {
+    color: $lightBlue;
+    margin-right: 10px;
+}

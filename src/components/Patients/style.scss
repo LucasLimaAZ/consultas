@@ -11,8 +11,7 @@ form{
 }
 
 .edit-button, .delete-button{
-	width: 45px;
-	height: 45px;
+	max-width: 50px;
 	background: $lightBlue;
 	color: #ffffff;
 }

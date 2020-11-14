@@ -9,6 +9,7 @@ export function* watchSagas(){
         takeEvery("FETCH_ALL_PATIENTS_SAGA", patientsSagas.fetchAll),
         takeEvery("FETCH_PATIENT_INFO", patientsSagas.find),
         takeEvery("DELETE_PATIENT_SAGA", patientsSagas.deletePatient),
+        takeEvery("FILTER_PATIENTS_SAGA", patientsSagas.filter),
         takeEvery("FETCH_PATIENT_APPOINTMENTS_SAGA", patientsSagas.fetchAppointments),
         takeEvery("FETCH_MADE_APPOINTMENTS_SAGA", appointmentsSagas.fetchMadeAppointments),
         takeEvery("FETCH_TODAYS_APPOINTMENTS_SAGA", appointmentsSagas.fetchTodaysAppointments),

@@ -1,42 +1,46 @@
-const initState = {}
+const initState = {
+    patients: [],
+    paginationData: [],
+    loader: false
+}
 
 const patientsReducer = (state = {}, action) => {
 
     switch(action.type){
 
-        case "FILTER_PATIENTS":
-            let filteredPatients = initState.patients.filter(patient => {
-                let name = patient.name.toLocaleLowerCase()
-                return name.includes(action.payload.toLocaleLowerCase())
-            })
+        case "SET_LOADER":
             return {
                 ...state,
-                patients: filteredPatients
+                loader: true
             }
 
         case "SET_PATIENTS":
             initState.patients = action.payload
             return {
                 ...state,
-                patients: action.payload
+                patients: action.payload,
+                loader: false
             }
 
         case "SET_PATIENT":
             return {
                 ...state,
-                patient: action.payload
+                patient: action.payload,
+                loader: false
             }
 
         case "SET_PATIENT_APPOINTMENTS":
             return {
                 ...state,
-                appointments: action.payload
+                appointments: action.payload,
+                loader: false
             }
 
         case "SET_PAGINATION_DATA":
             return {
                 ...state,
-                paginationData: action.payload
+                paginationData: action.payload,
+                loader: false
             }
 
         case "DELETE_PATIENT":
@@ -47,7 +51,8 @@ const patientsReducer = (state = {}, action) => {
             return {
                 ...state,
                 patients: remainingPatients,
-                status: action.payload.jsonResponse.status
+                status: action.payload.jsonResponse.status,
+                loader: false
             }
             
         default: return state
