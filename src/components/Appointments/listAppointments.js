@@ -76,11 +76,9 @@ const ListAppointments = props => {
                                     <FontAwesomeIcon className="light-icon" icon={faClock} />
                                     {appointment.time} 
                                 </div>
-                                <div className="appointment-item">
+                                <div className="appointment-item patient-name">
                                     <FontAwesomeIcon className="light-icon" icon={faUser} />
                                     {appointment.patient.name} 
-                                </div>
-                                <div className="appointment-item">
                                 </div>
                                 <div className="appointment-item">
                                     <a
