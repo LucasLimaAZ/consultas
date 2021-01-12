@@ -7,7 +7,7 @@ export function* watchSagas(){
     yield all([
         takeEvery("FETCH_PATIENTS_SAGA", patientsSagas.fetchPatients),
         takeEvery("FETCH_ALL_PATIENTS_SAGA", patientsSagas.fetchAll),
-        takeEvery("FETCH_PATIENT_INFO", patientsSagas.find),
+        takeEvery("FETCH_PATIENT_INFO_SAGA", patientsSagas.fetchPatientInfo),
         takeEvery("DELETE_PATIENT_SAGA", patientsSagas.deletePatient),
         takeEvery("FILTER_PATIENTS_SAGA", patientsSagas.filter),
         takeEvery("FETCH_PATIENT_APPOINTMENTS_SAGA", patientsSagas.fetchAppointments),

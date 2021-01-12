@@ -7,7 +7,6 @@ import { Row, Col, Table, Pagination, PaginationItem, PaginationLink } from 'rea
 import Loader from 'react-loader-spinner'
 import "./style.scss"
 import Swal from "sweetalert2"
-import { Link } from 'react-router-dom'
 import PatientRecordModal from "./patientRecordModal"
 
 const Patients = props => {
@@ -29,6 +28,13 @@ const Patients = props => {
         props.history.push({ 
             pathname: 'cadastrar-atendimento', 
             patient: id
+        })
+    }
+
+    const handleEdit = patient => {
+        props.history.push({ 
+            pathname: 'cadastrar-pacientes', 
+            state: patient
         })
     }
 
@@ -101,11 +107,12 @@ const Patients = props => {
                                         </button>
                                     </td>
                                     <td>
-                                        <Link to="/cadastrar-pacientes">
-                                            <button className="btn edit-button">
-                                                <FontAwesomeIcon icon={faEdit} />
-                                            </button>
-                                        </Link>
+                                        <button 
+                                            className="btn edit-button"
+                                            onClick={ () => handleEdit(patient) }
+                                        >
+                                            <FontAwesomeIcon icon={faEdit} />
+                                        </button>
                                     </td>
                                     <td>
                                         <button 

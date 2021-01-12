@@ -27,7 +27,16 @@ const StorePatients = props => {
             "Atualizar Paciente" :
             "Cadastrar Paciente"
         )
-    })
+
+        if (props.location.state) {
+            props.fetchPatientInfo(props.location.state.id)
+            console.log("patient ==> ", props.patient)
+            setBody(props.location.state)
+            setPhone(props.location.state.telephone)
+            setMobilephone(props.location.state.phone)
+            setCpf(props.location.state.cpf)
+        }
+    },[props.patient])
 
     const handleCpf = e => {
         setCpf(cpfMask(e.target.value))
@@ -74,7 +83,7 @@ const StorePatients = props => {
                         setIsCepValid(false)
                     }
                 })
-                .catch(err => console.log("Um erro ocorreu ao buscar o CEP: ", err))
+                .catch(err => console.error("Um erro ocorreu ao buscar o CEP: ", err))
         else
             setBody({
                 ...body,
@@ -258,6 +267,7 @@ const StorePatients = props => {
                                     placeholder="Nome completo"
                                     className="form-control input"
                                     required
+                                    value={body.name}
                                 />
                             </Col>
                             <Col md={4}>
@@ -304,6 +314,7 @@ const StorePatients = props => {
                                     type="text"
                                     name="rg"
                                     className="form-control input"
+                                    value={body.rg}
                                 />
                             </Col>
                         </Row>
@@ -317,6 +328,7 @@ const StorePatients = props => {
                                     placeholder="Data de Nascimento"
                                     onChange={handleDateChange}
                                     onKeyDown={handleDateChange}
+                                    value={body.birthday}
                                 />
                             </Col>
                             <Col md={6}>
@@ -696,7 +708,14 @@ const StorePatients = props => {
 }
 
 const mapDispatchToProps = dispatch => ({
-    setPageTitle: title => dispatch(actions.setPageTitle(title))
+    setPageTitle: title => dispatch(actions.setPageTitle(title)),
+    fetchPatientInfo: id => dispatch(actions.fetchPatientInfo(id))
 })
 
-export default connect(null, mapDispatchToProps)(StorePatients)
+const mapStateToProps = store => {
+    return {
+        patient: store.patientsReducer.currentPatient
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(StorePatients)
