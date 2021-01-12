@@ -27,8 +27,10 @@ const ListAppointments = props => {
             cancelButtonColor: '#1492A5'
         })
             .then(res => {
-                if (res.value)
+                if (res.value) {
                     props.deleteAppointment(id)
+                    props.history.push('atendimentos')
+                }
             })
     }
 
