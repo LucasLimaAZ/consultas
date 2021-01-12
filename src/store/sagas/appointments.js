@@ -63,16 +63,25 @@ export function* updateAppointment(action) {
     
 }
 
-export function* fetchAll() {
-    let jsonResponse = yield call(appointmentsService.fetchAll)
+export function* fetchAll(action) {
+    yield put({ type: "SET_APPOINTMENTS_LOADER" })
+
+    let jsonResponse = yield call(appointmentsService.fetchAll, action.payload)
+
     yield put({
         type: "SET_APPOINTMENTS",
         payload: jsonResponse.data.data
+    })
+
+    yield put({
+        type: "SET_APPOINTMENTS_PAGINATION_DATA",
+        payload: jsonResponse.data
     })
 }
 
 export function* fetchMadeAppointments() {
     let jsonResponse = yield call(appointmentsService.fetchMade)
+
     yield put({
         type: "SET_MADE_APPOINTMENTS",
         payload: jsonResponse.data
@@ -81,6 +90,7 @@ export function* fetchMadeAppointments() {
 
 export function* fetchTodaysAppointments() {
     let jsonResponse = yield call(appointmentsService.fetchTodays)
+
     yield put({
         type: "SET_TODAYS_APPOINTMENTS",
         payload: jsonResponse.data
@@ -89,6 +99,7 @@ export function* fetchTodaysAppointments() {
 
 export function* deleteAppointment(action) {
     let jsonResponse = yield call(appointmentsService.deleteAppointment, action.payload)
+    
     yield put({
         type: "DELETE_APPOINTMENT",
         payload: { jsonResponse: jsonResponse, id: action.payload }

@@ -2,6 +2,8 @@ import { put, call } from 'redux-saga/effects'
 import patientsService from '../../services/patientsService'
 
 export function* fetchPatients(action){
+    yield put({ type: "SET_LOADER" })
+
     let jsonResponse = yield call(patientsService.fetch, action.payload)
 
     yield put({
@@ -30,6 +32,22 @@ export function* fetchAppointments(action){
     yield put({
         type: "SET_PATIENT_APPOINTMENTS",
         payload: jsonResponse.data
+    })
+}
+
+export function* filter(action){
+    yield put({ type: "SET_LOADER" })
+
+    let jsonResponse = yield call(patientsService.filter, action.payload)
+
+    yield put({
+        type: "SET_PAGINATION_DATA",
+        payload: jsonResponse.data
+    })
+
+    yield put({
+        type: "SET_PATIENTS",
+        payload: jsonResponse.data.data
     })
 }
 

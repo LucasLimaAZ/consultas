@@ -28,8 +28,8 @@ const Files = props => {
                         <select className="selected-patient" onChange={handlePatientChange}>
                             <option>Selecione um paciente</option>
                             {
-                                props.patients?.map(patient => (
-                                    <option value={patient.id}>{patient.name}</option>
+                                props.patients?.map((patient, index) => (
+                                    <option key={index} value={patient.id}>{patient.name}</option>
                                 ))
                             }
                         </select>

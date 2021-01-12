@@ -33,7 +33,7 @@ export function* fetchFiles() {
 
 export function* fetchByPatient(action) {
 
-    yield put({ type: "SET_LOADER" })
+    yield put({ type: "SET_FILES_LOADER" })
 
     let jsonResponse = yield call(filesService.fetchByPatient, action.payload)
 
