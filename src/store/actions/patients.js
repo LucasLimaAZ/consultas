@@ -1,5 +1,5 @@
 export const filterPatients = patient => ({
-    type: "FILTER_PATIENTS",
+    type: "FILTER_PATIENTS_SAGA",
     payload: patient
 })
 

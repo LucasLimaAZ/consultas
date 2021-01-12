@@ -16,8 +16,9 @@ export const fetchMadeAppointments = () => ({
     type: "FETCH_MADE_APPOINTMENTS_SAGA"
 })
 
-export const fetchAllAppointments = () => ({
-    type: "FETCH_ALL_APPOINTMENTS_SAGA"
+export const fetchAppointments = page => ({
+    type: "FETCH_ALL_APPOINTMENTS_SAGA",
+    payload: page
 })
 
 export const deleteAppointment = id => ({
