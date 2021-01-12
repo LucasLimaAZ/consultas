@@ -22,7 +22,11 @@ const StorePatients = props => {
     const [body, setBody] = useState({address: {state: "AC"}, user: {role_id: 1, gender_id: 1}})
 
     useEffect(() => {
-        props.setPageTitle("Cadastrar Paciente")
+        props.setPageTitle(
+            props.location.state ?
+            "Atualizar Paciente" :
+            "Cadastrar Paciente"
+        )
     })
 
     const handleCpf = e => {
