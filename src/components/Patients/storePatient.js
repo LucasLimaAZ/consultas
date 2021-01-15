@@ -36,7 +36,7 @@ const StorePatients = props => {
             setMobilephone(props.location.state.phone)
             setCpf(props.location.state.cpf)
         }
-    },[props.patient])
+    },[])
 
     const handleCpf = e => {
         setCpf(cpfMask(e.target.value))
