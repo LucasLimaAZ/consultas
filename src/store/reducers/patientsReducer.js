@@ -45,7 +45,6 @@ const patientsReducer = (state = {}, action) => {
             }
 
         case "SET_CURRENT_PATIENT":
-            console.log("eita, que agora eu cheguei no reducer")
             return {
                 ...state,
                 currentPatient: action.payload,

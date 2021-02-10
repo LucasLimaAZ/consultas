@@ -12,7 +12,7 @@ const ListAppointments = props => {
 
     useEffect(() => {
         props.setPageTitle("Gerenciar atendimentos")
-        props.fetchAppointments()
+        props.fetchAppointments(1)
     }, [])
 
     const deleteAppointment = id => {
@@ -80,7 +80,7 @@ const ListAppointments = props => {
                                 </div>
                                 <div className="appointment-item patient-name">
                                     <FontAwesomeIcon className="light-icon" icon={faUser} />
-                                    {appointment.patient.name} 
+                                    {appointment.patient?.name} 
                                 </div>
                                 <div className="appointment-item">
                                     <a

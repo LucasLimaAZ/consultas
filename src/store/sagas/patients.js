@@ -18,7 +18,6 @@ export function* fetchPatients(action){
 }
 
 export function* fetchPatientInfo(action){
-    console.log("ok... to no sagas")
     yield put({ type: "SET_LOADER" })
 
     let jsonResponse = yield call(patientsService.find, action.payload)

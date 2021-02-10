@@ -34,7 +34,8 @@ const Patients = props => {
     const handleEdit = patient => {
         props.history.push({ 
             pathname: 'cadastrar-pacientes', 
-            state: patient
+            state: patient,
+            new: true
         })
     }
 
