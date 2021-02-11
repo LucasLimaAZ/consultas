@@ -1,4 +1,5 @@
 const initState = {
+    currentPatient: {teste: "teste"},
     patients: [],
     paginationData: [],
     loader: false
@@ -40,6 +41,13 @@ const patientsReducer = (state = {}, action) => {
             return {
                 ...state,
                 paginationData: action.payload,
+                loader: false
+            }
+
+        case "SET_CURRENT_PATIENT":
+            return {
+                ...state,
+                currentPatient: action.payload,
                 loader: false
             }
 

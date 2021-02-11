@@ -23,7 +23,7 @@ class Auth{
             .catch(err => {
                 this.authenticated = false
                 elseCallBack()
-                console.log(err)
+                console.error(err)
             })
 
     }

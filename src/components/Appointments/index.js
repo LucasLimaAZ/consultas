@@ -12,17 +12,23 @@ const Appointments = props => {
     const [requestBody, setRequestBody] = useState({})
 
     useEffect(() => {
+
         props.setPageTitle(
             props.location.state ?
             "ATUALIZAR ATENDIMENTO" :
             "NOVO ATENDIMENTO "
         )
+
         props.fetchPatients()
         checkSuccess()
-        if (props.location.state)
+
+        if (props.location.state) {
             setRequestBody(props.location.state)
-        else if (props.location.patient)
+        }
+        else if (props.location.patient) {
             setRequestBody({patient_id: props.location.patient})
+        }
+        
     },[props.appointments]) 
 
     const handleRequestBody = e => {

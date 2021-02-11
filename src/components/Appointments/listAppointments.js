@@ -12,7 +12,7 @@ const ListAppointments = props => {
 
     useEffect(() => {
         props.setPageTitle("Gerenciar atendimentos")
-        props.fetchAppointments()
+        props.fetchAppointments(1)
     }, [])
 
     const deleteAppointment = id => {
@@ -27,8 +27,10 @@ const ListAppointments = props => {
             cancelButtonColor: '#1492A5'
         })
             .then(res => {
-                if (res.value)
+                if (res.value) {
                     props.deleteAppointment(id)
+                    props.history.push('atendimentos')
+                }
             })
     }
 
@@ -76,11 +78,9 @@ const ListAppointments = props => {
                                     <FontAwesomeIcon className="light-icon" icon={faClock} />
                                     {appointment.time} 
                                 </div>
-                                <div className="appointment-item">
+                                <div className="appointment-item patient-name">
                                     <FontAwesomeIcon className="light-icon" icon={faUser} />
-                                    {appointment.patient.name} 
-                                </div>
-                                <div className="appointment-item">
+                                    {appointment.patient?.name} 
                                 </div>
                                 <div className="appointment-item">
                                     <a

@@ -17,6 +17,17 @@ export function* fetchPatients(action){
     })
 }
 
+export function* fetchPatientInfo(action){
+    yield put({ type: "SET_LOADER" })
+
+    let jsonResponse = yield call(patientsService.find, action.payload)
+
+    yield put({
+        type: "SET_CURRENT_PATIENT",
+        payload: jsonResponse.data
+    })
+}
+
 export function* fetchAll(){
     let jsonResponse = yield call(patientsService.fetchAll)
 
