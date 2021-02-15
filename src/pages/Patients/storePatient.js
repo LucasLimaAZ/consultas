@@ -3,7 +3,7 @@ import './style.scss'
 import { Row, Col, Button } from 'reactstrap'
 import { connect } from 'react-redux'
 import * as actions from '../../store/actions'
-import { cpfMask, phoneMask, currencyMask } from '../Mask/index'
+import { cpfMask, phoneMask, currencyMask } from '../../components/Mask/index'
 import patientsService from "../../services/patientsService"
 import Swal from "sweetalert2"
 import axios from "axios"

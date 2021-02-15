@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { connect } from "react-redux"
 import { Row, Col, Button } from "reactstrap"
 import * as actions from "../../store/actions"
-import StyledDropzone from "../Dropzone"
+import StyledDropzone from "../../components/Dropzone"
 import Loader from 'react-loader-spinner'
 import "./style.scss"
 import Swal from "sweetalert2"

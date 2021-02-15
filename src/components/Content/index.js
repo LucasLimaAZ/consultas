@@ -5,12 +5,12 @@ import NavBar from './Navbar'
 import { Switch } from 'react-router-dom'
 import { ProtectedRoute } from '../../protected.route'
 
-import Home from '../Home'
-import StorePatients from '../Patients/storePatient'
-import Patients from '../Patients/patients'
-import Appointments from '../Appointments/index'
-import ListAppointments from '../Appointments/listAppointments'
-import Files from '../Files/index'
+import Home from '../../pages/Home'
+import StorePatients from '../../pages/Patients/storePatient'
+import Patients from '../../pages/Patients/patients'
+import Appointments from '../../pages/Appointments/index'
+import ListAppointments from '../../pages/Appointments/listAppointments'
+import Files from '../../pages/Files/index'
 
 export default props => (
     <Container fluid className={classNames('content', {'is-open': props.isOpen})}>
