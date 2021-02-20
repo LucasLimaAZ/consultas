@@ -7,6 +7,7 @@ const store = body => api.post('/patients', body)
 const deletePatient = id => api.delete(`/patients/${id}`)
 const fetchAppointments = patient => api.get(`/appointments/patient/${patient}`)
 const filter = search => api.post(`/patients/search`, {value: search})
+const update = (id, body) => api.put(`/patients/${id}`, body)
 
 export default { 
     fetchAll,
@@ -15,5 +16,6 @@ export default {
     fetchAppointments,
     deletePatient,
     store,
-    filter
+    filter,
+    update
 }

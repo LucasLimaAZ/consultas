@@ -46,15 +46,11 @@ const StorePatients = props => {
     },[props.patient])
 
     const handleCpf = e => {
-        setCpf(cpfMask(e.target.value))
-
         let value = e.target.value
         let name = e.target.name
 
-        setBody({
-            ...body,
-            [name]: value
-        })
+        setCpf(cpfMask(value))
+        setBody({ ...body, [name]: value })
     }
 
     const handleVerifyPasswords = () => {
@@ -65,7 +61,7 @@ const StorePatients = props => {
         let cep = e.target.value.replace(/[^0-9]/g, '')
         setCep(cep)
 
-        if (cep.length === 8)
+        if (cep.length === 8) {
             axios.get(`https://viacep.com.br/ws/${cep}/json`)
                 .then(res => {
                     if (!res.data.erro) {
@@ -87,25 +83,17 @@ const StorePatients = props => {
                     }
                 })
                 .catch(err => console.error("Um erro ocorreu ao buscar o CEP: ", err))
-        else
-            setBody({
-                ...body,
-                address: {
-                    ...body.address,
-                    cep: cep
-                }
-            })
+        } 
+        else {
+            setBody({ ...body, address: { ...body.address, cep: cep } })
+        }
     }
 
     const handleDateChange = e => {
         let value = e.target.value
         let name = e.target.name
 
-        setBody({
-            ...body,
-            [name]: value
-        })
-
+        setBody({ ...body, [name]: value })
         setDateColor("form-control input")
     }
 
@@ -166,13 +154,7 @@ const StorePatients = props => {
         let value = e.target.value
         let name = e.target.name
 
-        setBody({
-            ...body,
-            address: {
-                ...body.address,
-                [name]: value
-            }
-        })
+        setBody({ ...body, address: { ...body.address, [name]: value } })
     }
 
     const handlePlusInformationChange = e => {
@@ -208,43 +190,77 @@ const StorePatients = props => {
 
     const handleFormSubmit = async e => {
         e.preventDefault()
-        if(value === "R$ 0,00")
+
+        if (value === "R$ 0,00") {
             return Swal.fire("Por favor informe o valor da consulta.")
+        }
+            
         if (handleVerifyPasswords() && handleVerifyDate()) {
-            await setBody({
-                ...body,
-                foreign: foreign
-            })
-            await patientsService.store(body)
-                .then(() => {
-                    Swal.fire({
-                        title: "Paciente cadastrado com sucesso!",
-                        icon: "success",
-                        confirmButtonColor: "#1492A5"
-                    })
-                })
-                .catch(e => {
-                    if(e.message == "Request failed with status code 422"){
-                        return Swal.fire({
-                            title: "Email já cadastrado.",
-                            text: "Por favor tente com um endereço de email diferente.",
-                            icon: "warning",
-                            confirmButtonColor: "#1492A5"
-                        })
-                    }
-                    Swal.fire({
-                        title: "Ocorreu um erro.",
-                        text: "Por favor tente novamente mais tarde.",
-                        icon: "warning",
-                        confirmButtonColor: "#1492A5"
-                    })
-                })
-        } else {
+            setBody({ ...body, foreign: foreign })
+            props.location.state ?
+            await updatePatient() :
+            await storePatient()
+        } 
+        else {
             if (!handleVerifyPasswords())
                 return Swal.fire("As senhas divergem.")
             if (!handleVerifyDate())
                 return Swal.fire("Por favor informe uma data de nascimento válida.")
         }
+    }
+
+    const updatePatient = async () => {
+        await patientsService.update(props.location.state.id, body)
+        .then(() => {
+            Swal.fire({
+                title: "Paciente atualizado com sucesso!",
+                icon: "success",
+                confirmButtonColor: "#1492A5"
+            })
+        })
+        .catch(e => {
+            if(e.message == "Request failed with status code 422"){
+                return Swal.fire({
+                    title: "Email já cadastrado.",
+                    text: "Por favor tente com um endereço de email diferente.",
+                    icon: "warning",
+                    confirmButtonColor: "#1492A5"
+                })
+            }
+            Swal.fire({
+                title: "Ocorreu um erro.",
+                text: "Por favor tente novamente mais tarde.",
+                icon: "warning",
+                confirmButtonColor: "#1492A5"
+            })
+        })
+    }
+
+    const storePatient = async () => {
+        await patientsService.store(body)
+            .then(() => {
+                Swal.fire({
+                    title: "Paciente cadastrado com sucesso!",
+                    icon: "success",
+                    confirmButtonColor: "#1492A5"
+                })
+            })
+            .catch(e => {
+                if(e.message == "Request failed with status code 422"){
+                    return Swal.fire({
+                        title: "Email já cadastrado.",
+                        text: "Por favor tente com um endereço de email diferente.",
+                        icon: "warning",
+                        confirmButtonColor: "#1492A5"
+                    })
+                }
+                Swal.fire({
+                    title: "Ocorreu um erro.",
+                    text: "Por favor tente novamente mais tarde.",
+                    icon: "warning",
+                    confirmButtonColor: "#1492A5"
+                })
+            })
     }
 
     const handleForeignChange = () => {
@@ -719,8 +735,12 @@ const StorePatients = props => {
             <Row style={{ marginBottom: '100px' }}>
                 <Col md={12}>
                     <div className="box">
-                        <h1 className="subtitle">Salvar dados</h1>
-                        <Button type="submit">Salvar</Button>
+                        <h1 className="subtitle">
+                            { props.location.state ? 'Atualizar dados' : 'Salvar dados' }
+                        </h1>
+                        <Button type="submit">
+                            { props.location.state ? 'Atualizar' : 'Salvar' }
+                        </Button>
                     </div>
                 </Col>
             </Row>
