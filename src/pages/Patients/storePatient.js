@@ -4,21 +4,44 @@ import { Row, Col, Button } from 'reactstrap'
 import { connect } from 'react-redux'
 import * as actions from '../../store/actions'
 import { cpfMask, phoneMask, currencyMask } from '../../components/Mask/index'
-import patientsService from "../../services/patientsService"
 import Swal from "sweetalert2"
-import axios from "axios"
 
 const StorePatients = props => {
 
-    const [cpf, setCpf] = useState("")
     const [cep, setCep] = useState("")
     const [foreign, setForeign] = useState(false)
-    const [value, setValue] = useState("R$ 0,00")
-    const [phone, setPhone] = useState("")
-    const [mobilephone, setMobilephone] = useState("")
-    const [isCepValid, setIsCepValid] = useState(false)
-    const [dateColor, setDateColor] = useState("form-control input nascimento")
-    const [body, setBody] = useState({ address: {state: "AC"}, user: {role_id: 1, gender_id: 1} })
+    const [body, setBody] = useState({ 
+        name: "",
+        rg: "",
+        birthday: "",
+        foreign: "",
+        cpf: "",
+        phone: "",
+        telephone: "",
+        address: {
+            state: "AC",
+            cep: "",
+            street: "",
+            complement: "",
+            neighborhood: "",
+            number: "",
+            city: "",
+            country: ""
+        }, 
+        user: {
+            role_id: 1, 
+            gender_id: 1,
+            value: "R$ 0,00",
+            email: "",
+            password: "",
+            password_confirmation: ""
+        },
+        plusInformation: {
+            emergency_contact: "",
+            name: "",
+            observation: ""
+        },
+    })
 
     useEffect(() => {
         props.setPageTitle(
@@ -37,115 +60,40 @@ const StorePatients = props => {
                 ...props.patient,
                 plusInformation: props.patient.plus_informations
             })
-            setPhone(props.patient.telephone)
-            setMobilephone(props.patient.phone)
-            setCpf(props.patient.cpf)
             setCep(props.patient.address.cep)
-            setValue(currencyMask(String(props.patient.user.value)))
         }
     },[props.patient])
-
-    const handleCpf = e => {
-        let value = e.target.value
-        let name = e.target.name
-
-        setCpf(cpfMask(value))
-        setBody({ ...body, [name]: value })
-    }
-
-    const handleVerifyPasswords = () => {
-        return body.user.password === body.user.password_confirmation
-    }
 
     const handleChangeCep = e => {
         let cep = e.target.value.replace(/[^0-9]/g, '')
         setCep(cep)
 
         if (cep.length === 8) {
-            axios.get(`https://viacep.com.br/ws/${cep}/json`)
-                .then(res => {
-                    if (!res.data.erro) {
-                        setIsCepValid(true)
-                        setBody({
-                            ...body,
-                            address: {
-                                ...body.address,
-                                city: res.data.localidade,
-                                cep: cep,
-                                street: res.data.logradouro,
-                                state: res.data.uf,
-                                neighborhood: res.data.bairro
-                            }
-                        })
-                    }
-                    else {
-                        setIsCepValid(false)
-                    }
-                })
-                .catch(err => console.error("Um erro ocorreu ao buscar o CEP: ", err))
+            props.fetchCep()
         } 
         else {
             setBody({ ...body, address: { ...body.address, cep: cep } })
         }
     }
 
-    const handleDateChange = e => {
-        let value = e.target.value
-        let name = e.target.name
-
-        setBody({ ...body, [name]: value })
-        setDateColor("form-control input")
-    }
-
     const handleChangeBody = e => {
         let value = e.target.value
         let name = e.target.name
 
-        setBody({
-            ...body,
-            [name]: value
-        })
-    }
-
-    const handleChangePhone = e => {
-        let name = e.target.name
-        let value = e.target.value
-
-        if (!foreign) {
-            value = value.replace(/[^0-9]/g, '')
-
-            if (name == "telephone")
-                setPhone(phoneMask(value))
-            else
-                setMobilephone(phoneMask(value))
-        } else {
-            if (name == "telephone")
-                setPhone(value)
-            else
-                setMobilephone(value)
-        }
-
-        setBody({
-            ...body,
-            [name]: value
-        })
+        setBody({ ...body, [name]: value })
     }
 
     const handleChangeUser = e => {
         let value = e.target.value
         let name = e.target.name
 
-        if (name == "value") {
-            setValue(currencyMask(value))
-            value = value.replace(/[^0-9]/g, '')
-        }
-
         setBody({
             ...body,
-            user: {
-                ...body.user,
-                name: body.name,
-                [name]: value
+            user: { 
+                ...body.user, 
+                name: body.name, 
+                [name]: name === "value" ? 
+                value.replace(/[^0-9]/g, '') : value 
             }
         })
     }
@@ -161,116 +109,51 @@ const StorePatients = props => {
         let value = e.target.value
         let name = e.target.name
 
-        if (!foreign && name == "emergency_contact") {
-            setBody({
-                ...body,
-                plusInformation: {
-                    ...body.plusInformation,
-                    [name]: phoneMask(value)
-                }
-            })
-        }
-        else {
-            setBody({
-                ...body,
-                plusInformation: {
-                    ...body.plusInformation,
-                    [name]: value
-                }
-            })
-        }
+        setBody({
+            ...body,
+            plusInformation: { ...body.plusInformation, [name]: value }
+        })
     }
 
-    const handleVerifyDate = () => {
+    const validateDate = () => {
         let date = new Date()
         let birthday = new Date(body.birthday)
         let age = date.getFullYear() - birthday.getFullYear()
-        return !(age > 130 || age < 0)
+
+        if(age > 130 || age < 0) {
+            Swal.fire("Por favor informe uma data de nascimento válida.")
+            return false;
+        }
+        return true;
     }
 
-    const handleFormSubmit = async e => {
-        e.preventDefault()
-
-        if (value === "R$ 0,00") {
-            return Swal.fire("Por favor informe o valor da consulta.")
+    const validateValue = () => {
+        if(body.user.value === "R$ 0,00") {
+            Swal.fire("Por favor informe o valor da consulta.")
+            return false
         }
+        return true
+    }
+
+    const validatePasswords = () => {
+        if(body.user.password === body.user.password_confirmation) {
+            return true;
+        }
+        else {
+            Swal.fire("As senhas divergem.")
+            return false;
+        }
+    }
+
+    const handleFormSubmit = e => {
+        e.preventDefault()
             
-        if (handleVerifyPasswords() && handleVerifyDate()) {
+        if (validatePasswords() && validateDate() && validateValue()) {
             setBody({ ...body, foreign: foreign })
             props.location.state ?
-            await updatePatient() :
-            await storePatient()
-        } 
-        else {
-            if (!handleVerifyPasswords())
-                return Swal.fire("As senhas divergem.")
-            if (!handleVerifyDate())
-                return Swal.fire("Por favor informe uma data de nascimento válida.")
+            props.updatePatient(body) :
+            props.storePatient(body)
         }
-    }
-
-    const updatePatient = async () => {
-        await patientsService.update(props.location.state.id, body)
-        .then(() => {
-            Swal.fire({
-                title: "Paciente atualizado com sucesso!",
-                icon: "success",
-                confirmButtonColor: "#1492A5"
-            })
-        })
-        .catch(e => {
-            if(e.message == "Request failed with status code 422"){
-                return Swal.fire({
-                    title: "Email já cadastrado.",
-                    text: "Por favor tente com um endereço de email diferente.",
-                    icon: "warning",
-                    confirmButtonColor: "#1492A5"
-                })
-            }
-            Swal.fire({
-                title: "Ocorreu um erro.",
-                text: "Por favor tente novamente mais tarde.",
-                icon: "warning",
-                confirmButtonColor: "#1492A5"
-            })
-        })
-    }
-
-    const storePatient = async () => {
-        await patientsService.store(body)
-            .then(() => {
-                Swal.fire({
-                    title: "Paciente cadastrado com sucesso!",
-                    icon: "success",
-                    confirmButtonColor: "#1492A5"
-                })
-            })
-            .catch(e => {
-                if(e.message == "Request failed with status code 422"){
-                    return Swal.fire({
-                        title: "Email já cadastrado.",
-                        text: "Por favor tente com um endereço de email diferente.",
-                        icon: "warning",
-                        confirmButtonColor: "#1492A5"
-                    })
-                }
-                Swal.fire({
-                    title: "Ocorreu um erro.",
-                    text: "Por favor tente novamente mais tarde.",
-                    icon: "warning",
-                    confirmButtonColor: "#1492A5"
-                })
-            })
-    }
-
-    const handleForeignChange = () => {
-        setPhone("")
-        setMobilephone("")
-
-        if (!foreign)
-            setForeign(true)
-        else
-            setForeign(false)
     }
 
     return (
@@ -291,18 +174,22 @@ const StorePatients = props => {
                                     placeholder="Nome completo"
                                     className="form-control input"
                                     required
-                                    value={body.name || ''}
+                                    value={body.name}
                                 />
                             </Col>
                             <Col md={4}>
                                 <label htmlFor="telephone">Telefone Fixo: </label>
                                 <input
-                                    onChange={handleChangePhone}
+                                    onChange={handleChangeBody}
                                     type="text"
                                     name="telephone"
                                     className="form-control input"
                                     placeholder={foreign ? "Formato internacional" : "DDD + número"}
-                                    value={phone || ''}
+                                    value={
+                                        foreign ?
+                                        body.telephone :
+                                        phoneMask(body.telephone)
+                                    }
                                 />
                             </Col>
                         </Row>
@@ -310,12 +197,16 @@ const StorePatients = props => {
                             <Col md={4}>
                                 <label htmlFor="phone">Celular: </label>
                                 <input
-                                    onChange={handleChangePhone}
+                                    onChange={handleChangeBody}
                                     type="text"
                                     name="phone"
                                     className="form-control input"
                                     placeholder={foreign ? "Formato internacional" : "DDD + número"}
-                                    value={mobilephone || ''}
+                                    value={
+                                        foreign ?
+                                        body.phone :
+                                        phoneMask(body.phone)
+                                    }
                                 />
                             </Col>
                             <Col md={4}>
@@ -324,10 +215,10 @@ const StorePatients = props => {
                                     type="text"
                                     name="cpf"
                                     className="form-control input"
-                                    onChange={handleCpf}
+                                    onChange={handleChangeBody}
                                     maxLength="14"
                                     placeholder="___.___.___-__"
-                                    value={cpf || ''}
+                                    value={cpfMask(body.cpf)}
                                     required
                                 />
                             </Col>
@@ -338,7 +229,7 @@ const StorePatients = props => {
                                     type="text"
                                     name="rg"
                                     className="form-control input"
-                                    value={body.rg || ''}
+                                    value={body.rg}
                                 />
                             </Col>
                         </Row>
@@ -348,11 +239,10 @@ const StorePatients = props => {
                                 <input
                                     type="date"
                                     name="birthday"
-                                    className={dateColor}
-                                    placeholder="Data de Nascimento"
-                                    onChange={handleDateChange}
-                                    onKeyDown={handleDateChange}
-                                    value={body.birthday || ''}
+                                    className="form-control input"
+                                    onChange={handleChangeBody}
+                                    onKeyDown={handleChangeBody}
+                                    value={body.birthday}
                                 />
                             </Col>
                             <Col md={6}>
@@ -385,7 +275,7 @@ const StorePatients = props => {
                                     name="foreign"
                                     type="checkbox"
                                     checked={foreign}
-                                    onChange={handleForeignChange}
+                                    onChange={setForeign(!foreign)}
                                 />
                                 <span className="foreignLabel">
                                     Estrangeiro?
@@ -422,7 +312,7 @@ const StorePatients = props => {
                                     name="foreign_cep"
                                     className="form-control input"
                                     placeholder="Formato internacional"
-                                    value={body.address.cep || ''}
+                                    value={body.address.cep}
                                 />
                                 : <input
                                     maxLength="8"
@@ -430,7 +320,7 @@ const StorePatients = props => {
                                     type="text"
                                     name="cep"
                                     className="form-control input"
-                                    value={cep || ''}
+                                    value={cep}
                                 />} 
                             </Col>
                             <Col md={6}>
@@ -442,8 +332,8 @@ const StorePatients = props => {
                                     name="street"
                                     className="form-control input"
                                     placeholder="Rua, AV, etc..."
-                                    disabled={isCepValid}
-                                    value={body.address.street || ''}
+                                    disabled={props.cepIsValid}
+                                    value={body.address.street}
 
                                 />
                             </Col>
@@ -457,7 +347,7 @@ const StorePatients = props => {
                                     name="complement"
                                     className="form-control input"
                                     onChange={handleChangeAddress}
-                                    value={body.address.complement || ''}
+                                    value={body.address.complement}
                                 />
                             </Col>
                             <Col md={6}>
@@ -467,9 +357,9 @@ const StorePatients = props => {
                                     type="text"
                                     name="neighborhood"
                                     className="form-control input"
-                                    disabled={isCepValid}
+                                    disabled={props.cepIsValid}
                                     onChange={handleChangeAddress}
-                                    value={body.address.neighborhood || ''}
+                                    value={body.address.neighborhood}
                                 />
                             </Col>
                         </Row>
@@ -483,7 +373,7 @@ const StorePatients = props => {
                                     min="1"
                                     name="number"
                                     className="form-control input"
-                                    value={body.address.number || ''}
+                                    value={body.address.number}
                                 />
                             </Col>
                             <Col md={3}>
@@ -496,9 +386,9 @@ const StorePatients = props => {
                                                 name="state"
                                                 id="state"
                                                 className="form-control input"
-                                                disabled={isCepValid}
+                                                disabled={props.cepIsValid}
                                                 onChange={handleChangeAddress}
-                                                value={body.address.state || ''}
+                                                value={body.address.state}
                                             />
                                         </>
                                     )
@@ -509,9 +399,9 @@ const StorePatients = props => {
                                                     name="state"
                                                     id="state"
                                                     className="form-control input"
-                                                    disabled={isCepValid}
+                                                    disabled={props.cepIsValid}
                                                     onChange={handleChangeAddress}
-                                                    value={body.address.state || ''}
+                                                    value={body.address.state}
                                                 >
                                                     <option value="AC">AC</option>
                                                     <option value="AL">AL</option>
@@ -553,8 +443,8 @@ const StorePatients = props => {
                                     name="city"
                                     id="city"
                                     className="form-control input"
-                                    disabled={isCepValid}
-                                    value={body.address.city || ''}
+                                    disabled={props.cepIsValid}
+                                    value={body.address.city}
                                 />
                             </Col>
                         </Row>
@@ -576,7 +466,11 @@ const StorePatients = props => {
                                     className="form-control input"
                                     placeholder={foreign ? "Formato internacional" : "DDD + número"}
                                     onChange={handlePlusInformationChange}
-                                    value={body.plusInformation?.emergency_contact || ''}
+                                    value={
+                                        foreign ?
+                                            body.plusInformation.emergency_contact :
+                                            phoneMask(body.plusInformation.emergency_contact)
+                                    }
                                 />
                             </Col>
                             <Col md={6}>
@@ -587,7 +481,7 @@ const StorePatients = props => {
                                     className="form-control input"
                                     placeholder="Nome completo"
                                     onChange={handlePlusInformationChange}
-                                    value={body.plusInformation?.name}
+                                    value={body.plusInformation.name}
                                 />
                             </Col>
                         </Row>
@@ -598,7 +492,7 @@ const StorePatients = props => {
                                     className="form-control input"
                                     name="observation"
                                     onChange={handlePlusInformationChange}
-                                    value={body.plusInformation?.observation || ''}
+                                    value={body.plusInformation.observation}
                                 >
                                 </textarea>
                             </Col>
@@ -620,7 +514,7 @@ const StorePatients = props => {
                                     onChange={handleChangeUser}
                                     className="form-control input"
                                     name="value"
-                                    value={value || ''}
+                                    value={currencyMask(String(body.user.value))}
                                     required
                                 />
                             </Col>
@@ -667,7 +561,7 @@ const StorePatients = props => {
                                     name="email"
                                     autoComplete="new-password"
                                     required
-                                    value={body.user.email || ''}
+                                    value={body.user.email}
                                 />
                             </Col>
                             <Col md={4}>
@@ -698,7 +592,7 @@ const StorePatients = props => {
                                 <select 
                                     className="form-control input" 
                                     name="role"
-                                    value={body.user.role || ''}
+                                    value={body.user.role}
                                 >
                                     <option value="1">Admin</option>
                                     <option value="1">Médico</option>
@@ -750,12 +644,15 @@ const StorePatients = props => {
 
 const mapDispatchToProps = dispatch => ({
     setPageTitle: title => dispatch(actions.setPageTitle(title)),
-    fetchPatientInfo: id => dispatch(actions.fetchPatientInfo(id))
+    fetchPatientInfo: id => dispatch(actions.fetchPatientInfo(id)),
+    storePatient: body => dispatch(actions.storePatient(body)),
+    fetchCep: cep => dispatch(actions.fetchCep(cep))
 })
 
 const mapStateToProps = store => {
     return {
-        patient: store.patientsReducer.currentPatient
+        patient: store.patientsReducer.currentPatient,
+        cepIsValid: store.patientsReducer.cepIsValid
     }
 }
 

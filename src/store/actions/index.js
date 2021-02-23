@@ -1,28 +1,28 @@
-export {
-    setPageTitle 
-} from "./page"
+export { setPageTitle } from "./page";
 
 export {
-    filterPatients,
-    fetchPatients,
-    fetchAllPatients,
-    fetchPatientInfo,
-    fetchPatientAppointments,
-    deletePatient
-} from "./patients"
+	storePatient,
+	filterPatients,
+	fetchPatients,
+	fetchAllPatients,
+	fetchPatientInfo,
+	fetchPatientAppointments,
+	deletePatient,
+	fetchCep
+} from "./patients";
 
 export {
-    storeAppointments,
-    fetchAppointments,
-    deleteAppointment,
-    updateAppointments,
-    fetchMadeAppointments,
-    fetchTodaysAppointments
-} from "./appointments"
+	storeAppointments,
+	fetchAppointments,
+	deleteAppointment,
+	updateAppointments,
+	fetchMadeAppointments,
+	fetchTodaysAppointments,
+} from "./appointments";
 
 export {
-    setSelectedFiles,
-    uploadFiles,
-    fetchFiles,
-    fetchFilesByPatient
-} from "./files"
+	setSelectedFiles,
+	uploadFiles,
+	fetchFiles,
+	fetchFilesByPatient,
+} from "./files";

@@ -3,30 +3,19 @@ import appointmentsService from '../../services/appointmentsService'
 
 export function* storeAppointment(action) {
 
-    yield put({
-        type: "TOGGLE_APPOINTMENTS_LOADER"
-    })
+    yield put({ type: "SET_LOADER" })
 
     try {
-        let jsonResponse = yield call(appointmentsService.store, action.payload)
-
-        if (jsonResponse.status === 200) {
-            yield put({
-                type: "SET_APPOINTMENTS_SUCCESS",
-                payload: jsonResponse
-            })
-        }
-        else {
-            yield put({
-                type: "SET_APPOINTMENTS_FAILURE",
-                payload: jsonResponse
-            })
-        }
+        yield call(appointmentsService.store, action.payload)
+        yield put({
+            type: "SET_SUCCESS",
+            payload: "Atendimento cadastrado com sucesso!"
+        })
     }
     catch (err) {
         yield put({
-            type: "SET_APPOINTMENTS_FAILURE",
-            payload: err
+            type: "SET_FAILURE",
+            payload: "Ocorreu um erro ao cadastrar o atendimento."
         })
     }
 
@@ -34,33 +23,22 @@ export function* storeAppointment(action) {
 
 export function* updateAppointment(action) {
 
-    yield put({
-        type: "TOGGLE_APPOINTMENTS_LOADER"
-    })
+    yield put({ type: "SET_LOADER" })
 
     try {
-        let jsonResponse = yield call(appointmentsService.update, action.payload)
-
-        if (jsonResponse.status === 200) {
-            yield put({
-                type: "SET_APPOINTMENTS_SUCCESS",
-                payload: jsonResponse
-            })
-        }
-        else {
-            yield put({
-                type: "SET_APPOINTMENTS_FAILURE",
-                payload: jsonResponse
-            })
-        }
+        yield call(appointmentsService.update, action.payload)
+        yield put({
+            type: "SET_SUCCESS",
+            payload: "Atendimento atualizado com sucesso!"
+        })
     }
     catch (err) {
         yield put({
-            type: "SET_APPOINTMENTS_FAILURE",
-            payload: err
+            type: "SET_FAILURE",
+            payload: "Ocorreu um erro ao atualizar o atendimento."
         })
     }
-    
+
 }
 
 export function* fetchAll(action) {

@@ -2,17 +2,22 @@ const initState = {
     currentPatient: {teste: "teste"},
     patients: [],
     paginationData: [],
-    loader: false
+    loader: false,
+    cepInfo: {},
+    cepIsValid: false
 }
 
 const patientsReducer = (state = {}, action) => {
 
     switch(action.type){
 
-        case "SET_LOADER":
+        case "SET_CEP":
+            console.log("CEP ===> ", action.payload)
             return {
                 ...state,
-                loader: true
+                cepInfo: action.payload,
+                loader: false,
+                cepIsValid: !action.payload.data.erro
             }
 
         case "SET_PATIENTS":

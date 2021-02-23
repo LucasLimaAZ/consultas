@@ -5,58 +5,29 @@ import * as actions from "../../store/actions"
 import StyledDropzone from "../../components/Dropzone"
 import Loader from 'react-loader-spinner'
 import "./style.scss"
-import Swal from "sweetalert2"
 
 const Appointments = props => {
 
     const [requestBody, setRequestBody] = useState({})
 
     useEffect(() => {
-
-        props.setPageTitle(
+        props.setPageTitle( 
             props.location.state ?
             "ATUALIZAR ATENDIMENTO" :
             "NOVO ATENDIMENTO "
         )
-
         props.fetchPatients()
-        checkSuccess()
 
         if (props.location.state) {
             setRequestBody(props.location.state)
         }
-        else if (props.location.patient) {
-            setRequestBody({patient_id: props.location.patient})
+        if (props.location.patient) {
+            setRequestBody({ patient_id: props.location.patient })
         }
-        
-    },[props.appointments]) 
+    },[]) 
 
     const handleRequestBody = e => {
-        setRequestBody({
-            ...requestBody,
-            [e.target.name]: e.target.value
-        })
-    }
-
-    const checkSuccess = () => {
-        if (props.appointments.success) {
-            Swal.fire({
-                title: "Sucesso!",
-                text: "Atendimento cadastrado com sucesso.",
-                icon: "success",
-                confirmButtonColor: "#1492A5"
-            })
-            props.appointments.success = false
-        }
-        if (props.appointments.error) {
-            Swal.fire({
-                title: "Ooops!",
-                text: "Ocorreu um erro, tente novamente mais tarde.",
-                icon: "warning",
-                confirmButtonColor: "#1492A5"
-            })
-            props.appointments.error = false
-        }
+        setRequestBody({ ...requestBody, [e.target.name]: e.target.value })
     }
 
     const uploadFiles = async () => {
@@ -97,13 +68,13 @@ const Appointments = props => {
                                     placeholder="Buscar..." 
                                     className="form-control input"
                                     required
-                                    value={requestBody.patient_id}
+                                    value={requestBody.patient_id || ''}
                                 >
                                     <option>Selecione...</option>
                                     {
                                         props.patients.patients ? 
                                         props.patients.patients.map(patient => (
-                                            <option key={patient.id} value={patient.id}>
+                                            <option key={patient.id} value={patient.id || ''}>
                                                 {patient.name}
                                             </option>
                                         )) : ("")
@@ -119,7 +90,7 @@ const Appointments = props => {
                                     className="form-control input" 
                                     placeholder="http://exemplo.com.br/link" 
                                     required
-                                    value={requestBody.link}
+                                    value={requestBody.link || ''}
                                 />
                             </Col>
                             <Col md={2}>
@@ -130,7 +101,7 @@ const Appointments = props => {
                                     type="date" 
                                     className="form-control input" 
                                     required
-                                    value={requestBody.date}
+                                    value={requestBody.date || ''}
                                 />
                             </Col>
                             <Col md={2}>
@@ -141,7 +112,7 @@ const Appointments = props => {
                                     type="time" 
                                     className="form-control input" 
                                     required
-                                    value={requestBody.time}
+                                    value={requestBody.time || ''}
                                 />
                             </Col>
                         </Row>
@@ -152,7 +123,7 @@ const Appointments = props => {
                                     onChange={handleRequestBody} 
                                     name="notes" 
                                     className="form-control"
-                                    value={requestBody.notes}
+                                    value={requestBody.notes || ''}
                                 ></textarea>
                             </Col>
                             <Col md={6}>
@@ -161,7 +132,7 @@ const Appointments = props => {
                                     onChange={handleRequestBody} 
                                     name="cronogram" 
                                     className="form-control"
-                                    value={requestBody.cronogram}
+                                    value={requestBody.cronogram || ''}
                                 ></textarea>
                             </Col>
                         </Row>
@@ -172,7 +143,7 @@ const Appointments = props => {
                                     onChange={handleRequestBody} 
                                     name="abstract" 
                                     className="form-control"
-                                    value={requestBody.abstract}
+                                    value={requestBody.abstract || ''}
                                 ></textarea>
                             </Col>
                             <Col md={6}>
@@ -181,7 +152,7 @@ const Appointments = props => {
                                     onChange={handleRequestBody} 
                                     name="todo_list" 
                                     className="form-control"
-                                    value={requestBody.todo_list}
+                                    value={requestBody.todo_list || ''}
                                 ></textarea>
                             </Col>
                         </Row>
@@ -200,7 +171,7 @@ const Appointments = props => {
                                         "CADASTRAR ATENDIMENTO "
                                     }
                                     {
-                                        props.appointments.isLoading ?
+                                        props.loader ?
                                             <Loader 
                                                 type="TailSpin" 
                                                 color="#ffffff"
@@ -224,7 +195,8 @@ const mapStateToProps = store => {
     return{
         patients: store.patientsReducer,
         appointments: store.appointmentsReducer,
-        files: store.filesReducer
+        files: store.filesReducer,
+        loader: store.resultReducer.loader
     }
 }
 
